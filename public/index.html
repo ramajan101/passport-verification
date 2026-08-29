@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="i18n-page-title">Passport Document Verification System</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="background-radial"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top-bar">
+                <div class="header-logo">
+                    <span class="icon-passport">🛂</span>
+                    <h1 id="i18n-title">Passport Document Verification System</h1>
+                </div>
+                <div class="header-controls">
+                    <select id="lang-select" class="control-select">
+                        <option value="roman">Roman English</option>
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="ur">اردو (Urdu)</option>
+                    </select>
+                    <button id="theme-toggle-btn" class="btn-theme" title="Toggle Theme">🌙</button>
+                </div>
+            </div>
+            <p class="subtitle" id="i18n-subtitle">Upload and cross-verify documents locally using secure client-side PDF rendering & AI OCR.</p>
+        </header>
+
+        <!-- Main Actions Bar -->
+        <div class="actions-bar">
+            <button id="add-doc-btn" class="btn btn-secondary">
+                <span class="btn-icon">+</span> <span id="i18n-add-doc">Add Custom Document</span>
+            </button>
+            <button id="verify-all-btn" class="btn btn-primary" disabled>
+                <span class="btn-icon">⚡</span> <span id="i18n-verify">Verify Documents</span>
+            </button>
+            <button id="reset-all-btn" class="btn btn-danger">
+                <span class="btn-icon">🔄</span> <span id="i18n-reset">Reset All</span>
+            </button>
+        </div>
+
+        <!-- Global Message / Status Display -->
+        <div id="global-status-message" class="info-banner">
+            <p id="global-status-text">Aadhaar aur PAN mandatory hain. Kripya dono upload karein.</p>
+        </div>
+
+        <!-- Document Grid -->
+        <main class="document-grid" id="document-grid">
+            <!-- Dynamic Document Cards will be loaded here via JS -->
+        </main>
+
+        <!-- Verification Report Section -->
+        <section id="verification-report-section" class="report-section hidden">
+            <div class="section-card">
+                <h2 id="i18n-report-title">Verification Report</h2>
+                <div id="verdict-banner" class="verdict-banner">
+                    <!-- Dynamic Roman Urdu overall verdict goes here -->
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="report-table">
+                        <thead>
+                            <tr id="report-table-header">
+                                <th id="i18n-table-field">Field</th>
+                                <th>Aadhaar Card</th>
+                                <th>PAN Card</th>
+                                <!-- Dynamic headers will be inserted here -->
+                                <th id="i18n-table-status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparison-table-body">
+                            <!-- Dynamic comparison rows go here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="report-footer">
+                    <button id="toggle-raw-text-btn" class="btn btn-text">Show Raw Extracted Text</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Raw Text Panel (Collapsible) -->
+        <section id="raw-text-section" class="raw-text-section hidden animate-fade-in">
+            <div class="section-card">
+                <h3 id="i18n-raw-logs-title">Raw Extracted Text Logs</h3>
+                <div id="raw-text-container" class="raw-text-container">
+                    <!-- Raw text elements go here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Custom Document Modal -->
+    <div id="custom-doc-modal" class="modal hidden">
+        <div class="modal-content glass-card">
+            <h3 id="i18n-modal-title">Add Custom Document</h3>
+            <div class="form-group">
+                <label for="custom-doc-title" id="i18n-modal-label">Document Name (e.g., Voter ID, Driving License)</label>
+                <input type="text" id="custom-doc-title" placeholder="Enter document name..." autocomplete="off">
+            </div>
+            <div class="form-group-row">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="custom-doc-mandatory">
+                    <span class="checkmark"></span>
+                    <span id="i18n-modal-mandatory">Is this document mandatory?</span>
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-cancel-btn" class="btn btn-text">Cancel</button>
+                <button id="modal-submit-btn" class="btn btn-primary">Add Document</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript App -->
+    <script src="app.js"></script>
+</body>
+</html>

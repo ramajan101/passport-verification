@@ -1,0 +1,18 @@
+{
+  "name": "Passport Document Verification System",
+  "short_name": "PassportVerify",
+  "description": "Full-stack AI Passport Document Verification System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0c29",
+  "theme_color": "#6c63ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9726/9726034.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
