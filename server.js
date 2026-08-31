@@ -75,7 +75,7 @@ Strict Guidelines:
 `;
 
         // Model fallback cycle to bypass 429 quota/rate limits (cycles through active models, skipping deprecated ones)
-        const modelsToTry = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-1.5-flash", "gemini-1.5-flash-8b"];
+        const modelsToTry = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"];
         let result = null;
         let lastError = null;
 
@@ -83,7 +83,7 @@ Strict Guidelines:
             try {
                 console.log(`[OCR] Attempting extraction with model: ${modelName}`);
                 const model = ai.getGenerativeModel({ model: modelName });
-                result = await generateContentWithRetry(model, prompt, imagePart, 2, 1000);
+                result = await generateContentWithRetry(model, prompt, imagePart, 1, 0);
                 if (result) {
                     console.log(`[OCR] Success using model: ${modelName}`);
                     break;
