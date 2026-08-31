@@ -629,8 +629,8 @@ function renderDocumentGrid() {
     });
 }
 
-// Compress and resize image files to lightweight JPEGs
-function compressImage(file, maxWidth = 1600, maxHeight = 1600, quality = 0.85) {
+// Compress and resize image files to lightweight JPEGs (optimized for low-latency transmission)
+function compressImage(file, maxWidth = 1000, maxHeight = 1000, quality = 0.75) {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = function (event) {
@@ -715,6 +715,9 @@ async function handleFileSelect(docId, file) {
         
         document.getElementById('verification-report-section').classList.add('hidden');
         document.getElementById('raw-text-section').classList.add('hidden');
+        
+        const inlineReport = document.getElementById('inline-report-section');
+        if (inlineReport) inlineReport.classList.add('hidden');
 
         if (finalFile.type === 'application/pdf') {
             generatePdfBlob(documents[docIndex]);
@@ -823,6 +826,9 @@ function clearFile(docId) {
         
         document.getElementById('verification-report-section').classList.add('hidden');
         document.getElementById('raw-text-section').classList.add('hidden');
+        
+        const inlineReport = document.getElementById('inline-report-section');
+        if (inlineReport) inlineReport.classList.add('hidden');
     }
 }
 
@@ -834,6 +840,9 @@ function removeDocument(docId) {
     
     document.getElementById('verification-report-section').classList.add('hidden');
     document.getElementById('raw-text-section').classList.add('hidden');
+    
+    const inlineReport = document.getElementById('inline-report-section');
+    if (inlineReport) inlineReport.classList.add('hidden');
 }
 
 // Global Status message updates & Button state toggles
@@ -878,6 +887,9 @@ function resetAll() {
 
     document.getElementById('verification-report-section').classList.add('hidden');
     document.getElementById('raw-text-section').classList.add('hidden');
+    
+    const inlineReport = document.getElementById('inline-report-section');
+    if (inlineReport) inlineReport.classList.add('hidden');
 }
 
 // Display messages in status banner
@@ -1054,21 +1066,23 @@ function compileVerificationResults() {
     const activeDocs = documents.filter(d => d.file !== null && d.status === 'done');
     const dict = translations[currentLang];
     
-    // Setup report header dynamically
+    // Setup report header dynamically (both modal and inline)
     const headerRow = document.getElementById('report-table-header');
-    headerRow.innerHTML = `<th>${dict.field}</th>`;
+    const inlineHeaderRow = document.getElementById('inline-report-table-header');
+    
+    const headersHtml = [`<th>${dict.field}</th>`];
     activeDocs.forEach(doc => {
-        const th = document.createElement('th');
         let translatedTitle = doc.title;
         if (doc.id === 'aadhaar') translatedTitle = dict.aadhaarTitle || doc.title;
         else if (doc.id === 'pan') translatedTitle = dict.panTitle || doc.title;
         else if (doc.id === 'marksheet') translatedTitle = dict.marksheetTitle || doc.title;
-        th.textContent = translatedTitle;
-        headerRow.appendChild(th);
+        headersHtml.push(`<th>${translatedTitle}</th>`);
     });
-    const statusTh = document.createElement('th');
-    statusTh.textContent = dict.statusCol;
-    headerRow.appendChild(statusTh);
+    headersHtml.push(`<th>${dict.statusCol}</th>`);
+    
+    const combinedHeaders = headersHtml.join('');
+    headerRow.innerHTML = combinedHeaders;
+    if (inlineHeaderRow) inlineHeaderRow.innerHTML = combinedHeaders;
 
     const fields = [
         { label: dict.fieldName, key: 'name' },
@@ -1078,7 +1092,9 @@ function compileVerificationResults() {
     ];
 
     const tbody = document.getElementById('comparison-table-body');
+    const inlineTbody = document.getElementById('inline-comparison-table-body');
     tbody.innerHTML = '';
+    if (inlineTbody) inlineTbody.innerHTML = '';
 
     let totalMismatches = 0;
 
@@ -1132,20 +1148,26 @@ function compileVerificationResults() {
 
         statusTd.innerHTML = statusHtml;
         row.appendChild(statusTd);
+        
         tbody.appendChild(row);
+        if (inlineTbody) inlineTbody.appendChild(row.cloneNode(true));
     });
 
-    // Render Overall Verdict Banner
+    // Render Overall Verdict Banner (both modal and inline)
     const verdictBanner = document.getElementById('verdict-banner');
-    verdictBanner.className = 'verdict-banner';
-
-    if (totalMismatches > 0) {
-        verdictBanner.classList.add('verdict-error');
-        verdictBanner.textContent = dict.verdictError;
-    } else {
-        verdictBanner.classList.add('verdict-success');
-        verdictBanner.textContent = dict.verdictSuccess;
-    }
+    const inlineVerdictBanner = document.getElementById('inline-verdict-banner');
+    
+    [verdictBanner, inlineVerdictBanner].forEach(banner => {
+        if (!banner) return;
+        banner.className = 'verdict-banner';
+        if (totalMismatches > 0) {
+            banner.classList.add('verdict-error');
+            banner.textContent = dict.verdictError;
+        } else {
+            banner.classList.add('verdict-success');
+            banner.textContent = dict.verdictSuccess;
+        }
+    });
 
     // Render Raw Text logs
     const rawContainer = document.getElementById('raw-text-container');
@@ -1162,6 +1184,8 @@ function compileVerificationResults() {
     });
 
     document.getElementById('verification-report-section').classList.remove('hidden');
+    const inlineReport = document.getElementById('inline-report-section');
+    if (inlineReport) inlineReport.classList.remove('hidden');
 }
 
 // Register Service Worker for PWA (Mobile App install support)
