@@ -26,6 +26,7 @@
                     <h1 id="i18n-title">Passport Document Verification System</h1>
                 </div>
                 <div class="header-controls">
+                    <input type="password" id="api-key-input" class="control-select" placeholder="Gemini API Key (Optional)..." style="width: 220px; cursor: text;" title="Enter custom Gemini API Key to override default server key">
                     <select id="lang-select" class="control-select">
                         <option value="roman">Roman English</option>
                         <option value="en">English</option>
@@ -63,8 +64,11 @@
 
         <!-- Verification Report Section -->
         <section id="verification-report-section" class="report-section hidden">
-            <div class="section-card">
-                <h2 id="i18n-report-title">Verification Report</h2>
+            <div class="section-card report-modal-card">
+                <div class="report-header-row">
+                    <h2 id="i18n-report-title">Verification Report</h2>
+                    <button id="close-report-btn" class="btn-close-modal" title="Close Report">&times;</button>
+                </div>
                 <div id="verdict-banner" class="verdict-banner">
                     <!-- Dynamic Roman Urdu overall verdict goes here -->
                 </div>

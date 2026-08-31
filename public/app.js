@@ -5,6 +5,7 @@
 const pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
+
 // Multilingual Translations Dictionary
 const translations = {
     en: {
@@ -23,6 +24,7 @@ const translations = {
         fieldName: "Name",
         fieldDob: "Date of Birth (DOB)",
         fieldFather: "Father's Name",
+        fieldDocNumber: "Document Number",
         btnShowRaw: "Show Raw Extracted Text",
         btnHideRaw: "Hide Raw Extracted Text",
         modalTitle: "Add Custom Document",
@@ -42,10 +44,16 @@ const translations = {
         inputPlaceholderName: "Type name...",
         inputPlaceholderDob: "DD/MM/YYYY",
         inputPlaceholderFather: "Type father's name...",
+        inputPlaceholderDocNumber: "Type document number...",
         matchBadge: "Match",
         mismatchBadge: "Mismatch",
         ignoredBadge: "Ignored (Need 2+ docs)",
-        rawLogsTitle: "Raw Extracted Text Logs"
+        infoOnly: "Number",
+        rawLogsTitle: "Raw Extracted Text Logs",
+        aadhaarTitle: "Aadhaar Card",
+        panTitle: "PAN Card",
+        marksheetTitle: "10th Marksheet",
+        closeReport: "Close Report"
     },
     hi: {
         title: "पासपोर्ट दस्तावेज़ सत्यापन प्रणाली",
@@ -63,6 +71,7 @@ const translations = {
         fieldName: "नाम",
         fieldDob: "जन्म तिथि (DOB)",
         fieldFather: "पिता का नाम",
+        fieldDocNumber: "दस्तावेज़ संख्या (ID)",
         btnShowRaw: "रॉ एक्सट्रैक्टेड टेक्स्ट दिखाएं",
         btnHideRaw: "रॉ एक्सट्रैक्टेड टेक्स्ट छुपाएं",
         modalTitle: "कस्टम दस्तावेज़ जोड़ें",
@@ -82,10 +91,16 @@ const translations = {
         inputPlaceholderName: "नाम लिखें...",
         inputPlaceholderDob: "दिन/महीना/साल",
         inputPlaceholderFather: "पिता का नाम लिखें...",
+        inputPlaceholderDocNumber: "दस्तावेज़ नंबर लिखें...",
         matchBadge: "समान",
         mismatchBadge: "असमान",
         ignoredBadge: "अनदेखा (2+ दस्तावेज़ चाहिए)",
-        rawLogsTitle: "रॉ एक्सट्रैक्टेड टेक्स्ट लॉग्स"
+        infoOnly: "संख्या",
+        rawLogsTitle: "रॉ एक्सट्रैक्टेड टेक्स्ट लॉग्स",
+        aadhaarTitle: "आधार कार्ड",
+        panTitle: "पैन कार्ड",
+        marksheetTitle: "10वीं की मार्कशीट",
+        closeReport: "रिपोर्ट बंद करें"
     },
     ur: {
         title: "پاسپورٹ دستاویز کی تصدیق کا نظام",
@@ -103,6 +118,7 @@ const translations = {
         fieldName: "نام",
         fieldDob: "تاریخ پیدائش (DOB)",
         fieldFather: "والد کا نام",
+        fieldDocNumber: "دستاویز نمبر",
         btnShowRaw: "نکالا گیا متن دکھائیں",
         btnHideRaw: "نکالا گیا متن چھپائیں",
         modalTitle: "اپنی مرضی کی دستاویز شامل کریں",
@@ -122,10 +138,16 @@ const translations = {
         inputPlaceholderName: "نام لکھیں...",
         inputPlaceholderDob: "تاریخ/مہینہ/سال",
         inputPlaceholderFather: "والد کا نام لکھیں...",
+        inputPlaceholderDocNumber: "دستاویز کا نمبر لکھیں...",
         matchBadge: "مماثل",
         mismatchBadge: "غیر مماثل",
         ignoredBadge: "نظر انداز (2+ دستاویزات درکار)",
-        rawLogsTitle: "نکالے گئے متن کا لاگ"
+        infoOnly: "نمبر",
+        rawLogsTitle: "نکالے گئے متن کا لاگ",
+        aadhaarTitle: "آدھار کارڈ",
+        panTitle: "پین کارڈ",
+        marksheetTitle: "دسویں کی مارک شیٹ",
+        closeReport: "رپورٹ بند کریں"
     },
     roman: {
         title: "Passport Document Verification System",
@@ -143,6 +165,7 @@ const translations = {
         fieldName: "Name",
         fieldDob: "Date of Birth (DOB)",
         fieldFather: "Father's Name",
+        fieldDocNumber: "Document Number",
         btnShowRaw: "Show Raw Extracted Text",
         btnHideRaw: "Hide Raw Extracted Text",
         modalTitle: "Custom Document Add Karein",
@@ -162,10 +185,16 @@ const translations = {
         inputPlaceholderName: "Type name...",
         inputPlaceholderDob: "DD/MM/YYYY",
         inputPlaceholderFather: "Type father's name...",
+        inputPlaceholderDocNumber: "Type document number...",
         matchBadge: "Match",
         mismatchBadge: "Mismatch",
         ignoredBadge: "Ignored (Need 2+ docs)",
-        rawLogsTitle: "Raw Extracted Text Logs"
+        infoOnly: "Number",
+        rawLogsTitle: "Raw Extracted Text Logs",
+        aadhaarTitle: "Aadhaar Card",
+        panTitle: "PAN Card",
+        marksheetTitle: "10th Marksheet",
+        closeReport: "Close Report"
     }
 };
 
@@ -186,7 +215,8 @@ let documents = [
         rawText: '',
         name: 'N/A',
         dob: 'N/A',
-        fatherName: 'N/A'
+        fatherName: 'N/A',
+        documentNumber: 'N/A'
     },
     {
         id: 'pan',
@@ -199,7 +229,8 @@ let documents = [
         rawText: '',
         name: 'N/A',
         dob: 'N/A',
-        fatherName: 'N/A'
+        fatherName: 'N/A',
+        documentNumber: 'N/A'
     },
     {
         id: 'marksheet',
@@ -212,7 +243,8 @@ let documents = [
         rawText: '',
         name: 'N/A',
         dob: 'N/A',
-        fatherName: 'N/A'
+        fatherName: 'N/A',
+        documentNumber: 'N/A'
     }
 ];
 
@@ -220,9 +252,21 @@ let documents = [
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initLanguageSelector();
+    initApiKeyInput();
     applyTranslations();
     setupGlobalEventListeners();
 });
+
+// Load and save custom Gemini API key
+function initApiKeyInput() {
+    const keyInput = document.getElementById('api-key-input');
+    if (keyInput) {
+        keyInput.value = localStorage.getItem('customGeminiApiKey') || '';
+        keyInput.addEventListener('input', (e) => {
+            localStorage.setItem('customGeminiApiKey', e.target.value.trim());
+        });
+    }
+}
 
 // Setup Theme State on Startup
 function initTheme() {
@@ -263,6 +307,13 @@ function initLanguageSelector() {
 function applyTranslations() {
     const dict = translations[currentLang];
     
+    // Set layout direction (RTL for Urdu, LTR for others)
+    if (currentLang === 'ur') {
+        document.documentElement.dir = 'rtl';
+    } else {
+        document.documentElement.dir = 'ltr';
+    }
+    
     // Text contents translation
     document.getElementById('i18n-page-title').textContent = dict.title;
     document.getElementById('i18n-title').textContent = dict.title;
@@ -275,6 +326,11 @@ function applyTranslations() {
     document.getElementById('i18n-report-title').textContent = dict.title + " Report";
     document.getElementById('i18n-table-field').textContent = dict.field;
     document.getElementById('i18n-table-status').textContent = dict.statusCol;
+    
+    const closeReportBtn = document.getElementById('close-report-btn');
+    if (closeReportBtn) {
+        closeReportBtn.textContent = dict.closeReport || 'Close Report';
+    }
     
     const toggleBtn = document.getElementById('toggle-raw-text-btn');
     const rawTextSec = document.getElementById('raw-text-section');
@@ -326,6 +382,16 @@ function setupGlobalEventListeners() {
     document.getElementById('custom-doc-modal').addEventListener('click', (e) => {
         if (e.target.id === 'custom-doc-modal') closeModal();
     });
+    
+    document.getElementById('close-report-btn').addEventListener('click', () => {
+        document.getElementById('verification-report-section').classList.add('hidden');
+    });
+    
+    document.getElementById('verification-report-section').addEventListener('click', (e) => {
+        if (e.target.id === 'verification-report-section') {
+            document.getElementById('verification-report-section').classList.add('hidden');
+        }
+    });
 }
 
 // Render the grid containing document cards
@@ -345,7 +411,11 @@ function renderDocumentGrid() {
         
         const titleSpan = document.createElement('span');
         titleSpan.className = 'doc-title';
-        titleSpan.textContent = doc.title;
+        let translatedTitle = doc.title;
+        if (doc.id === 'aadhaar') translatedTitle = dict.aadhaarTitle || doc.title;
+        else if (doc.id === 'pan') translatedTitle = dict.panTitle || doc.title;
+        else if (doc.id === 'marksheet') translatedTitle = dict.marksheetTitle || doc.title;
+        titleSpan.textContent = translatedTitle;
 
         const badge = document.createElement('span');
         badge.className = `badge ${doc.mandatory ? 'badge-mandatory' : 'badge-optional'}`;
@@ -534,6 +604,20 @@ function renderDocumentGrid() {
                 compileVerificationResults();
             });
             parsedFieldsDiv.appendChild(fatherRow);
+
+            // Document Number input row
+            const docNumberRow = document.createElement('div');
+            docNumberRow.className = 'parsed-field-row-input';
+            docNumberRow.innerHTML = `
+                <span class="parsed-label">${dict.fieldDocNumber}:</span>
+                <input type="text" class="parsed-input" id="input-docnumber-${doc.id}" value="${doc.documentNumber === 'N/A' ? '' : doc.documentNumber}" placeholder="${dict.inputPlaceholderDocNumber}">
+            `;
+            const docNumberInput = docNumberRow.querySelector('input');
+            docNumberInput.addEventListener('input', (e) => {
+                doc.documentNumber = e.target.value.trim() || 'N/A';
+                compileVerificationResults();
+            });
+            parsedFieldsDiv.appendChild(docNumberRow);
             
             fileDisplay.appendChild(parsedFieldsDiv);
             card.appendChild(fileDisplay);
@@ -545,11 +629,59 @@ function renderDocumentGrid() {
     });
 }
 
+// Compress and resize image files to lightweight JPEGs
+function compressImage(file, maxWidth = 1600, maxHeight = 1600, quality = 0.85) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+                let width = img.width;
+                let height = img.height;
+
+                // Scale down if larger than max dimensions
+                if (width > maxWidth || height > maxHeight) {
+                    if (width > height) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    } else {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(compressedFile);
+                    } else {
+                        resolve(file);
+                    }
+                }, 'image/jpeg', quality);
+            };
+            img.onerror = () => resolve(file);
+            img.src = event.target.result;
+        };
+        reader.onerror = () => resolve(file);
+        reader.readAsDataURL(file);
+    });
+}
+
 // Handling File Drop/Select
-function handleFileSelect(docId, file) {
-    const limit = 10 * 1024 * 1024;
+async function handleFileSelect(docId, file) {
+    const limit = 15 * 1024 * 1024; // Allow up to 15MB originals for local compression
     if (file.size > limit) {
-        alert("File size 10MB se kam honi chahiye!");
+        alert("File size 15MB se kam honi chahiye!");
         return;
     }
 
@@ -560,9 +692,15 @@ function handleFileSelect(docId, file) {
         return;
     }
 
+    let finalFile = file;
+    if (file.type.startsWith('image/')) {
+        // Compress image client side
+        finalFile = await compressImage(file);
+    }
+
     const docIndex = documents.findIndex(d => d.id === docId);
     if (docIndex > -1) {
-        documents[docIndex].file = file;
+        documents[docIndex].file = finalFile;
         documents[docIndex].processedBlob = null;
         documents[docIndex].status = 'uploaded';
         documents[docIndex].progress = 0;
@@ -570,6 +708,7 @@ function handleFileSelect(docId, file) {
         documents[docIndex].name = 'N/A';
         documents[docIndex].dob = 'N/A';
         documents[docIndex].fatherName = 'N/A';
+        documents[docIndex].documentNumber = 'N/A';
         
         renderDocumentGrid();
         updateGlobalStatus();
@@ -577,7 +716,7 @@ function handleFileSelect(docId, file) {
         document.getElementById('verification-report-section').classList.add('hidden');
         document.getElementById('raw-text-section').classList.add('hidden');
 
-        if (file.type === 'application/pdf') {
+        if (finalFile.type === 'application/pdf') {
             generatePdfBlob(documents[docIndex]);
         }
     }
@@ -596,7 +735,7 @@ async function generatePdfBlob(doc) {
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
                 
-                const viewport = page.getViewport({ scale: 3.0 });
+                const viewport = page.getViewport({ scale: 1.5 }); // Speed up by using 1.5 scale
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
                 
@@ -604,7 +743,7 @@ async function generatePdfBlob(doc) {
                 
                 canvas.toBlob((blob) => {
                     doc.processedBlob = blob;
-                }, 'image/png');
+                }, 'image/jpeg', 0.85); // JPEG instead of PNG for 10x smaller size
 
             } catch (e) {
                 console.error("PDF Blob generation failed", e);
@@ -677,6 +816,7 @@ function clearFile(docId) {
         documents[docIndex].name = 'N/A';
         documents[docIndex].dob = 'N/A';
         documents[docIndex].fatherName = 'N/A';
+        documents[docIndex].documentNumber = 'N/A';
         
         renderDocumentGrid();
         updateGlobalStatus();
@@ -729,6 +869,7 @@ function resetAll() {
         documents[idx].name = 'N/A';
         documents[idx].dob = 'N/A';
         documents[idx].fatherName = 'N/A';
+        documents[idx].documentNumber = 'N/A';
     });
 
     documents = documents.slice(0, 3);
@@ -788,7 +929,8 @@ function handleAddCustomDoc() {
         rawText: '',
         name: 'N/A',
         dob: 'N/A',
-        fatherName: 'N/A'
+        fatherName: 'N/A',
+        documentNumber: 'N/A'
     });
 
     closeModal();
@@ -827,7 +969,7 @@ async function performVerification() {
     const docsToProcess = documents.filter(d => d.file !== null);
 
     try {
-        for (const doc of docsToProcess) {
+        const promises = docsToProcess.map(async (doc) => {
             doc.status = 'processing';
             renderDocumentGrid();
 
@@ -835,19 +977,26 @@ async function performVerification() {
             
             if (doc.file.type === 'application/pdf') {
                 const pdfBlob = await waitForBlob(doc);
-                formData.append('document', pdfBlob, `${doc.id}.png`);
+                formData.append('document', pdfBlob, `${doc.id}.jpg`); // Changed to JPG
             } else {
                 formData.append('document', doc.file);
             }
 
+            const customApiKey = document.getElementById('api-key-input')?.value.trim();
+            const headers = {};
+            if (customApiKey) {
+                headers['x-api-key'] = customApiKey;
+            }
+
             const response = await fetch('/api/verify-document', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: headers
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || "Backend verification failed.");
+                throw new Error(errorData.error || `${doc.title} verification failed.`);
             }
 
             const data = await response.json();
@@ -856,16 +1005,24 @@ async function performVerification() {
             doc.name = data.name;
             doc.dob = data.dob;
             doc.fatherName = data.fatherName;
+            doc.documentNumber = data.documentNumber;
             doc.status = 'done';
             
             renderDocumentGrid();
-        }
-        
+        });
+
+        await Promise.all(promises);
         compileVerificationResults();
 
     } catch (err) {
         console.error("AI Verification failed", err);
-        alert(`Verification error: ${err.message}`);
+        let errorMsg = err.message;
+        if (err.message === 'Failed to fetch' || err.message.includes('fetch')) {
+            errorMsg = "Verification server is offline or unreachable! Please run the backend server (using 'npm run dev') or check your network connection.";
+        } else if (errorMsg.includes('429') || errorMsg.toLowerCase().includes('quota') || errorMsg.toLowerCase().includes('too many requests')) {
+            errorMsg = "Default API Key ki daily limit khatam ho chuki hai! Kripya page ke top-right corner me apni personal Gemini API Key enter karein aur fir se verify karein.";
+        }
+        alert(`Verification error: ${errorMsg}`);
     } finally {
         verifyBtn.disabled = false;
         updateGlobalStatus();
@@ -902,7 +1059,11 @@ function compileVerificationResults() {
     headerRow.innerHTML = `<th>${dict.field}</th>`;
     activeDocs.forEach(doc => {
         const th = document.createElement('th');
-        th.textContent = doc.title;
+        let translatedTitle = doc.title;
+        if (doc.id === 'aadhaar') translatedTitle = dict.aadhaarTitle || doc.title;
+        else if (doc.id === 'pan') translatedTitle = dict.panTitle || doc.title;
+        else if (doc.id === 'marksheet') translatedTitle = dict.marksheetTitle || doc.title;
+        th.textContent = translatedTitle;
         headerRow.appendChild(th);
     });
     const statusTh = document.createElement('th');
@@ -912,7 +1073,8 @@ function compileVerificationResults() {
     const fields = [
         { label: dict.fieldName, key: 'name' },
         { label: dict.fieldDob, key: 'dob' },
-        { label: dict.fieldFather, key: 'fatherName' }
+        { label: dict.fieldFather, key: 'fatherName' },
+        { label: dict.fieldDocNumber, key: 'documentNumber', noCompare: true }
     ];
 
     const tbody = document.getElementById('comparison-table-body');
@@ -952,7 +1114,9 @@ function compileVerificationResults() {
         const statusTd = document.createElement('td');
         let statusHtml = '';
         
-        if (values.length < 2) {
+        if (field.noCompare) {
+            statusHtml = `<span class="status-badge ignored">${dict.infoOnly || 'Number'}</span>`;
+        } else if (values.length < 2) {
             statusHtml = `<span class="status-badge ignored">${dict.ignoredBadge}</span>`;
         } else {
             const firstVal = values[0].val;

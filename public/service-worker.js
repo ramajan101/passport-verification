@@ -1,4 +1,4 @@
-const CACHE_NAME = 'passport-verify-v1';
+const CACHE_NAME = 'passport-verify-v5';
 const ASSETS = [
     '/',
     '/index.html',
