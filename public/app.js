@@ -324,6 +324,10 @@ function applyTranslations() {
     document.getElementById('i18n-reset').textContent = dict.reset;
     
     document.getElementById('i18n-report-title').textContent = dict.title + " Report";
+    const inlineTitle = document.getElementById('i18n-inline-report-title');
+    if (inlineTitle) {
+        inlineTitle.textContent = dict.title + " Report";
+    }
     document.getElementById('i18n-table-field').textContent = dict.field;
     document.getElementById('i18n-table-status').textContent = dict.statusCol;
     
@@ -383,13 +387,19 @@ function setupGlobalEventListeners() {
         if (e.target.id === 'custom-doc-modal') closeModal();
     });
     
-    document.getElementById('close-report-btn').addEventListener('click', () => {
+    const hideModalAndScroll = () => {
         document.getElementById('verification-report-section').classList.add('hidden');
-    });
+        const inlineReport = document.getElementById('inline-report-section');
+        if (inlineReport) {
+            inlineReport.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    document.getElementById('close-report-btn').addEventListener('click', hideModalAndScroll);
     
     document.getElementById('verification-report-section').addEventListener('click', (e) => {
         if (e.target.id === 'verification-report-section') {
-            document.getElementById('verification-report-section').classList.add('hidden');
+            hideModalAndScroll();
         }
     });
 }
