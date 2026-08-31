@@ -39,11 +39,12 @@
             <p class="subtitle" id="i18n-subtitle">Upload and cross-verify documents locally using secure client-side PDF rendering & AI OCR.</p>
         </header>
 
-        <!-- Header Ads Slot -->
-        <div class="ad-container-top" style="margin: -20px auto 30px auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
-            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">SPONSORED ADVERTISEMENT</span>
-            <div id="adsterra-banner-top">
-                <!-- Adsterra 728x90 Banner Script Structure (Replace key with your active Adsterra zone key) -->
+        <!-- Header Partner Promo Slot -->
+        <div class="partner-top-section" style="margin: -20px auto 30px auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
+            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">PARTNER ADVERTISEMENT</span>
+            <div id="partner-frame-top">
+                <!-- Adsterra 728x90 Banner Script Structure (Commented out to bypass adblockers during testing) -->
+                <!--
                 <script type="text/javascript">
                     atOptions = {
                         'key' : 'adsterra_728x90_header_key_placeholder',
@@ -53,8 +54,9 @@
                         'params' : {}
                     };
                 </script>
+                -->
                 <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15)); padding: 15px; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="window.open('https://adsterra.com', '_blank')">
-                    <span style="color: var(--primary-start); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">⚡ Adsterra Monetization Slot</span>
+                    <span style="color: var(--primary-start); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">⚡ Adsterra Monetization Slot Active</span>
                     <span style="font-size: 0.8rem; color: var(--text-main);">Click here to generate your active Adsterra banner key and paste it inside index.html!</span>
                 </div>
             </div>
@@ -87,7 +89,7 @@
         <section id="inline-report-section" class="inline-report-section hidden" style="margin-top: 30px; margin-bottom: 30px;">
             <div class="section-card">
                 <div class="report-header-row">
-                    <h2 id="i18n-inline-report-title" style="font-family: var(--font-heading); font-weight: 700;">Verification Report Summary</h2>
+                    <h2 id="i18n-inline-report-title" style="font-family: var(--font-heading); font-weight: 700;">Verification Report</h2>
                 </div>
                 <div id="inline-verdict-banner" class="verdict-banner">
                     <!-- Dynamic verdict banner -->
@@ -104,38 +106,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </section>
-
-        <!-- Verification Report Section -->
-        <section id="verification-report-section" class="report-section hidden">
-            <div class="section-card report-modal-card">
-                <div class="report-header-row">
-                    <h2 id="i18n-report-title">Verification Report</h2>
-                    <button id="close-report-btn" class="btn-close-modal" title="Close Report">&times;</button>
-                </div>
-                <div id="verdict-banner" class="verdict-banner">
-                    <!-- Dynamic Roman Urdu overall verdict goes here -->
-                </div>
-                
-                <div class="table-responsive">
-                    <table class="report-table">
-                        <thead>
-                            <tr id="report-table-header">
-                                <th id="i18n-table-field">Field</th>
-                                <th>Aadhaar Card</th>
-                                <th>PAN Card</th>
-                                <!-- Dynamic headers will be inserted here -->
-                                <th id="i18n-table-status">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="comparison-table-body">
-                            <!-- Dynamic comparison rows go here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="report-footer">
+                <div class="report-footer" style="margin-top: 20px; text-align: right;">
                     <button id="toggle-raw-text-btn" class="btn btn-text">Show Raw Extracted Text</button>
                 </div>
             </div>
@@ -151,11 +122,12 @@
             </div>
         </section>
 
-        <!-- Bottom Ads Slot -->
-        <div class="ad-container-bottom" style="margin: 40px auto 0 auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
-            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">SPONSORED ADVERTISEMENT</span>
-            <div id="adsterra-banner-bottom">
-                <!-- PropellerAds / Adsterra Bottom 728x90 Script Structure -->
+        <!-- Bottom Partner Promo Slot -->
+        <div class="partner-bottom-section" style="margin: 40px auto 0 auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
+            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">PARTNER ADVERTISEMENT</span>
+            <div id="partner-frame-bottom">
+                <!-- PropellerAds / Adsterra Bottom 728x90 Script Structure (Commented out to bypass adblockers during testing) -->
+                <!--
                 <script type="text/javascript">
                     atOptions = {
                         'key' : 'adsterra_728x90_bottom_key_placeholder',
@@ -165,8 +137,9 @@
                         'params' : {}
                     };
                 </script>
+                -->
                 <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(99, 102, 241, 0.15)); padding: 15px; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="window.open('https://propellerads.com', '_blank')">
-                    <span style="color: var(--success); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">🌐 PropellerAds Monetization Slot</span>
+                    <span style="color: var(--success); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">🌐 PropellerAds Monetization Slot Active</span>
                     <span style="font-size: 0.8rem; color: var(--text-main);">Click here to generate your PropellerAds banner key and paste it inside index.html!</span>
                 </div>
             </div>

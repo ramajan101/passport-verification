@@ -323,17 +323,9 @@ function applyTranslations() {
     document.getElementById('i18n-verify').textContent = dict.verify;
     document.getElementById('i18n-reset').textContent = dict.reset;
     
-    document.getElementById('i18n-report-title').textContent = dict.title + " Report";
     const inlineTitle = document.getElementById('i18n-inline-report-title');
     if (inlineTitle) {
         inlineTitle.textContent = dict.title + " Report";
-    }
-    document.getElementById('i18n-table-field').textContent = dict.field;
-    document.getElementById('i18n-table-status').textContent = dict.statusCol;
-    
-    const closeReportBtn = document.getElementById('close-report-btn');
-    if (closeReportBtn) {
-        closeReportBtn.textContent = dict.closeReport || 'Close Report';
     }
     
     const toggleBtn = document.getElementById('toggle-raw-text-btn');
@@ -385,22 +377,6 @@ function setupGlobalEventListeners() {
     
     document.getElementById('custom-doc-modal').addEventListener('click', (e) => {
         if (e.target.id === 'custom-doc-modal') closeModal();
-    });
-    
-    const hideModalAndScroll = () => {
-        document.getElementById('verification-report-section').classList.add('hidden');
-        const inlineReport = document.getElementById('inline-report-section');
-        if (inlineReport) {
-            inlineReport.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    };
-
-    document.getElementById('close-report-btn').addEventListener('click', hideModalAndScroll);
-    
-    document.getElementById('verification-report-section').addEventListener('click', (e) => {
-        if (e.target.id === 'verification-report-section') {
-            hideModalAndScroll();
-        }
     });
 }
 
@@ -723,7 +699,6 @@ async function handleFileSelect(docId, file) {
         renderDocumentGrid();
         updateGlobalStatus();
         
-        document.getElementById('verification-report-section').classList.add('hidden');
         document.getElementById('raw-text-section').classList.add('hidden');
         
         const inlineReport = document.getElementById('inline-report-section');
@@ -834,7 +809,6 @@ function clearFile(docId) {
         renderDocumentGrid();
         updateGlobalStatus();
         
-        document.getElementById('verification-report-section').classList.add('hidden');
         document.getElementById('raw-text-section').classList.add('hidden');
         
         const inlineReport = document.getElementById('inline-report-section');
@@ -848,7 +822,6 @@ function removeDocument(docId) {
     renderDocumentGrid();
     updateGlobalStatus();
     
-    document.getElementById('verification-report-section').classList.add('hidden');
     document.getElementById('raw-text-section').classList.add('hidden');
     
     const inlineReport = document.getElementById('inline-report-section');
@@ -895,7 +868,6 @@ function resetAll() {
     renderDocumentGrid();
     updateGlobalStatus();
 
-    document.getElementById('verification-report-section').classList.add('hidden');
     document.getElementById('raw-text-section').classList.add('hidden');
     
     const inlineReport = document.getElementById('inline-report-section');
@@ -1076,8 +1048,7 @@ function compileVerificationResults() {
     const activeDocs = documents.filter(d => d.file !== null && d.status === 'done');
     const dict = translations[currentLang];
     
-    // Setup report header dynamically (both modal and inline)
-    const headerRow = document.getElementById('report-table-header');
+    // Setup report header dynamically (inline static report only)
     const inlineHeaderRow = document.getElementById('inline-report-table-header');
     
     const headersHtml = [`<th>${dict.field}</th>`];
@@ -1091,7 +1062,6 @@ function compileVerificationResults() {
     headersHtml.push(`<th>${dict.statusCol}</th>`);
     
     const combinedHeaders = headersHtml.join('');
-    headerRow.innerHTML = combinedHeaders;
     if (inlineHeaderRow) inlineHeaderRow.innerHTML = combinedHeaders;
 
     const fields = [
@@ -1101,9 +1071,7 @@ function compileVerificationResults() {
         { label: dict.fieldDocNumber, key: 'documentNumber', noCompare: true }
     ];
 
-    const tbody = document.getElementById('comparison-table-body');
     const inlineTbody = document.getElementById('inline-comparison-table-body');
-    tbody.innerHTML = '';
     if (inlineTbody) inlineTbody.innerHTML = '';
 
     let totalMismatches = 0;
@@ -1159,25 +1127,21 @@ function compileVerificationResults() {
         statusTd.innerHTML = statusHtml;
         row.appendChild(statusTd);
         
-        tbody.appendChild(row);
-        if (inlineTbody) inlineTbody.appendChild(row.cloneNode(true));
+        if (inlineTbody) inlineTbody.appendChild(row);
     });
 
-    // Render Overall Verdict Banner (both modal and inline)
-    const verdictBanner = document.getElementById('verdict-banner');
+    // Render Overall Verdict Banner
     const inlineVerdictBanner = document.getElementById('inline-verdict-banner');
-    
-    [verdictBanner, inlineVerdictBanner].forEach(banner => {
-        if (!banner) return;
-        banner.className = 'verdict-banner';
+    if (inlineVerdictBanner) {
+        inlineVerdictBanner.className = 'verdict-banner';
         if (totalMismatches > 0) {
-            banner.classList.add('verdict-error');
-            banner.textContent = dict.verdictError;
+            inlineVerdictBanner.classList.add('verdict-error');
+            inlineVerdictBanner.textContent = dict.verdictError;
         } else {
-            banner.classList.add('verdict-success');
-            banner.textContent = dict.verdictSuccess;
+            inlineVerdictBanner.classList.add('verdict-success');
+            inlineVerdictBanner.textContent = dict.verdictSuccess;
         }
-    });
+    }
 
     // Render Raw Text logs
     const rawContainer = document.getElementById('raw-text-container');
@@ -1193,9 +1157,14 @@ function compileVerificationResults() {
         rawContainer.appendChild(rawCard);
     });
 
-    document.getElementById('verification-report-section').classList.remove('hidden');
     const inlineReport = document.getElementById('inline-report-section');
-    if (inlineReport) inlineReport.classList.remove('hidden');
+    if (inlineReport) {
+        inlineReport.classList.remove('hidden');
+        // Smoothly scroll down to the report automatically!
+        setTimeout(() => {
+            inlineReport.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
 }
 
 // Register Service Worker for PWA (Mobile App install support)
