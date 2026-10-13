@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Excellence Services — Admin Portal (Hafiz Ramajan)</title>
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css?v=20261012_03">
+    <style>
+        body {
+            background: #090d16;
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        .admin-page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .admin-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-nav-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .admin-nav-title h1 {
+            font-size: 1.3rem;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            color: #f8fafc;
+        }
+        .admin-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .view-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .login-card-wrapper {
+            max-width: 440px;
+            margin: 60px auto;
+            text-align: center;
+        }
+        .status-badge.match {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .status-badge.mismatch {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .pass-input-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .btn-toggle-eye {
+            position: absolute;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+    
+        /* ==========================================================================
+           ADMIN PORTAL LIGHT MODE STYLING
+           ========================================================================== */
+        body.admin-light-mode {
+            background: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode .admin-nav-bar {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        body.admin-light-mode .admin-nav-title h1 {
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode .view-box {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode .admin-kpi-card {
+            background: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode .kpi-label {
+            color: #475569 !important;
+        }
+
+        body.admin-light-mode .admin-tab-btn {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body.admin-light-mode .admin-tab-btn.active {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        body.admin-light-mode .admin-search-input,
+        body.admin-light-mode input[type="text"],
+        body.admin-light-mode input[type="password"],
+        body.admin-light-mode input[type="tel"],
+        body.admin-light-mode input[type="email"],
+        body.admin-light-mode select,
+        body.admin-light-mode textarea {
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode table {
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode table th {
+            background: #f1f5f9 !important;
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        body.admin-light-mode table td {
+            border-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        body.admin-light-mode table tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        body.admin-light-mode .tab-toolbar {
+            border-color: #e2e8f0 !important;
+        }
+
+        body.admin-light-mode .leads-note-hint {
+            color: #475569 !important;
+        }
+
+        body.admin-light-mode .admin-select {
+            background: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-page-container">
+        <!-- Top Navigation -->
+        <header class="admin-nav-bar">
+            <div class="admin-nav-title">
+                <span style="font-size: 1.8rem;">🏢</span>
+                <div>
+                    <h1 id="admin-header-shop-title">EXCELLENCE SERVICES — ADMIN PORTAL</h1>
+                    <span style="font-size: 0.8rem; color: #94a3b8;" id="admin-header-meta">Center: <span id="admin-header-address">Near Iqra School, Raibag</span> | Owner: <strong id="admin-header-owner">Ramajan</strong></span>
+                </div>
+            </div>
+            <div class="admin-nav-actions">
+                <button type="button" id="admin-theme-toggle-btn" class="btn btn-secondary btn-sm" title="Toggle Light / Dark Mode" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <span id="admin-theme-icon">☀️</span> <span id="admin-theme-text">Light Mode</span>
+                </button>
+                <a href="/" class="btn btn-sm btn-secondary" style="text-decoration: none;" target="_blank">
+                    🌐 Open Main Website
+                </a>
+                <button id="admin-page-refresh" class="btn btn-sm btn-secondary">🔄 Refresh Data</button>
+                <button id="admin-page-logout" class="btn btn-sm btn-danger hidden">🚪 Logout</button>
+            </div>
+        </header>
+
+        <!-- 1. LOGIN VIEW -->
+        <div id="admin-auth-view" class="view-box login-card-wrapper animate-fade-in">
+            <span style="font-size: 3rem; display: block; margin-bottom: 12px;">🔐</span>
+            <h2 style="font-size: 1.4rem; margin-bottom: 6px; font-family: 'Outfit', sans-serif;">Admin Master Login</h2>
+            <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 20px;">
+                Enter password / PIN to manage services, rates, blog posts & view user verification reports.
+            </p>
+            <form id="admin-auth-form">
+                <div class="form-group" style="text-align: left; margin-bottom: 16px;">
+                    <label style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px; display: block;">Master Password / PIN</label>
+                    <div class="pass-input-row">
+                        <input type="password" id="admin-auth-pass" placeholder="Password daalein (admin123 ya phone)..." style="width: 100%; padding: 12px; padding-right: 44px; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: white; font-size: 1rem;" autofocus>
+                        <button type="button" class="btn-toggle-eye" id="toggle-pass-visibility" title="Show / Hide Password">👁️</button>
+                    </div>
+                </div>
+                <div id="admin-auth-error" class="hidden" style="color: #ef4444; font-size: 0.84rem; margin-bottom: 12px;">Galat password! Dobara koshish karein.</div>
+                
+                <button type="button" id="admin-auth-submit" class="btn btn-primary" style="width: 100%; padding: 13px; font-weight: 700; font-size: 1rem; margin-bottom: 10px;">
+                    Unlock Admin Dashboard 🚀
+                </button>
+                
+                <!-- One-Click Direct Unlock as Owner -->
+                <button type="button" id="admin-quick-unlock-btn" class="btn btn-secondary" style="width: 100%; padding: 11px; font-weight: 600; font-size: 0.9rem; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+                    ⚡ Direct Enter (Login as Hafiz Ramajan)
+                </button>
+
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 14px;">
+                    Default Passcodes: <code>admin123</code>, <code>7849008882</code>, <code>9620746029</code>, or <code>admin</code>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2. MAIN DASHBOARD VIEW -->
+        <div id="admin-main-view" class="view-box hidden">
+            <!-- KPI Grid -->
+            <div class="admin-kpi-grid" style="margin-bottom: 24px;">
+                <div class="admin-kpi-card">
+                    <span class="kpi-icon">📋</span>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-verifications">0</span>
+                        <span class="kpi-label">Total Verifications Done</span>
+                    </div>
+                </div>
+                <div class="admin-kpi-card">
+                    <span class="kpi-icon">⚠️</span>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-mismatches" style="color: #f87171;">0</span>
+                        <span class="kpi-label">Client Leads (Mismatches)</span>
+                    </div>
+                </div>
+                <div class="admin-kpi-card">
+                    <span class="kpi-icon">💼</span>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-services" style="color: #60a5fa;">0</span>
+                        <span class="kpi-label">Listed Services & Rates</span>
+                    </div>
+                </div>
+                <div class="admin-kpi-card">
+                    <span class="kpi-icon">📢</span>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-blogs" style="color: #34d399;">0</span>
+                        <span class="kpi-label">Published Blog Posts</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="admin-tabs-nav" style="margin-bottom: 20px;">
+                <button class="admin-tab-btn active" data-tab="page-tab-leads">
+                    <span>📋</span> User Reports & CRM Leads (<span id="count-leads">0</span>)
+                </button>
+                <button class="admin-tab-btn" data-tab="page-tab-services">
+                    <span>💼</span> Services & Rates Manager
+                </button>
+                <button class="admin-tab-btn" data-tab="page-tab-blogs">
+                    <span>📢</span> Blog & Updates Manager
+                </button>
+                <button class="admin-tab-btn" data-tab="page-tab-shop">
+                    <span>🏪</span> Shop & Contact Profile
+                </button>
+            </div>
+
+            <!-- TAB 1: LEADS & CRM -->
+            <div id="page-tab-leads" class="admin-tab-content active">
+                <div class="tab-toolbar">
+                    <div class="tab-toolbar-left">
+                        <input type="text" id="filter-leads-input" placeholder="Search applicant name, phone, or status..." class="admin-search-input" style="min-width: 250px;">
+                    <select id="filter-leads-status" class="admin-select" style="padding: 9px 12px; font-size: 0.84rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15);">
+                        <option value="all">🔍 All Statuses (All Leads)</option>
+                        <option value="mismatch">⚠️ Mismatches Only (Urgent Leads)</option>
+                        <option value="match">✅ 100% Matches (Passed)</option>
+                    </select>
+                        <span class="leads-note-hint">💡 Users verifying on website appear here in real-time. Contact them directly on WhatsApp!</span>
+                    </div>
+                    <div class="tab-toolbar-right">
+                        <button id="download-leads-csv" class="btn btn-sm btn-secondary">📥 Export CSV</button>
+                        <button id="clear-leads-history" class="btn btn-sm btn-danger">🗑️ Clear History</button>
+                    </div>
+                </div>
+
+                <div class="admin-table-responsive">
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant Name</th>
+                                  <th>📱 Mobile / WhatsApp</th>
+                                  <th>Verified Documents</th>
+                                  <th>Status Outcome</th>
+                                  <th>Timestamp</th>
+                                  <th>Direct Customer Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="page-leads-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: SERVICES & RATES -->
+            <div id="page-tab-services" class="admin-tab-content">
+                <div class="tab-toolbar">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Manage Services & Rate Card</h3>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin: 2px 0 0 0;">Add new services, set pricing, or edit existing services. Changes immediately appear on the website!</p>
+                    </div>
+                    <button id="btn-show-add-service" class="btn btn-sm btn-primary">➕ Add New Service</button>
+                </div>
+
+                <!-- Form Card -->
+                <div id="card-service-form" class="admin-edit-form-card hidden">
+                    <h4 id="heading-service-form">➕ Add New Service</h4>
+                    <form id="form-service" onsubmit="return false;">
+                        <input type="hidden" id="input-service-id">
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>Service Name *</label>
+                                <input type="text" id="input-service-name" placeholder="e.g. SSP Scholarship Online Filing" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <input type="text" id="input-service-cat" placeholder="e.g. Scholarship, Passport, Voter ID">
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>Rate / Fees (₹) *</label>
+                                <input type="text" id="input-service-rate" placeholder="e.g. ₹50 ya ₹500" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Turnaround Time</label>
+                                <input type="text" id="input-service-time" placeholder="e.g. Same Day, 1-2 Days">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="input-service-desc" rows="2" placeholder="Details about this service..."></textarea>
+                        </div>
+                        <div class="form-actions-row">
+                            <button type="button" id="btn-cancel-service" class="btn btn-secondary btn-sm">Cancel</button>
+                            <button type="submit" id="btn-save-service" class="btn btn-success btn-sm">💾 Save Service</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Services Table -->
+                <div class="admin-table-responsive">
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Service Name</th>
+                                <th>Category</th>
+                                <th>Fees / Rate</th>
+                                <th>Turnaround Time</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="page-services-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: BLOGS & ANNOUNCEMENTS -->
+            <div id="page-tab-blogs" class="admin-tab-content">
+                <div class="tab-toolbar">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Manage Blog & Latest News Updates</h3>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin: 2px 0 0 0;">Publish scholarship deadlines, voter ID announcements, and passport rules updates to the homepage.</p>
+                    </div>
+                    <button id="btn-show-add-blog" class="btn btn-sm btn-primary">➕ Post New Update</button>
+                </div>
+
+                <!-- Form Card -->
+                <div id="card-blog-form" class="admin-edit-form-card hidden">
+                    <h4 id="heading-blog-form">➕ Post New Announcement</h4>
+                    <form id="form-blog" onsubmit="return false;">
+                        <input type="hidden" id="input-blog-id">
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>Post Title *</label>
+                                <input type="text" id="input-blog-title" placeholder="e.g. SSP Scholarship 2026-27 Started..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category / Badge</label>
+                                <input type="text" id="input-blog-cat" placeholder="e.g. Scholarship, Voter ID, Passport">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Summary (Dikhne wali line) *</label>
+                            <input type="text" id="input-blog-summary" placeholder="Short summary..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Content (Puri khabar)</label>
+                            <textarea id="input-blog-content" rows="4" placeholder="Full details, required documents, fees, etc..."></textarea>
+                        </div>
+                        <div class="form-actions-row">
+                            <button type="button" id="btn-cancel-blog" class="btn btn-secondary btn-sm">Cancel</button>
+                            <button type="submit" id="btn-save-blog" class="btn btn-success btn-sm">📢 Publish Update</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Blogs Table -->
+                <div class="admin-table-responsive">
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Summary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="page-blogs-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: SHOP & CONTACT PROFILE SETTINGS -->
+            <div id="page-tab-shop" class="admin-tab-content">
+                <div class="tab-toolbar">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.15rem; font-family: 'Outfit', sans-serif;">🏪 Shop & Contact Profile Settings</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin: 3px 0 0 0;">Yahan se aap apni shop ka naam, pata, timing, phone numbers, WhatsApp, Instagram aur email enter/update kar sakte hain. Website par automatically update ho jayega.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" id="btn-save-shop-profile" class="btn btn-sm btn-success">💾 Save Shop Info</button>
+                    </div>
+                </div>
+
+                
+                <!-- LIVE ACTIVE PROFILE & WEBSITE PREVIEW CARD -->
+                <div id="admin-shop-live-card" style="margin-top: 18px; background: rgba(30, 41, 59, 0.75); border: 1.5px solid rgba(99, 102, 241, 0.4); border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 2rem;">🏬</span>
+                            <div>
+                                <div style="font-size: 1.25rem; font-weight: 800; color: #60a5fa;" id="preview-shop-name">EXCELLENCE SERVICES</div>
+                                <div style="font-size: 0.82rem; color: #94a3b8;" id="preview-shop-owner">Authorized Person / Owner: Ramajan</div>
+                            </div>
+                        </div>
+                        <div id="preview-shop-status-badge">
+                            <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700;">🟢 Live on Website</span>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">📞 Primary Call Number</span>
+                            <strong style="color: #38bdf8; font-size: 1.05rem;" id="preview-shop-phone1">7849008882</strong>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">📞 Secondary Call Number</span>
+                            <strong style="color: #38bdf8; font-size: 1.05rem;" id="preview-shop-phone2">9620746029</strong>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">💬 WhatsApp Direct Link</span>
+                            <a href="https://wa.me/qr/HTPXYYKJAOWWA1" target="_blank" style="color: #34d399; font-size: 0.85rem; font-weight: 600; text-decoration: none; word-break: break-all;" id="preview-shop-whatsapp">WhatsApp Link Active ↗</a>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">📍 Address & Location</span>
+                            <span style="color: #cbd5e1; font-size: 0.84rem;" id="preview-shop-address">Near Iqra School, Raibag, Dist. Belagavi, Karnataka</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(15, 23, 42, 0.6); border-left: 3px solid #6366f1; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+                        <strong style="display: block; font-size: 0.9rem; color: #f8fafc; margin-bottom: 4px;" id="preview-shop-banner-title">Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!</strong>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin: 0; line-height: 1.45;" id="preview-shop-banner-sub">Passport, PAN Card, Voter ID, ya Marksheet me Name Spelling, DOB, ya Father's Name mismatch ho gaya hai? Ya naya Passport, Voter ID, Police Verification, ya SSP Scholarship karwana ho? Fikar mat karein! Aapka sabhi online kaam 100% legal, fast aur approved karwayen.</p>
+                    </div>
+                </div>
+
+                <div class="admin-edit-form-card" style="margin-top: 15px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 22px;">
+                    <form id="form-shop-profile" onsubmit="return false;">
+                        <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong style="color: #34d399; font-size: 1rem;">Show Shop & Contact Info on Website</strong>
+                                <p style="font-size: 0.82rem; color: #94a3b8; margin: 2px 0 0 0;">Agar isko band karenge to public website par se dukan ka banner aur contact buttons gayab ho jayenge.</p>
+                            </div>
+                            <label style="position: relative; display: inline-block; width: 48px; height: 26px; cursor: pointer;">
+                                <input type="checkbox" id="input-shop-enabled" checked style="opacity: 0; width: 0; height: 0;">
+                                <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .3s; border-radius: 26px;"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>🏪 Shop / Center / Business Name</label>
+                                <input type="text" id="input-shop-name" placeholder="e.g. EXCELLENCE SERVICES" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                            <div class="form-group">
+                                <label>👤 Owner / Authorized Person Name</label>
+                                <input type="text" id="input-shop-owner" placeholder="e.g. Hafiz Ramajan" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>📍 Full Address & Landmark</label>
+                            <input type="text" id="input-shop-address" placeholder="e.g. Near Iqra School, Raibag, Dist. Belagavi, Karnataka" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        </div>
+
+                        <div class="form-row-2" style="margin-top: 15px;">
+                            <div class="form-group">
+                                <label>⏰ Shop / Center Working Timings</label>
+                                <input type="text" id="input-shop-timing" placeholder="e.g. 10:00 AM to 8:00 PM" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                            <div class="form-group">
+                                <label>✉️ Email Address</label>
+                                <input type="email" id="input-shop-email" placeholder="e.g. ramajanraibag@gmail.com" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                        </div>
+
+                        <div class="form-row-2" style="margin-top: 15px;">
+                            <div class="form-group">
+                                <label>📞 Primary Call Number</label>
+                                <input type="text" id="input-shop-phone1" placeholder="e.g. 7849008882" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                            <div class="form-group">
+                                <label>📞 Secondary Call Number</label>
+                                <input type="text" id="input-shop-phone2" placeholder="e.g. 9620746029" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                        </div>
+
+                        <div class="form-row-2" style="margin-top: 15px;">
+                            <div class="form-group">
+                                <label>💬 WhatsApp Direct Chat Link / Mobile Number</label>
+                                <input type="text" id="input-shop-whatsapp" placeholder="e.g. https://wa.me/qr/HTPXYYKJAOWWA1 ya 7849008882" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                            <div class="form-group">
+                                <label>📸 Instagram Profile Link</label>
+                                <input type="text" id="input-shop-instagram" placeholder="e.g. https://instagram.com/Excellence_Serv_Rbg" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                        </div>
+
+                        <div class="form-row-2" style="margin-top: 15px;">
+                            <div class="form-group">
+                                <label>📸 Instagram Username / Handle</label>
+                                <input type="text" id="input-shop-insta-handle" placeholder="e.g. @Excellence_Serv_Rbg" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                            <div class="form-group">
+                                <label>📱 WhatsApp QR Code Image (File Path or URL)</label>
+                                <input type="text" id="input-shop-qr-image" placeholder="e.g. assets/whatsapp-qr.png" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>📢 Banner Title Heading</label>
+                            <input type="text" id="input-shop-banner-title" placeholder="e.g. Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>📝 Banner Subtitle / Description</label>
+                            <textarea id="input-shop-banner-sub" rows="3" placeholder="Shop promotion description..." style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); color: #fff;"></textarea>
+                        </div>
+
+                        <div id="shop-save-status" style="margin-top: 12px; font-size: 0.92rem; font-weight: 600;" class="hidden"></div>
+
+                        <div class="form-actions-row" style="margin-top: 22px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button type="button" id="btn-clear-shop-profile" class="btn btn-secondary btn-sm">🗑️ Clear All</button>
+                            <button type="button" id="btn-save-shop-profile-bottom" class="btn btn-success btn-sm">💾 Save & Update Website</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Toggle Password Visibility Script -->
+    <script>
+        const eyeBtn = document.getElementById('toggle-pass-visibility');
+        const passInp = document.getElementById('admin-auth-pass');
+        if (eyeBtn && passInp) {
+            eyeBtn.addEventListener('click', () => {
+                if (passInp.type === 'password') {
+                    passInp.type = 'text';
+                    eyeBtn.textContent = '🔒';
+                } else {
+                    passInp.type = 'password';
+                    eyeBtn.textContent = '👁️';
+                }
+            });
+        }
+    </script>
+
+    <!-- Main Clean Admin Logic with Cache Busting -->
+    <script src="admin.js?v=20261012_03"></script>
+</body>
+</html>

@@ -1,24 +1,17 @@
-const CACHE_NAME = 'passport-verify-v5';
-const ASSETS = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/manifest.json'
-];
-
+// Cache Destroyer & Auto-Updater Service Worker
 self.addEventListener('install', (e) => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (e) => {
     e.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS).catch(err => console.log("Caching assets skipped on install", err));
-        })
+        caches.keys().then((keys) => {
+            return Promise.all(keys.map(k => caches.delete(k)));
+        }).then(() => self.clients.claim())
     );
 });
 
 self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.match(e.request).then((cachedResponse) => {
-            return cachedResponse || fetch(e.request);
-        })
-    );
+    // Always fetch fresh network content
+    e.respondWith(fetch(e.request));
 });

@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "SSP Scholarship Online Application (Karnataka)",
+    "category": "Scholarship",
+    "rate": "Call Me",
+    "rateNumber": 50,
+    "turnAround": "Same Day",
+    "description": "Applicable for 1st to 10th Class, 1st & 2nd PUC, Degree UG & PG. Fast online submission with tracking slip."
+  },
+  {
+    "id": 2,
+    "name": "Fresh Indian Passport Application",
+    "category": "Passport",
+    "rate": "₹Call Me",
+    "rateNumber": 500,
+    "turnAround": "1-2 Days",
+    "description": "New Passport filing, PSK slot appointment booking, document pre-screening & guidance."
+  },
+  {
+    "id": 3,
+    "name": "Tatkaal Passport Urgent Application",
+    "category": "Passport",
+    "rate": "₹Call Me",
+    "rateNumber": 800,
+    "turnAround": "Express / Same Day",
+    "description": "Emergency Tatkaal passport filing with priority PSK appointment slot scheduling."
+  },
+  {
+    "id": 4,
+    "name": "Passport Name Spelling & DOB Correction",
+    "category": "Passport",
+    "rate": "₹Call Me",
+    "rateNumber": 400,
+    "turnAround": "1-2 Days",
+    "description": "Official correction filing for spelling mismatch, Annexure-D affidavit preparation & file clearance."
+  },
+  {
+    "id": 5,
+    "name": "Annexure-D / Annexure-E Legal Affidavit",
+    "category": "Legal Affidavit",
+    "rate": "₹Call Me",
+    "rateNumber": 250,
+    "turnAround": "Same Day",
+    "description": "Notarized One & Same Person affidavit formatting for PSK passport submission."
+  },
+  {
+    "id": 6,
+    "name": "New PAN Card (Instant / Regular)",
+    "category": "PAN Card",
+    "rate": "₹Call Me",
+    "rateNumber": 150,
+    "turnAround": "2-3 Days (e-PAN Same Day)",
+    "description": "Fresh PAN card filing via NSDL/UTI with doorstep PVC card delivery and instant e-PAN."
+  },
+  {
+    "id": 7,
+    "name": "PAN Card Name / DOB Correction",
+    "category": "PAN Card",
+    "rate": "₹Call Me",
+    "rateNumber": 200,
+    "turnAround": "3-5 Days",
+    "description": "Spelling rectification in PAN Card to match Aadhaar Card and 10th Marksheet."
+  },
+  {
+    "id": 8,
+    "name": "New Color PVC Voter ID Card (ಹೊಸ ಕಲರ್ ವೋಟರ್ ಐಡಿ)",
+    "category": "Voter ID",
+    "rate": "₹Call Me",
+    "rateNumber": 100,
+    "turnAround": "Same Day",
+    "description": "Convert old voter ID to high-quality digital color PVC card, fresh voter registration & address shift."
+  },
+  {
+    "id": 9,
+    "name": "Police Clearance Certificate (PCC) & Verification",
+    "category": "Police Verification",
+    "rate": "₹Call Me",
+    "rateNumber": 300,
+    "turnAround": "1-2 Days",
+    "description": "Police verification form submission for Indian Passport & Overseas employment."
+  },
+  {
+    "id": 10,
+    "name": "Visa Consultation & Passport Status Check",
+    "category": "Visa & Tracking",
+    "rate": "₹Call Me",
+    "rateNumber": 150,
+    "turnAround": "Instant",
+    "description": "Live tracking of Passport file status, RPO objection clearance & travel visa advice."
+  }
+]

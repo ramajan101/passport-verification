@@ -2,33 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title id="i18n-page-title">Passport Document Verification System</title>
+    
+    <!-- Instant Cache Destroyer Script -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let r of registrations) { r.unregister(); }
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(keys => {
+                for (let k of keys) { caches.delete(k); }
+            });
+        }
+        // Clear any old accidental autofilled password stored in localStorage
+        localStorage.removeItem('customGeminiApiKey');
+    </script>
+
     <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Main Stylesheet with Cache Busting -->
+    <link rel="stylesheet" href="styles.css?v=final_1791871112092">
+    
     <!-- PDF.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <!-- PWA Manifest Link -->
-    <link rel="manifest" href="manifest.json">
+    <!-- html2pdf.js for Client-Side High-Quality PDF Report Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="background-radial"></div>
     <div class="app-container">
-        <!-- Header -->
+        <!-- Header (Clean & Professional: No admin buttons or password inputs on public site) -->
         <header class="app-header">
             <div class="header-top-bar">
                 <div class="header-logo">
                     <span class="icon-passport">🛂</span>
-                    <h1 id="i18n-title">Passport Document Verification System</h1>
+                    <div>
+                        <h1 id="i18n-title">Passport Document Verification System</h1>
+                        <span class="system-badge">AI KYC & PSK Compliance Engine</span>
+                    </div>
                 </div>
                 <div class="header-controls">
-                    <input type="password" id="api-key-input" class="control-select" placeholder="Gemini API Key (Optional)..." style="width: 220px; cursor: text;" title="Enter custom Gemini API Key to override default server key">
                     <select id="lang-select" class="control-select">
-                        <option value="roman">Roman English</option>
+                        <option value="roman">Roman Urdu / English</option>
                         <option value="en">English</option>
                         <option value="hi">हिन्दी (Hindi)</option>
                         <option value="ur">اردو (Urdu)</option>
@@ -39,62 +63,98 @@
             <p class="subtitle" id="i18n-subtitle">Upload and cross-verify documents locally using secure client-side PDF rendering & AI OCR.</p>
         </header>
 
-        <!-- Header Partner Promo Slot -->
-        <div class="partner-top-section" style="margin: -20px auto 30px auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
-            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">PARTNER ADVERTISEMENT</span>
-            <div id="partner-frame-top">
-                <!-- Adsterra 728x90 Banner Script Structure (Commented out to bypass adblockers during testing) -->
-                <!--
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : 'adsterra_728x90_header_key_placeholder',
-                        'format' : 'iframe',
-                        'height' : 90,
-                        'width' : 728,
-                        'params' : {}
-                    };
-                </script>
-                -->
-                <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15)); padding: 15px; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="window.open('https://adsterra.com', '_blank')">
-                    <span style="color: var(--primary-start); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">⚡ Adsterra Monetization Slot Active</span>
-                    <span style="font-size: 0.8rem; color: var(--text-main);">Click here to generate your active Adsterra banner key and paste it inside index.html!</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Actions Bar -->
-        <div class="actions-bar">
+        <!-- Main Actions Bar (Top Buttons - Fully Mobile Responsive) -->
+        <div class="actions-bar" id="main-actions-bar">
             <button id="add-doc-btn" class="btn btn-secondary">
-                <span class="btn-icon">+</span> <span id="i18n-add-doc">Add Custom Document</span>
+                <span class="btn-icon">➕</span> <span id="i18n-add-doc">Custom Document Add Karein</span>
             </button>
             <button id="verify-all-btn" class="btn btn-primary" disabled>
                 <span class="btn-icon">⚡</span> <span id="i18n-verify">Verify Documents</span>
             </button>
+            <button id="btn-toggle-news-drawer" class="btn btn-secondary">
+                <span class="btn-icon">📢</span> <span>Latest News & Schemes</span>
+            </button>
             <button id="reset-all-btn" class="btn btn-danger">
                 <span class="btn-icon">🔄</span> <span id="i18n-reset">Reset All</span>
+            </button>
+            <!-- Top Download & View Buttons -->
+            <button id="top-download-pdf-btn" class="btn btn-success hidden" style="font-weight: 700;">
+                <span class="btn-icon">📄</span> <span id="i18n-top-dl-pdf">Download PDF Report</span>
+            </button>
+            <button id="top-open-report-btn" class="btn btn-primary hidden" style="font-weight: 700;">
+                <span class="btn-icon">🔍</span> <span id="i18n-top-view-report">View Full Report</span>
             </button>
         </div>
 
         <!-- Global Message / Status Display -->
         <div id="global-status-message" class="info-banner">
-            <p id="global-status-text">Aadhaar aur PAN mandatory hain. Kripya dono upload karein.</p>
+            <p id="global-status-text">Aadhaar aur PAN mandatory hain. 10th Marksheet aur Custom docs bhi upload kar sakte hain.</p>
         </div>
 
-        <!-- Document Grid -->
-        <main class="document-grid" id="document-grid">
-            <!-- Dynamic Document Cards will be loaded here via JS -->
-        </main>
-
-        <!-- Inline Static Report Section -->
-        <section id="inline-report-section" class="inline-report-section hidden" style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="section-card">
-                <div class="report-header-row">
-                    <h2 id="i18n-inline-report-title" style="font-family: var(--font-heading); font-weight: 700;">Verification Report</h2>
+        <!-- Document Grid (Aadhaar, PAN, 10th Marksheet & Custom Docs) -->
+        
+        <!-- APPLICANT PHONE / WHATSAPP NUMBER CAPTURE (Direct CRM Integration) -->
+        <div class="applicant-phone-banner glass-card" id="applicant-phone-banner">
+            <div class="phone-banner-left">
+                <span class="phone-banner-icon">📱</span>
+                <div>
+                    <strong>Applicant WhatsApp / Mobile Number (Zaroori):</strong>
+                    <p>Apna 10-digit WhatsApp number darj karein taake verification report aur customer assistance direct mil sake.</p>
                 </div>
-                <div id="inline-verdict-banner" class="verdict-banner">
+            </div>
+            <div class="phone-input-group">
+                <span class="phone-prefix">🇮🇳 +91</span>
+                <input type="tel" id="applicant-phone-input" placeholder="Enter 10 digits..." maxlength="10" class="phone-input">
+                <button type="button" id="btn-save-phone" class="btn btn-primary btn-sm">💾 Save Number</button>
+            </div>
+        </div>
+
+        <!-- INLINE VERIFICATION REPORT SECTION (PLACED ABOVE DOCUMENT GRID) -->
+        <section id="verification-report-section" class="report-section hidden animate-fade-in" style="display: none !important;">
+            <div class="section-card report-modal-card glass-card">
+                <!-- Report Header with Title & Action Buttons -->
+                <div class="report-header-row">
+                    <div>
+                        <div class="report-org-badge" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.4); color: #60a5fa; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px;">
+                            <span>🏢 EXCELLENCE SERVICES</span>
+                            <span style="color: #94a3b8;">&bull;</span>
+                            <span style="color: #34d399;">📞 7849008882</span>
+                            <span style="color: #94a3b8;">&bull;</span>
+                            <span style="color: #34d399;">📞 9620746029</span>
+                        </div>
+                        <h2 id="i18n-inline-report-title">OFFICIAL DOCUMENT VERIFICATION AUDIT CERTIFICATE</h2>
+                        <span class="report-meta-subtitle" id="report-timestamp-meta">Official Verification Certificate for Indian Passport Application</span>
+                    </div>
+                    <div class="report-actions-group">
+                        <button id="download-pdf-btn" class="btn btn-success btn-sm">
+                            <span>📄</span> <span id="i18n-download-pdf">Download PDF Report</span>
+                        </button>
+                        <button id="print-report-btn" class="btn btn-secondary btn-sm">
+                            <span>🖨️</span> <span id="i18n-print-report">Print Report</span>
+                        </button>
+                        <button id="scroll-to-top-btn" class="btn btn-secondary btn-sm">
+                            <span>⬆️</span> <span>Top Par Jayein</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Verdict Banner -->
+                <div id="inline-verdict-banner" class="verdict-banner" style="margin-bottom: 20px;">
                     <!-- Dynamic verdict banner -->
                 </div>
-                <div class="table-responsive">
+
+                <!-- Smart Name & Spelling Difference Analysis Box (Supports Aadhaar, PAN, 10th Marksheet & Custom Docs) -->
+                <div id="smart-name-analysis-box" class="smart-analysis-box hidden" style="margin-bottom: 20px;">
+                    <!-- Dynamic Name & Spelling Diff Visualizer -->
+                </div>
+
+                <!-- Gender Verification Summary Box -->
+                <div id="gender-analysis-box" class="gender-analysis-box hidden" style="margin-bottom: 20px;">
+                    <!-- Dynamic Gender Comparison Banner -->
+                </div>
+
+                <!-- Comparison Table (Columns for all verified documents: Aadhaar, PAN, 10th Marksheet, Custom) -->
+                <div class="table-responsive" style="margin-bottom: 20px;">
                     <table class="report-table">
                         <thead>
                             <tr id="inline-report-table-header">
@@ -106,42 +166,151 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="report-footer" style="margin-top: 20px; text-align: right;">
+
+                <!-- PSK Rules & Advisory Notice -->
+                <div id="psk-advisory-box" class="psk-advisory-box" style="margin-bottom: 20px;">
+                    <div class="advisory-title">ℹ️ Passport Seva Kendra (PSK) Verification Guidelines:</div>
+                    <ul class="advisory-list" id="advisory-list-items">
+                        <li><strong>Name Spelling:</strong> Name should match 100% across Aadhaar, PAN, and 10th Marksheet. Any spelling variation (even 1 letter) requires Annexure-D affidavit or document correction.</li>
+                        <li><strong>Gender (Male/Female):</strong> Gender must match strictly across all identity records.</li>
+                        <li><strong>Date of Birth (DOB):</strong> 10th Marksheet / Birth Certificate takes precedence for official passport issuance.</li>
+                    </ul>
+                </div>
+
+                <!-- Section Footer: Raw Logs Toggle -->
+                <div class="report-footer">
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        💡 <em>Tip: You can download the PDF report anytime from the top button or inside this report!</em>
+                    </div>
                     <button id="toggle-raw-text-btn" class="btn btn-text">Show Raw Extracted Text</button>
                 </div>
+
+                <!-- Raw Text Panel (Collapsible inside report) -->
+                <section id="raw-text-section" class="raw-text-section hidden animate-fade-in" style="margin-top: 15px;">
+                    <div class="section-card" style="background: rgba(0,0,0,0.3); padding: 15px;">
+                        <h3 id="i18n-raw-logs-title" style="margin-bottom: 10px; font-size: 1rem;">Raw Extracted Text Logs</h3>
+                        <div id="raw-text-container" class="raw-text-container">
+                            <!-- Raw text elements go here -->
+                        </div>
+                    </div>
+                </section>
             </div>
         </section>
 
-        <!-- Raw Text Panel (Collapsible) -->
-        <section id="raw-text-section" class="raw-text-section hidden animate-fade-in">
-            <div class="section-card">
-                <h3 id="i18n-raw-logs-title">Raw Extracted Text Logs</h3>
-                <div id="raw-text-container" class="raw-text-container">
-                    <!-- Raw text elements go here -->
-                </div>
+        <!-- MAIN DUAL-COLUMN LAYOUT (Main Workspace + Right News Sidebar) -->
+        <div class="main-app-layout">
+            <div class="content-primary-col">
+                <main class="document-grid" id="document-grid">
+            <!-- Dynamic Document Cards loaded via JS -->
+        </main>
+
+        <!-- 📢 HOME PAGE: LATEST NEWS, SCHEMES & BLOG UPDATES SECTION (Directly visible on homepage) -->
+        <!-- DYNAMIC SERVICES & SHOP PROFILE BANNER (Fully Managed via Admin Panel) -->
+        <section id="service-promo-card" class="service-promo-card animate-fade-in" style="margin-top: 0; margin-bottom: 30px;">
+            <div class="promo-badge-tag" id="promo-badge-wrapper" style="display: none;">
+                <span>🏬</span> <strong id="promo-shop-badge"></strong> <span id="promo-shop-location"></span>
+            </div>
+            
+            <h3 class="promo-title" id="promo-banner-title">
+                📄 Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!
+            </h3>
+            
+            <p class="promo-subtitle" id="promo-banner-subtitle">
+                Passport, PAN Card, Voter ID, ya Marksheet me Name Spelling, DOB, ya Father's Name mismatch ho gaya hai? Ya naya Passport, Voter ID, Police Verification, ya SSP Scholarship karwana ho? Fikar mat karein! Aapka sabhi online kaam 100% legal, fast aur approved karwayen.
+            </p>
+
+            <!-- All Services & Price List Grid -->
+            <div class="services-category-title">
+                📋 <strong>Hamari Sabhi Online Sevaen & Fees (Services & Price List):</strong>
+            </div>
+            <div class="service-highlights-grid" id="public-services-grid">
+                <!-- Populated dynamically via JS from /api/services -->
+            </div>
+
+            <!-- DYNAMIC SHOP & CONTACT INFO DETAILS BOX (Managed via Admin Panel) -->
+            <div id="shop-info-dynamic-container">
+                <!-- Populated dynamically via JS from /api/shop-info -->
             </div>
         </section>
+            </div>
 
-        <!-- Bottom Partner Promo Slot -->
-        <div class="partner-bottom-section" style="margin: 40px auto 0 auto; max-width: 728px; text-align: center; background: var(--glass-bg); border: 1px dashed var(--glass-border); padding: 10px; border-radius: var(--border-radius-md); box-shadow: 0 4px 15px var(--glass-shadow); backdrop-filter: blur(var(--glass-blur));">
-            <span style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">PARTNER ADVERTISEMENT</span>
-            <div id="partner-frame-bottom">
-                <!-- PropellerAds / Adsterra Bottom 728x90 Script Structure (Commented out to bypass adblockers during testing) -->
-                <!--
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : 'adsterra_728x90_bottom_key_placeholder',
-                        'format' : 'iframe',
-                        'height' : 90,
-                        'width' : 728,
-                        'params' : {}
-                    };
-                </script>
-                -->
-                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(99, 102, 241, 0.15)); padding: 15px; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="window.open('https://propellerads.com', '_blank')">
-                    <span style="color: var(--success); font-weight: 800; font-size: 1rem; display: block; margin-bottom: 4px;">🌐 PropellerAds Monetization Slot Active</span>
-                    <span style="font-size: 0.8rem; color: var(--text-main);">Click here to generate your PropellerAds banner key and paste it inside index.html!</span>
+            <!-- RIGHT SIDEBAR: LATEST NEWS, SCHEMES & SERVICE BLOG -->
+            <aside class="sidebar-news-col" id="sidebar-news-section">
+                <div class="sidebar-news-card glass-card">
+                    <div class="sidebar-news-header">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.25rem;">📰</span>
+                            <div>
+                                <h3 id="sidebar-news-title" style="margin: 0; font-size: 1.05rem; font-family: var(--font-heading);">Latest News & Schemes</h3>
+                                <span id="sidebar-news-sub" style="font-size: 0.75rem; color: var(--text-muted);">Govt Schemes & Daily Alerts</span>
+                            </div>
+                        </div>
+                        <span class="badge badge-mandatory" style="font-size: 0.7rem; padding: 2px 7px;">LIVE</span>
+                    </div>
+
+                    <!-- Live Real-Time News Search Input -->
+                    <div class="sidebar-news-search">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="news-search-input" placeholder="Search news & schemes..." autocomplete="off">
+                    </div>
+
+                    <div class="sidebar-blogs-feed" id="public-blogs-grid">
+                        <!-- Shows Last 5 Posts by default -->
+                    </div>
+
+                    <!-- View All News & Schemes Button -->
+                    <button type="button" id="btn-view-all-news" class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 12px; display: none; justify-content: center;">
+                        <span>📋</span> <span id="i18n-view-all-news">View All News & Schemes</span> (<span id="total-news-count">0</span>)
+                    </button>
                 </div>
+            </aside>
+
+        </div>
+
+
+        <!-- INLINE VERIFICATION REPORT SECTION (Appears smoothly when documents are verified) -->
+        
+    </div>
+
+    <!-- Hidden Dedicated Printable / Exportable PDF Report Container -->
+    <div id="printable-pdf-container" class="printable-pdf-wrapper" style="display: none;">
+        <div id="pdf-report-content" class="pdf-page">
+            <!-- Dynamically populated PDF content with official Passport Seva styling -->
+        </div>
+    </div>
+
+    
+    <!-- Optional Mobile Number Prompt Modal (Shown on clicking Verify Documents) -->
+    <div id="phone-prompt-modal" class="modal hidden">
+        <div class="modal-content glass-card phone-prompt-modal-card">
+            <button type="button" id="btn-close-phone-modal" class="phone-modal-close-btn" title="Skip / Band Karein">&times;</button>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 2.2rem;">📱</span>
+                <div>
+                    <h3 class="phone-modal-title">Apna Mobile / WhatsApp Number Dein</h3>
+                    <span class="phone-modal-optional">(Optional &bull; Fikar na karein, ye bilkul zaroori nahi)</span>
+                </div>
+            </div>
+            
+            <p class="phone-modal-desc">
+                Agar documents me koi spelling ya DOB galti nikalti hai, to <strong>Excellence Services</strong> ki team aapse direct rabta (contact) karke aapka affidavit aur passport documents theek karwa sakti hai.
+            </p>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+                <label for="modal-phone-input" class="phone-modal-label">WhatsApp / Calling Number (10 Digits)</label>
+                <div class="phone-modal-input-wrap">
+                    <span class="phone-modal-prefix">🇮🇳 +91</span>
+                    <input type="tel" id="modal-phone-input" placeholder="e.g. 7849008882" maxlength="10" autocomplete="tel">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                <button type="button" id="btn-skip-phone-modal" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;">
+                    <span>✖ Skip (Bina Number Verify)</span>
+                </button>
+                <button type="button" id="btn-submit-phone-modal" class="btn btn-primary btn-sm" style="flex: 1.2; justify-content: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <span>⚡ Save & Verify Karein</span>
+                </button>
             </div>
         </div>
     </div>
@@ -168,7 +337,30 @@
         </div>
     </div>
 
-    <!-- Main JavaScript App -->
-    <script src="app.js"></script>
+    <!-- Main JavaScript App with Cache Busting -->
+    <script src="app.js?v=final_1791871112092"></script>
+
+    <!-- All News & Schemes Modal -->
+    <div id="all-news-modal" class="modal hidden">
+        <div class="modal-content glass-card" style="max-width: 720px; width: 95%; max-height: 85vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1.4rem;">📰</span>
+                    <h3 style="margin: 0; font-size: 1.2rem; font-family: var(--font-heading);" id="all-news-modal-title">All Latest News, Government Schemes & Service Blog</h3>
+                </div>
+                <button type="button" id="close-all-news-modal" style="background: none; border: none; font-size: 1.6rem; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
+            </div>
+            
+            <div class="sidebar-news-search" style="margin: 0 0 12px 0;">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="modal-news-search-input" placeholder="Search all schemes & updates..." autocomplete="off">
+            </div>
+
+            <div class="all-news-modal-body" id="all-news-grid" style="overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; padding-right: 4px;">
+                <!-- Dynamically filled with all blogs -->
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
