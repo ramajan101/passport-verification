@@ -172,11 +172,13 @@ function renderNewsSidebarFeed(filterQuery = '') {
 
     grid.innerHTML = displayList.map(b => {
         const msg = encodeURIComponent(`Namaste Hafiz Ramajan Sir! Maine aapke website par blog dekha: "${b.title}". Mujhe is service ke baare me baat karni hai.`);
+        const imgHtml = b.image ? `<div class="blog-thumb-wrap"><img src="${b.image}" alt="${b.title}" class="blog-thumb-img" onerror="this.parentElement.style.display='none'"></div>` : '';
         return `
             <article class="blog-post-card animate-fade-in">
+                ${imgHtml}
                 <div>
                     <div class="blog-post-header">
-                        <span class="blog-badge" style="background: ${b.tagColor ? b.tagColor + '20' : 'rgba(16,185,129,0.15)'}; color: ${b.tagColor || '#10b981'};">${b.badge || b.category || 'Update'}</span>
+                        <span class="blog-badge" style="background: ${b.tagColor ? b.tagColor + '20' : 'rgba(16,185,129,0.15)'}; color: ${b.tagColor || '#10b981'};	">${b.badge || b.category || 'Update'}</span>
                         <span class="blog-date">${b.date || 'Recent'}</span>
                     </div>
                     <h5 class="blog-post-title">${b.title}</h5>
@@ -213,24 +215,40 @@ function setupNewsSearchAndModal() {
         const filtered = query ? allNewsData.filter(b => 
             (b.title || '').toLowerCase().includes(query) ||
             (b.summary || '').toLowerCase().includes(query) ||
-            (b.category || '').toLowerCase().includes(query)
+            (b.category || '').toLowerCase().includes(query) ||
+            (b.badge || '').toLowerCase().includes(query)
         ) : allNewsData;
+
+        if (filtered.length === 0) {
+            modalGrid.innerHTML = '<div style="text-align:center; color: var(--text-muted); padding: 30px; font-size: 0.95rem;">🔍 Koi scheme ya news nahi mili. Doosra keyword search karein.</div>';
+            return;
+        }
 
         modalGrid.innerHTML = filtered.map(b => {
             const msg = encodeURIComponent(`Namaste Hafiz Ramajan Sir! Maine aapke portal par dekha: "${b.title}". Is baare me jankari chahiye.`);
+            const imgHtml = b.image ? `
+                <div class="all-news-img-wrap">
+                    <img src="${b.image}" alt="${b.title}" class="all-news-img" onerror="this.parentElement.style.display='none'">
+                </div>
+            ` : '';
             return `
-                <article class="blog-post-card" style="margin-bottom: 0;">
-                    <div class="blog-post-header">
-                        <span class="blog-badge">${b.badge || b.category || 'Update'}</span>
-                        <span class="blog-date">${b.date || 'Recent'}</span>
-                    </div>
-                    <h4 style="margin: 4px 0 6px 0; font-size: 1.05rem; font-family: var(--font-heading); color: var(--text-main);">${b.title}</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 10px 0;">${b.summary || ''}</p>
-                    <div class="blog-cta-row">
-                        <span style="font-size: 0.76rem; color: var(--text-muted);">👤 ${b.author || 'Hafiz Ramajan'}</span>
-                        <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn-blog-action">
-                            <span>💬 Apply / Contact on WhatsApp</span>
-                        </a>
+                <article class="blog-post-card all-news-card animate-fade-in">
+                    ${imgHtml}
+                    <div class="all-news-content">
+                        <div>
+                            <div class="blog-post-header">
+                                <span class="blog-badge" style="background: ${b.tagColor ? b.tagColor + '20' : 'rgba(16,185,129,0.15)'}; color: ${b.tagColor || '#10b981'}; font-weight: 800;">${b.badge || b.category || 'Update'}</span>
+                                <span class="blog-date" style="font-weight: 600;">📅 ${b.date || 'Recent'}</span>
+                            </div>
+                            <h4 class="blog-post-title" style="margin: 4px 0 6px 0; font-size: 1.05rem; font-family: var(--font-heading);">${b.title}</h4>
+                            <p class="blog-post-summary" style="font-size: 0.88rem; line-height: 1.5; margin: 0 0 10px 0;">${b.summary || ''}</p>
+                        </div>
+                        <div class="blog-cta-row">
+                            <span style="font-size: 0.76rem;">👤 ${b.author || 'Hafiz Ramajan'}</span>
+                            <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn-blog-action" style="font-weight: 700;">
+                                <span>💬 Apply / Contact on WhatsApp</span>
+                            </a>
+                        </div>
                     </div>
                 </article>
             `;
@@ -265,7 +283,6 @@ function setupNewsSearchAndModal() {
         };
     }
 }
-
 
 // ==========================================================================
 // EXCELLENCE SERVICES - ADMIN PORTAL (HAFIZ RAMAJAN DASHBOARD)
@@ -1093,7 +1110,7 @@ const translations = {
 
 // Global App States
 let currentLang = localStorage.getItem('appLanguage') || 'roman';
-let activeTheme = localStorage.getItem('appTheme') || 'dark';
+let activeTheme = localStorage.getItem('appTheme') || 'light';
 let verificationPerformed = false;
 
 // Application State (Document Structure with Gender)
@@ -1231,23 +1248,25 @@ function updateConsultationAd(hasMismatch, mismatchCount, totalDocs) {
 // Setup Theme State on Startup
 function initTheme() {
     const themeBtn = document.getElementById('theme-toggle-btn');
-    if (activeTheme === 'light') {
-        document.body.classList.add('light-theme');
+    if (activeTheme === 'dark') {
+        document.body.classList.remove('light-theme');
         if (themeBtn) themeBtn.textContent = '☀️';
     } else {
-        document.body.classList.remove('light-theme');
+        document.body.classList.add('light-theme');
         if (themeBtn) themeBtn.textContent = '🌙';
+        activeTheme = 'light';
     }
+    localStorage.setItem('appTheme', activeTheme);
 
     if (themeBtn) {
         themeBtn.addEventListener('click', () => {
             if (document.body.classList.contains('light-theme')) {
                 document.body.classList.remove('light-theme');
-                themeBtn.textContent = '🌙';
+                themeBtn.textContent = '☀️';
                 activeTheme = 'dark';
             } else {
                 document.body.classList.add('light-theme');
-                themeBtn.textContent = '☀️';
+                themeBtn.textContent = '🌙';
                 activeTheme = 'light';
             }
             localStorage.setItem('appTheme', activeTheme);
@@ -1412,9 +1431,13 @@ function setupGlobalEventListeners() {
     const topOpenBtn = document.getElementById('top-open-report-btn');
     if (topOpenBtn) {
         topOpenBtn.addEventListener('click', () => {
+            verificationPerformed = true;
+            compileVerificationResults();
             const reportSec = document.getElementById('verification-report-section');
             if (reportSec) {
                 reportSec.classList.remove('hidden');
+                reportSec.style.removeProperty('display');
+                reportSec.style.display = 'block';
                 reportSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
@@ -2467,6 +2490,8 @@ function compileVerificationResults() {
 
     // Show the Inline Report Section & Smoothly Scroll down to it!
     reportModal.classList.remove('hidden');
+    reportModal.style.removeProperty('display');
+    reportModal.style.display = 'block';
     setTimeout(() => {
         reportModal.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -2925,7 +2950,7 @@ async function generatePdfReport() {
     wrapper.style.display = 'block';
 
     const opt = {
-        margin: [8, 8, 8, 8],
+        margin: [10, 10, 10, 10],
         filename: fileName,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
@@ -2937,8 +2962,8 @@ async function generatePdfReport() {
             y: 0,
             scrollX: 0,
             scrollY: 0,
-            width: 740,
-            windowWidth: 800
+            width: 700,
+            windowWidth: 700
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }

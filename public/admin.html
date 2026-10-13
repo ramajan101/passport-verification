@@ -425,6 +425,32 @@
                                 <input type="text" id="input-blog-cat" placeholder="e.g. Scholarship, Voter ID, Passport">
                             </div>
                         </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label>🖼️ Post Photo / Thumbnail Image</label>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" id="input-blog-image" placeholder="Image URL ya Asset Path (e.g. /assets/ssp-scholarship.jpg ya link)" style="flex: 1;">
+                                <label class="btn btn-secondary btn-sm" style="cursor: pointer; display: flex; align-items: center; gap: 4px; margin: 0; white-space: nowrap;">
+                                    📁 Device Se Photo Upload
+                                    <input type="file" id="input-blog-image-file" accept="image/*" style="display: none;">
+                                </label>
+                            </div>
+                            
+                            <!-- Quick Image Presets -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px;">
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">⚡ Ready Posters:</span>
+                                <button type="button" class="btn-img-preset" data-src="/assets/ssp-scholarship.jpg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">🎓 SSP Scholarship</button>
+                                <button type="button" class="btn-img-preset" data-src="/assets/voter-id-service.jpg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">🗳️ Voter ID</button>
+                                <button type="button" class="btn-img-preset" data-src="/assets/passport-services-poster.jpg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">🛂 Passport Seva</button>
+                                <button type="button" class="btn-img-preset" data-src="/assets/pan-card-service.svg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">💳 PAN Card</button>
+                                <button type="button" class="btn-img-preset" data-src="/assets/police-clearance.svg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">👮 Police PCC</button>
+                                <button type="button" class="btn-img-preset" data-src="/assets/ration-card.svg" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;">🌾 Ration Card</button>
+                            </div>
+
+                            <!-- Image Preview -->
+                            <div id="blog-image-preview-container" style="display: none; margin-top: 8px;">
+                                <img id="blog-image-preview-el" src="" alt="Preview" style="max-height: 100px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2);">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label>Summary (Dikhne wali line) *</label>
                             <input type="text" id="input-blog-summary" placeholder="Short summary..." required>
@@ -445,6 +471,7 @@
                     <table class="admin-data-table">
                         <thead>
                             <tr>
+                                <th>Photo</th>
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Date</th>

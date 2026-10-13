@@ -13,7 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Strict anti-caching middleware to force browser to always load fresh assets
 app.use((req, res, next) => {
@@ -277,19 +278,37 @@ app.delete('/api/services/:id', (req, res) => {
 });
 
 // 2. Blog & Updates API
+
+// Image/Photo upload route for Admin Blog & Scheme Posters
+app.post('/api/upload-asset', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No image file uploaded' });
+        }
+        const ext = path.extname(req.file.originalname) || '.jpg';
+        const filename = 'upload_' + Date.now() + ext;
+        const targetPath = path.join(__dirname, 'public', 'assets', filename);
+        fs.writeFileSync(targetPath, req.file.buffer);
+        res.json({ success: true, url: '/assets/' + filename });
+    } catch (err) {
+        console.error('Asset upload error:', err);
+        res.status(500).json({ error: 'Failed to save uploaded image' });
+    }
+});
+
 app.get('/api/blogs', (req, res) => {
     res.json(readJsonFile('blogs.json', []));
 });
 
 app.post('/api/blogs', (req, res) => {
     const blogs = readJsonFile('blogs.json', []);
-    const { id, title, category, author, summary, content, badge, tagColor } = req.body;
+    const { id, title, category, author, summary, content, badge, tagColor, image } = req.body;
     if (!title) return res.status(400).json({ error: "Title required" });
 
     if (id) {
         const idx = blogs.findIndex(b => String(b.id) === String(id));
         if (idx !== -1) {
-            blogs[idx] = { ...blogs[idx], title, category, author: author || 'Hafiz Ramajan', summary, content, badge, tagColor, date: 'Updated' };
+            blogs[idx] = { ...blogs[idx], title, category, author: author || 'Hafiz Ramajan', summary, content, badge, tagColor, image: image !== undefined ? image : blogs[idx].image, date: 'Updated' };
         } else {
             blogs.push({ id, title, category, author: author || 'Hafiz Ramajan', summary, content, badge, tagColor, date: new Date().toLocaleDateString() });
         }

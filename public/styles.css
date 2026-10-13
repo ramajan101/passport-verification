@@ -3515,8 +3515,8 @@ body.light-theme .phone-input {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 740px !important;
-    max-width: 740px !important;
+    width: 700px !important;
+    max-width: 700px !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
@@ -3526,14 +3526,15 @@ body.light-theme .phone-input {
 }
 
 .pdf-page {
-    width: 740px !important;
+    width: 700px !important;
+    max-width: 700px !important;
     box-sizing: border-box !important;
-    padding: 18px 22px !important;
+    padding: 20px 28px !important;
     background: #ffffff !important;
     color: #0f172a !important;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     line-height: 1.35 !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     overflow: hidden !important;
 }
 
@@ -3985,4 +3986,162 @@ body.light-theme #all-news-modal .modal-content {
 body.light-theme .all-news-modal-body article.blog-post-card {
     background: #f8fafc !important;
     border-color: #e2e8f0 !important;
+}
+
+
+/* ==========================================================================
+   ENHANCED NEWS & SCHEMES PHOTOS & MODAL STYLING (LIGHT & DARK THEMES)
+   ========================================================================== */
+
+/* Sidebar Blog Post Thumbnail Wrap */
+.blog-thumb-wrap {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    background: rgba(15, 23, 42, 0.06);
+    position: relative;
+}
+
+body.light-theme .blog-thumb-wrap {
+    background: #e2e8f0;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.blog-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+}
+
+.blog-post-card:hover .blog-thumb-img {
+    transform: scale(1.05);
+}
+
+/* Modal News Cards (Horizontal Layout with Photo) */
+.all-news-card {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    margin-bottom: 0 !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.all-news-img-wrap {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
+    height: 110px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    background: rgba(15, 23, 42, 0.08) !important;
+    flex-shrink: 0 !important;
+}
+
+body.light-theme .all-news-img-wrap {
+    background: #e2e8f0 !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.all-news-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    transition: transform 0.35s ease !important;
+}
+
+.all-news-card:hover .all-news-img {
+    transform: scale(1.06) !important;
+}
+
+.all-news-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    flex-grow: 1 !important;
+    min-width: 0 !important;
+}
+
+/* High-Contrast Light Theme Modal Text Styles (Fixes Invisible Text) */
+body.light-theme #all-news-modal .modal-content {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+    color: #0f172a !important;
+}
+
+body.light-theme #all-news-modal-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
+
+body.light-theme #modal-news-search-input {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-theme #modal-news-search-input:focus {
+    border-color: #4f46e5 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+    color: #0f172a !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card:hover {
+    border-color: #6366f1 !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.12) !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card h4,
+body.light-theme .all-news-modal-body article.blog-post-card .blog-post-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card p,
+body.light-theme .all-news-modal-body article.blog-post-card .blog-post-summary {
+    color: #334155 !important;
+    line-height: 1.5 !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card .blog-date {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card .blog-cta-row {
+    border-top: 1px solid #f1f5f9 !important;
+}
+
+body.light-theme .all-news-modal-body article.blog-post-card .blog-cta-row span {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+/* Responsive adjustment for Mobile screens */
+@media (max-width: 640px) {
+    .all-news-card {
+        flex-direction: column !important;
+    }
+    .all-news-img-wrap {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        height: 140px !important;
+    }
 }

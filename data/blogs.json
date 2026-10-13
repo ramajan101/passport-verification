@@ -1,57 +1,74 @@
 [
   {
-    "id": 1791803252060,
-    "title": "hioooo",
-    "category": "General",
-    "author": "Hafiz Ramajan",
-    "summary": "hiiiiiiiiii",
-    "content": "",
-    "badge": "Update",
-    "tagColor": "#10b981",
-    "date": "10/12/2026"
-  },
-  {
-    "id": 1791532918817,
-    "title": "Hi",
-    "category": "General",
-    "author": "Hafiz Ramajan",
-    "summary": "Hi kaise ho",
-    "content": "Hello",
-    "badge": "Update",
-    "tagColor": "#10b981",
-    "date": "10/9/2026"
-  },
-  {
     "id": 1,
-    "title": "SSP Scholarship 2026-27 Applications Open — Fees Only ₹50 at Excellence Services!",
+    "title": "SSP Scholarship 2026-27 Applications Open — Fees Only ₹50!",
     "category": "Scholarship",
     "date": "Today",
     "author": "Hafiz Ramajan",
-    "summary": "Karnataka State Scholarship Portal (SSP) applications are now being filled for all students from 1st to 10th Class, 1st & 2nd PUC, and Degree UG/PG.",
+    "summary": "Karnataka SSP scholarship forms 1st to 10th, PUC & Degree students ke liye online shuru ho chuke hain. Sirf ₹50 me online form bharein.",
     "content": "Karnataka Government SSP Scholarship forms are actively being processed at Excellence Services, Raibag. Students must bring Aadhaar Card, Fee Receipt, Bank Passbook, and Previous Year Marks Card. Our service fee is only ₹50. Visit our shop near Iqra School, Raibag.",
     "badge": "SSP Scholarship",
-    "tagColor": "#10b981"
+    "tagColor": "#10b981",
+    "image": "/assets/ssp-scholarship.jpg"
   },
   {
     "id": 2,
-    "title": "New Color PVC Voter ID Card Service Started in Raibag",
+    "title": "New Color PVC Digital Voter ID Card Service Started",
     "category": "Voter ID",
-    "date": "Updated",
+    "date": "Active",
     "author": "Hafiz Ramajan",
     "summary": "Apne purane black & white Voter ID card ko naye high quality color PVC plastic card me convert karwayen.",
     "content": "Election Commission of India ke naye format me digital color Voter ID cards print ho rahe hain. Agar aapke voter card me purani photo ya galat spelling hai, to use bhi update karwaya ja sakta hai. Excellence Services me same-day service uplabdh hai.",
     "badge": "Voter ID",
-    "tagColor": "#3b82f6"
+    "tagColor": "#3b82f6",
+    "image": "/assets/voter-id-service.jpg"
   },
   {
     "id": 3,
-    "title": "Passport Seva Kendra Guidelines: Name Spelling Mismatch Policy",
+    "title": "Passport Seva Kendra: Name Spelling Discrepancy Policy",
     "category": "Passport",
     "date": "Important Alert",
     "author": "Hafiz Ramajan",
-    "summary": "Aadhaar Card aur 10th Marksheet me 1 letter ka bhi spelling farak hone par Annexure-D affidavit zaroori hai.",
+    "summary": "Aadhaar Card aur 10th Marksheet me 1 letter ka bhi spelling farak hone par Annexure-D affidavit zaroori hai. Full checkup available.",
     "content": "Passport application reject hone se bachne ke liye biometric appointment se pehle documents cross-verify karwayen. Agar Aadhaar aur 10th Marksheet me naam alag hai to Annexure-D One & Same Person affidavit lagana lazmi hota hai. Hum pura document set tayyar karke dete hain.",
     "badge": "Passport Alert",
-    "tagColor": "#f59e0b"
+    "tagColor": "#f59e0b",
+    "image": "/assets/passport-services-poster.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Instant e-PAN Card & Aadhaar-PAN Biometric Linking",
+    "category": "PAN Card",
+    "date": "Instant",
+    "author": "Hafiz Ramajan",
+    "summary": "Naya instant PAN card sirf 2 ghante me banwayen aur Aadhaar-PAN biometric correction karwayen.",
+    "content": "Income Tax Department portal par naya PAN Card file karne aur biometric update karne ki service Excellence Services par uplabdh hai. Physical PVC card aapke ghar direct dispatch hoga.",
+    "badge": "PAN Card",
+    "tagColor": "#6366f1",
+    "image": "/assets/pan-card-service.svg"
+  },
+  {
+    "id": 5,
+    "title": "Police Verification Certificate (PCC) Online Application",
+    "category": "Police PCC",
+    "date": "New Update",
+    "author": "Hafiz Ramajan",
+    "summary": "Gulf visa aur international jobs ke liye Police Clearance Certificate (PCC) fast processing uplabdh hai.",
+    "content": "PSK aur police station se Police Clearance Certificate (PCC) ke liye appointment aur online application service Excellence Services par uplabdh hai.",
+    "badge": "PCC Clearance",
+    "tagColor": "#8b5cf6",
+    "image": "/assets/police-clearance.svg"
+  },
+  {
+    "id": 6,
+    "title": "Karnataka Ration Card BPL/APL Name Addition & Split",
+    "category": "Govt Scheme",
+    "date": "Recent",
+    "author": "Hafiz Ramajan",
+    "summary": "Ahara portal par naye bachhon ka naam jodne aur parivar split form online submit ho rahe hain.",
+    "content": "Karnataka Ahara portal par Ration card me naye sadasya jodne, biometric e-KYC karne aur card download karne ki service shuru hai.",
+    "badge": "Ration Card",
+    "tagColor": "#ec4899",
+    "image": "/assets/ration-card.svg"
   }
 ]
