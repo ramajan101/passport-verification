@@ -1,5 +1,317 @@
 [
   {
+    "id": "log-1792060043177",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/15/2026, 3:57:23 PM"
+  },
+  {
+    "id": "log-1792059837098",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/15/2026, 3:53:57 PM"
+  },
+  {
+    "id": "log-1792059784814",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/15/2026, 3:53:04 PM"
+  },
+  {
+    "id": "log-1792059622218",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/15/2026, 3:50:22 PM"
+  },
+  {
+    "id": "log-1791965404788",
+    "applicantName": "Mubassir Momin",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 4 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 4,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 1:40:04 PM"
+  },
+  {
+    "id": "log-1791963404767",
+    "applicantName": "JANNATABI VAJEERBADASHA DALAWAI",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 1:06:44 PM"
+  },
+  {
+    "id": "log-1791962434206",
+    "applicantName": "JANNATABI VAJEERBADASHA DALAWAI",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 12:50:34 PM"
+  },
+  {
+    "id": "log-1791962173217",
+    "applicantName": "JANNATABI VAJEERBADASHA DALAWAI",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 12:46:13 PM"
+  },
+  {
+    "id": "log-1791962064315",
+    "applicantName": "JANNATABI VAJEERBADASHA DALAWAI",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 12:44:24 PM"
+  },
+  {
+    "id": "log-1791958268875",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card",
+      "g"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:41:08 AM"
+  },
+  {
+    "id": "log-1791958265508",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card",
+      "g"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:41:05 AM"
+  },
+  {
+    "id": "log-1791958242316",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card",
+      "g"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:40:42 AM"
+  },
+  {
+    "id": "log-1791958230458",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card",
+      "g"
+    ],
+    "status": "⚠️ 1 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 1,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:40:30 AM"
+  },
+  {
+    "id": "log-1791955829896",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:00:29 AM"
+  },
+  {
+    "id": "log-1791955803312",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 11:00:03 AM"
+  },
+  {
+    "id": "log-1791955654123",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 10:57:34 AM"
+  },
+  {
+    "id": "log-1791955647660",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 10:57:27 AM"
+  },
+  {
+    "id": "log-1791955624838",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 10:57:04 AM"
+  },
+  {
+    "id": "log-1791953814398",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 3 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 3,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/14/2026, 10:26:54 AM"
+  },
+  {
+    "id": "log-1791890199315",
+    "applicantName": "Babu Balu Kuzane",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "آدھار کارڈ",
+      "پین کارڈ"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/13/2026, 4:46:39 PM"
+  },
+  {
+    "id": "log-1791890013070",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/13/2026, 4:43:33 PM"
+  },
+  {
+    "id": "log-1791889989483",
+    "applicantName": "SALIH AHMED MOMIN",
+    "applicantPhone": "",
+    "documentsVerified": [
+      "Aadhaar Card",
+      "PAN Card"
+    ],
+    "status": "⚠️ 2 Discrepancies",
+    "hasMismatch": true,
+    "mismatchCount": 2,
+    "notes": "Document discrepancy detected across records",
+    "timestamp": "10/13/2026, 4:43:09 PM"
+  },
+  {
     "id": "log-1791889617756",
     "applicantName": "Saleel Ahamad Momin",
     "applicantPhone": "",

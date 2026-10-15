@@ -1,74 +1,331 @@
 [
   {
-    "id": 1,
-    "title": "SSP Scholarship 2026-27 Applications Open — Fees Only ₹50!",
-    "category": "Scholarship",
-    "date": "Today",
+    "id": 1792059354876,
+    "title": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "category": "hioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyh",
     "author": "Hafiz Ramajan",
-    "summary": "Karnataka SSP scholarship forms 1st to 10th, PUC & Degree students ke liye online shuru ho chuke hain. Sirf ₹50 me online form bharein.",
-    "content": "Karnataka Government SSP Scholarship forms are actively being processed at Excellence Services, Raibag. Students must bring Aadhaar Card, Fee Receipt, Bank Passbook, and Previous Year Marks Card. Our service fee is only ₹50. Visit our shop near Iqra School, Raibag.",
-    "badge": "SSP Scholarship",
+    "summary": "hioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhvhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyhhio",
+    "content": "",
+    "badge": "hioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyh",
     "tagColor": "#10b981",
-    "image": "/assets/ssp-scholarship.jpg"
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "15 Oct 2026"
   },
   {
-    "id": 2,
-    "title": "New Color PVC Digital Voter ID Card Service Started",
+    "id": 1791966518902,
+    "title": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "category": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "author": "Hafiz Ramajan",
+    "summary": "hiiiiiii",
+    "content": "",
+    "badge": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "tagColor": "#10b981",
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "id": 1791964841012,
+    "title": "New Passport Scheme 2026 Test",
+    "category": "Passport Scheme",
+    "author": "Hafiz Ramajan",
+    "summary": "Important official guidelines update for all applicants.",
+    "content": "Full details of the test announcement.",
+    "badge": "Important Scheme",
+    "tagColor": "#10b981",
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "id": 1791963993138,
+    "title": "rrrrrrrrrrrrrrrrrrrrr",
+    "category": "rrrrrrrrrrrrrrrrrrrrr",
+    "author": "Hafiz Ramajan",
+    "summary": "rrrrrrrrrrrrrrrrrrrrr",
+    "content": "rrrrrrrrrrrrrrrrrrrrr",
+    "badge": "rrrrrrrrrrrrrrrrrrrrr",
+    "tagColor": "#10b981",
+    "image": "/assets/pan-card-service.svg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "id": 1791963960354,
+    "title": "rrrrrrrrrrrrrrrrrrrrr",
+    "category": "rrrrrrrrrrrrrrrrrrrrr",
+    "author": "Hafiz Ramajan",
+    "summary": "rrrrrrrrrrrrrrrrrrrrr",
+    "content": "rrrrrrrrrrrrrrrrrrrrr",
+    "badge": "rrrrrrrrrrrrrrrrrrrrr",
+    "tagColor": "#10b981",
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "id": 1791962580523,
+    "title": "hioooo  j5 6uhf vn jdf5y        nj bdg ty yj ty jyh",
+    "category": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "author": "Hafiz Ramajan",
+    "summary": "hiiiiiiiiii",
+    "content": "",
+    "badge": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "tagColor": "#10b981",
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "id": 1791962553566,
+    "title": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "category": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "author": "Hafiz Ramajan",
+    "summary": "hiiiiiii",
+    "content": "",
+    "badge": "hiiiiiiiiiiiiiiiiiiiiiiiii",
+    "tagColor": "#10b981",
+    "image": "/assets/passport-services-poster.jpg",
+    "date": "14 Oct 2026"
+  },
+  {
+    "badge": "Official Rollout",
+    "id": "e-passport-2026",
+    "steps": [
+      "Pre-verify all document spellings and DOB using our AI Document Verification Tool",
+      "Fill Online Application at passportindia.gov.in or contact Excellence Services",
+      "Pay government passport fee online and book your PSK / POPSK appointment slot",
+      "Visit PSK on scheduled date with original documents and photocopies"
+    ],
+    "requiredDocs": [
+      "Original Aadhaar Card (Must have complete DD/MM/YYYY Date of Birth)",
+      "10th Class Passing Certificate / Marksheet (Mandatory for Non-ECR status)",
+      "PAN Card / Voter ID Card (Supporting identity proof)",
+      "Old Passport original booklet (Only applicable for renewals / re-issue)"
+    ],
+    "officialLink": "https://www.passportindia.gov.in",
+    "image": "/assets/passport-services-poster.jpg",
+    "title": "New Indian e-Passport Rollout 2026: Biometric Chip & Fast Airport Clearance",
+    "category": "Passport & PSK",
+    "highlights": [
+      "Contactless RFID chip embedded inside back cover for instant automated e-Gates at international airports",
+      "Old passports remain completely valid till expiry date - no panic renewal needed",
+      "Zero PSK appointment rejection when Aadhaar and 10th Marksheet details match 100%"
+    ],
+    "readTime": "3 min read",
+    "summary": "Ministry of External Affairs (MEA) is now deploying next-generation e-Passports with embedded microchips storing biometric data for tamper-proof international travel.",
+    "content": "The Government of India has accelerated the nationwide distribution of contactless e-Passports equipped with secure radio-frequency identification (RFID) microchips. These chips store the holder fingerprint biometrics, facial scan, and digital signature, making forgery virtually impossible. Existing passports remain 100% valid until their normal expiry date, but all new fresh and renewal applications through PSK are gradually being upgraded to the chip standard.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "14 Oct 2026",
+    "tagColor": "#2563eb"
+  },
+  {
+    "badge": "Express Service",
+    "id": "tatkaal-passport-rules",
+    "steps": [
+      "Perform AI Document Cross-Verification on our portal to confirm 100% spelling match",
+      "Submit Tatkaal category application and secure emergency PSK quota slot",
+      "Carry Tatkaal Annexure-E self-declaration along with original proofs to PSK",
+      "Receive passport at doorstep and attend police verification locally"
+    ],
+    "requiredDocs": [
+      "Aadhaar Card (with linked active mobile phone number)",
+      "PAN Card (Issued by Income Tax Department / NSDL / UTI)",
+      "Voter ID Card (EPIC) / 10th Marksheet / Bank Passbook with stamped photo",
+      "Annexure-E Self Declaration Affidavit regarding citizenship and criminal record"
+    ],
+    "officialLink": "https://www.passportindia.gov.in",
+    "image": "/assets/passport-services-poster.jpg",
+    "title": "Tatkaal Passport Scheme 2026: Mandatory 3 Documents & Same-Day Dispatch",
+    "category": "Passport & PSK",
+    "highlights": [
+      "Passport dispatch within 24 to 72 hours directly via India Post Speed Post",
+      "Post-Police Verification: Police check happens after passport is received in hand",
+      "Even a minor single letter spelling mismatch will cause file hold in Tatkaal"
+    ],
+    "readTime": "4 min read",
+    "summary": "Need urgent passport for international employment, medical emergency, or family travel? Learn Tatkaal document requirements and post-verification rules.",
+    "content": "The Tatkaal Passport Scheme enables Indian citizens to receive an urgent passport dispatched within 1 to 3 working days without waiting for prior police verification. Police verification is conducted on a post-issuance basis. However, PSK verification officers demand strict compliance with 3 mandatory identity and address proofs, and name spellings must match without any ambiguity.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "13 Oct 2026",
+    "tagColor": "#ef4444"
+  },
+  {
+    "badge": "Crucial Guideline",
+    "id": "name-spelling-annexure-d",
+    "steps": [
+      "Identify exact mismatched characters using our Smart Name Difference visualizer",
+      "Contact Excellence Services (7849008882) to draft the legal Annexure-D affidavit",
+      "Sign before a Public Notary with original ID proofs",
+      "Submit the stamped affidavit to the Granting Officer (GO) at Passport Seva Kendra"
+    ],
+    "requiredDocs": [
+      "Aadhaar Card copy showing current name spelling",
+      "10th Marksheet or SSLC Marks Card showing schooling spelling",
+      "PAN Card copy showing father name and applicant name",
+      "₹20 / ₹50 Non-Judicial Notarized Stamp Paper prepared by advocate"
+    ],
+    "officialLink": "https://www.passportindia.gov.in",
+    "image": "/assets/passport-services-poster.jpg",
+    "title": "Name Spelling Mismatch in Aadhaar vs Marksheet: New PSK Annexure-D Guideline",
+    "category": "Legal Guidance",
+    "highlights": [
+      "Minor spelling differences do not require Gazette if Annexure-D affidavit is produced",
+      "10th Marksheet is the supreme authority for Name and Date of Birth in Non-ECR passports",
+      "Excellence Services prepares certified notarized affidavits in 1 hour"
+    ],
+    "readTime": "3 min read",
+    "summary": "Passport Seva Kendra holds up applications when name spelling differs between Aadhaar and 10th Marksheet. Here is how One & Same Person Annexure-D solves it.",
+    "content": "One of the most frequent reasons for PSK appointment rejection or file hold is spelling variance between Aadhaar, PAN, and Matriculation (10th) marksheets (e.g. Mohd vs Mohammed, Ramzan vs Ramajan, or surname expansion). Under official Ministry guidelines, if the variation is phonetic or minor, an applicant can submit a Notarized One & Same Person Affidavit (Annexure-D) on non-judicial stamp paper without requiring an expensive official Gazette notification.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "12 Oct 2026",
+    "tagColor": "#f59e0b"
+  },
+  {
+    "badge": "Govt Scheme",
+    "id": "ssp-scholarship-2026",
+    "steps": [
+      "Verify that student name on Aadhaar matches SATS / School Admission Register",
+      "Create SSP Student Account or log in with previous SSP ID",
+      "Enter RD number for Caste & Income verification and college details",
+      "Submit online, download final acknowledgment slip and submit copy to school/college"
+    ],
+    "requiredDocs": [
+      "Student Student Achievement Tracking System (SATS) ID / College Registration No",
+      "Student and Parent Aadhaar Card with active mobile link for OTP",
+      "Valid Income & Caste Certificate RD Number issued by Nadakacheri",
+      "Bank Account Passbook with Aadhaar NPCI DBT seeding confirmation",
+      "Current Academic Year Fee Receipt and previous year marks card"
+    ],
+    "officialLink": "https://ssp.postmatric.karnataka.gov.in",
+    "image": "/assets/ssp-scholarship.jpg",
+    "title": "Karnataka SSP Scholarship 2026-27: Pre-Matric & Post-Matric Online Applications Open",
+    "category": "Scholarship",
+    "highlights": [
+      "Financial scholarship support ranging from ₹2,500 up to ₹60,000 per year",
+      "Applicable for 1st to 10th standard (Pre-Matric) and PUC / Degree / PG (Post-Matric)",
+      "Excellence Services provides fast online filing and acknowledgment slip for just ₹50"
+    ],
+    "readTime": "3 min read",
+    "summary": "State Scholarship Portal (SSP) Karnataka is actively accepting scholarship applications for 1st to 10th standard, PUC, ITI, Diploma, and Degree students.",
+    "content": "The Government of Karnataka has announced the opening of the State Scholarship Portal (SSP) for the academic year 2026-27. Eligible students from Minority (Muslim, Christian, Jain, Buddhist, Sikh, Parsi), SC, ST, OBC, and Brahmin communities can now apply online. Ensuring your Aadhaar is linked to your bank account with NPCI mapping is compulsory to avoid DBT payment rejection.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "11 Oct 2026",
+    "tagColor": "#10b981"
+  },
+  {
+    "badge": "Doorstep Delivery",
+    "id": "pvc-voter-id-card",
+    "steps": [
+      "Visit voters.eci.gov.in portal or visit Excellence Services in Raibag",
+      "Fill Form 8 for Replacement of EPIC or Correction of Entries",
+      "Authenticate with Aadhaar OTP to update phone number",
+      "Get your instant color PVC printed card or await official Speed Post delivery"
+    ],
+    "requiredDocs": [
+      "Existing Voter ID (EPIC) Number",
+      "Aadhaar Card for identity and mobile phone number authentication",
+      "Passport size colored photograph (clean background)"
+    ],
+    "officialLink": "https://voters.eci.gov.in",
+    "image": "/assets/voter-id-service.jpg",
+    "title": "New Color PVC Digital Voter ID Card 2.0: Free Mobile Linking & Doorstep Delivery",
     "category": "Voter ID",
-    "date": "Active",
-    "author": "Hafiz Ramajan",
-    "summary": "Apne purane black & white Voter ID card ko naye high quality color PVC plastic card me convert karwayen.",
-    "content": "Election Commission of India ke naye format me digital color Voter ID cards print ho rahe hain. Agar aapke voter card me purani photo ya galat spelling hai, to use bhi update karwaya ja sakta hai. Excellence Services me same-day service uplabdh hai.",
-    "badge": "Voter ID",
-    "tagColor": "#3b82f6",
-    "image": "/assets/voter-id-service.jpg"
+    "highlights": [
+      "Durable, waterproof credit card size PVC Voter ID with high-security holographic strip",
+      "Instant e-EPIC digital PDF download directly on mobile",
+      "Name, address, and polling booth correction available online via Form 8"
+    ],
+    "readTime": "2 min read",
+    "summary": "Election Commission of India (ECI) has upgraded Voter ID cards to smart color PVC cards with high-security QR codes. Upgrade your old paper card now.",
+    "content": "Citizens holding old black-and-white or laminated paper Voter ID cards can now replace them with official government-issued Color PVC Voter ID cards featuring micro-text and security holograms. You can also link your mobile number to download e-EPIC digital voter PDF immediately or order physical home delivery.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "10 Oct 2026",
+    "tagColor": "#6366f1"
   },
   {
-    "id": 3,
-    "title": "Passport Seva Kendra: Name Spelling Discrepancy Policy",
-    "category": "Passport",
-    "date": "Important Alert",
-    "author": "Hafiz Ramajan",
-    "summary": "Aadhaar Card aur 10th Marksheet me 1 letter ka bhi spelling farak hone par Annexure-D affidavit zaroori hai. Full checkup available.",
-    "content": "Passport application reject hone se bachne ke liye biometric appointment se pehle documents cross-verify karwayen. Agar Aadhaar aur 10th Marksheet me naam alag hai to Annexure-D One & Same Person affidavit lagana lazmi hota hai. Hum pura document set tayyar karke dete hain.",
-    "badge": "Passport Alert",
-    "tagColor": "#f59e0b",
-    "image": "/assets/passport-services-poster.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Instant e-PAN Card & Aadhaar-PAN Biometric Linking",
+    "badge": "Instant Service",
+    "id": "instant-epan-link",
+    "steps": [
+      "Submit Aadhaar details online or at our Excellence Services office",
+      "Complete Aadhaar OTP biometric authentication",
+      "Receive official digitally signed e-PAN PDF immediately on WhatsApp",
+      "Physical PVC card dispatched directly by NSDL / Income Tax Department"
+    ],
+    "requiredDocs": [
+      "Aadhaar Card with active mobile phone for OTP verification",
+      "Existing PAN number (if applying for correction or linking)"
+    ],
+    "officialLink": "https://www.incometax.gov.in",
+    "image": "/assets/pan-card-service.svg",
+    "title": "Instant e-PAN Card & Mandatory Aadhaar-PAN Linking 2026",
     "category": "PAN Card",
-    "date": "Instant",
-    "author": "Hafiz Ramajan",
-    "summary": "Naya instant PAN card sirf 2 ghante me banwayen aur Aadhaar-PAN biometric correction karwayen.",
-    "content": "Income Tax Department portal par naya PAN Card file karne aur biometric update karne ki service Excellence Services par uplabdh hai. Physical PVC card aapke ghar direct dispatch hoga.",
-    "badge": "PAN Card",
-    "tagColor": "#6366f1",
-    "image": "/assets/pan-card-service.svg"
+    "highlights": [
+      "Instant e-PAN generated within 10 to 30 minutes via Aadhaar OTP e-KYC",
+      "Physical QR-coded PVC PAN Card delivered to your residential address in 5-7 days",
+      "Correction of Father Name, Date of Birth, and spelling to match 10th marksheet"
+    ],
+    "readTime": "2 min read",
+    "summary": "Get a brand new permanent PAN Card in just 10 minutes using Aadhaar e-KYC. Learn how to link inoperative PAN cards before passport filing.",
+    "content": "A valid and operational PAN Card is one of the primary KYC documents required by Passport Seva Kendra and banks. If your PAN card is inoperative due to lack of Aadhaar linking, or if your name spelling does not match Aadhaar, passport verification will trigger biometric discrepancies. We provide instant paperless e-PAN generation and correction services.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "09 Oct 2026",
+    "tagColor": "#06b6d4"
   },
   {
-    "id": 5,
-    "title": "Police Verification Certificate (PCC) Online Application",
+    "badge": "Visa Requirement",
+    "id": "pcc-police-verification",
+    "steps": [
+      "Submit online PCC application on Passport Seva Portal and pay ₹500 fee",
+      "Attend appointment at nearest Passport Seva Kendra (PSK) for biometric capture",
+      "Visit local Police Station when file is received with 2 resident references",
+      "Collect certified PCC certificate from Regional Passport Office or download digital copy"
+    ],
+    "requiredDocs": [
+      "Original Indian Passport (with minimum 6 months remaining validity)",
+      "Current Address Proof (Aadhaar Card / Bank Passbook / Rental Agreement)",
+      "Employment Offer Letter / Work Contract / Visa Invitation copy from sponsor"
+    ],
+    "officialLink": "https://www.passportindia.gov.in",
+    "image": "/assets/police-clearance.svg",
+    "title": "Police Clearance Certificate (PCC) for Gulf & Schengen Visa Guide 2026",
     "category": "Police PCC",
-    "date": "New Update",
-    "author": "Hafiz Ramajan",
-    "summary": "Gulf visa aur international jobs ke liye Police Clearance Certificate (PCC) fast processing uplabdh hai.",
-    "content": "PSK aur police station se Police Clearance Certificate (PCC) ke liye appointment aur online application service Excellence Services par uplabdh hai.",
-    "badge": "PCC Clearance",
-    "tagColor": "#8b5cf6",
-    "image": "/assets/police-clearance.svg"
+    "highlights": [
+      "Compulsory for employment and residency visas in Gulf (Saudi, UAE, Oman, etc.) & Europe",
+      "Requires active Indian Passport with minimum 6 months validity",
+      "PSK appointment slot booking followed by local Police Station physical verification"
+    ],
+    "readTime": "3 min read",
+    "summary": "Travelling abroad for work in Saudi Arabia, UAE, Qatar, Kuwait, or Europe? Here is the complete step-by-step procedure to get your PCC fast.",
+    "content": "Police Clearance Certificate (PCC) is an official document issued by the Regional Passport Office certifying that an applicant has no criminal record in India. It is mandatory for long-term work visas, residency permits, and family immigration to GCC nations and European Schengen countries. You must hold an active Indian Passport to apply for a PCC.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "08 Oct 2026",
+    "tagColor": "#8b5cf6"
   },
   {
-    "id": 6,
-    "title": "Karnataka Ration Card BPL/APL Name Addition & Split",
-    "category": "Govt Scheme",
-    "date": "Recent",
-    "author": "Hafiz Ramajan",
-    "summary": "Ahara portal par naye bachhon ka naam jodne aur parivar split form online submit ho rahe hain.",
-    "content": "Karnataka Ahara portal par Ration card me naye sadasya jodne, biometric e-KYC karne aur card download karne ki service shuru hai.",
-    "badge": "Ration Card",
-    "tagColor": "#ec4899",
-    "image": "/assets/ration-card.svg"
+    "badge": "Family Guide",
+    "id": "minor-passport-guide",
+    "steps": [
+      "Cross-check child name and parent names on birth certificate and parents passports",
+      "Prepare Annexure-D parental consent form or embassy attested Annexure-C",
+      "Book PSK appointment slot under Minor category",
+      "Both parents and child must be present at PSK during appointment"
+    ],
+    "requiredDocs": [
+      "Child Birth Certificate issued by Municipal Corporation / Gram Panchayat",
+      "Child Aadhaar Card (if available)",
+      "Both Parents original Indian Passports (with self-attested photocopies)",
+      "Annexure-D affidavit signed by both parents consenting to passport issuance"
+    ],
+    "officialLink": "https://www.passportindia.gov.in",
+    "image": "/assets/passport-services-poster.jpg",
+    "title": "Minor Child Passport Fresh & Renewal: Annexure-C & D Parental Consent Rules",
+    "category": "Passport & PSK",
+    "highlights": [
+      "Minor passports valid for 5 years or until attaining 18 years of age",
+      "Both parents passports required as primary proof; child can receive Non-ECR status",
+      "Annexure-C required if one parent is unavailable abroad or in cases of single parent"
+    ],
+    "readTime": "4 min read",
+    "summary": "Applying for child passport (under 18 years)? Understand Annexure-C/D consent requirements when one parent is abroad or parents are separated.",
+    "content": "Obtaining a passport for a minor child requires specific legal declarations by both parents. Under Indian Passport rules, minor passports are typically issued with 5-year validity or until the child reaches 18 years of age. If one parent is working overseas (e.g. in Gulf countries), their consent must be attested by the Indian Embassy or submitted via Annexure-C affidavit.",
+    "author": "Hafiz Ramajan (Excellence Services)",
+    "date": "07 Oct 2026",
+    "tagColor": "#ec4899"
   }
 ]

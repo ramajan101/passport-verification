@@ -102,8 +102,8 @@ Strict Guidelines:
 
         // Active Gemini models for vision extraction
         const modelsToTry = [
-            "gemini-3.5-flash",
             "gemini-3.5-flash-lite",
+            "gemini-3.5-flash",
             "gemini-3.8-flash"
         ];
         let result = null;
@@ -296,21 +296,133 @@ app.post('/api/upload-asset', upload.single('image'), (req, res) => {
     }
 });
 
+
+const reportsDir = path.join(__dirname, 'public', 'reports');
+if (!fs.existsSync(reportsDir)) {
+    fs.mkdirSync(reportsDir, { recursive: true });
+}
+
+
+// ==========================================================================
+// MOBILE & ANDROID WEBVIEW COMPATIBLE PDF DOWNLOAD ENDPOINTS
+// ==========================================================================
+app.post('/api/save-pdf', (req, res) => {
+    try {
+        const { pdfBase64, filename } = req.body;
+        if (!pdfBase64) return res.status(400).json({ error: "No PDF data provided" });
+
+        const safeFilename = (filename || ('Passport_Audit_' + Date.now() + '.pdf')).replace(/[^a-zA-Z0-9_.-]/g, '_');
+        const filePath = path.join(reportsDir, safeFilename);
+
+        // Strip data:application/pdf;base64, prefix if present
+        const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
+        fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+
+        res.json({
+            success: true,
+            downloadUrl: '/api/download-pdf/' + safeFilename,
+            filename: safeFilename
+        });
+    } catch (err) {
+        console.error("Save PDF error:", err);
+        res.status(500).json({ error: "Failed to save PDF on server: " + err.message });
+    }
+});
+
+app.get('/api/download-pdf/:filename', (req, res) => {
+    try {
+        const safeFilename = path.basename(req.params.filename);
+        const filePath = path.join(reportsDir, safeFilename);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).send("PDF report not found or expired.");
+        }
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="' + safeFilename + '"');
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+    } catch (err) {
+        console.error("Download PDF error:", err);
+        res.status(500).send("Error downloading PDF: " + err.message);
+    }
+});
+
+
+
+// ==========================================================================
+// REAL-TIME NOTIFICATION BROADCAST ENGINE (SSE - SERVER-SENT EVENTS)
+// ==========================================================================
+const sseClients = new Set();
+
+app.get('/api/live-stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.flushHeaders();
+
+    sseClients.add(res);
+
+    // Send initial handshake
+    res.write('data: {"type":"connected"}\n\n');
+
+    req.on('close', () => {
+        sseClients.delete(res);
+    });
+});
+
+function broadcastLiveNotification(eventData) {
+    const payload = 'data: ' + JSON.stringify(eventData) + '\n\n';
+    for (const client of sseClients) {
+        try {
+            client.write(payload);
+        } catch (e) {
+            sseClients.delete(client);
+        }
+    }
+}
+
 app.get('/api/blogs', (req, res) => {
     res.json(readJsonFile('blogs.json', []));
 });
 
 app.post('/api/blogs', (req, res) => {
     const blogs = readJsonFile('blogs.json', []);
-    const { id, title, category, author, summary, content, badge, tagColor, image } = req.body;
+    const { id, title, category, author, summary, content, badge, tagColor, image, date } = req.body;
     if (!title) return res.status(400).json({ error: "Title required" });
+
+    const formattedDate = date || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const postImage = image || '/assets/passport-services-poster.jpg';
 
     if (id) {
         const idx = blogs.findIndex(b => String(b.id) === String(id));
         if (idx !== -1) {
-            blogs[idx] = { ...blogs[idx], title, category, author: author || 'Hafiz Ramajan', summary, content, badge, tagColor, image: image !== undefined ? image : blogs[idx].image, date: 'Updated' };
+            blogs[idx] = { 
+                ...blogs[idx], 
+                title, 
+                category: category || blogs[idx].category || 'General', 
+                author: author || 'Hafiz Ramajan', 
+                summary, 
+                content, 
+                badge: badge || category || 'Update', 
+                tagColor: tagColor || '#10b981', 
+                image: image !== undefined && image !== '' ? image : blogs[idx].image, 
+                date: 'Updated' 
+            };
         } else {
-            blogs.push({ id, title, category, author: author || 'Hafiz Ramajan', summary, content, badge, tagColor, date: new Date().toLocaleDateString() });
+            blogs.unshift({ 
+                id, 
+                title, 
+                category: category || 'General', 
+                author: author || 'Hafiz Ramajan', 
+                summary, 
+                content, 
+                badge: badge || category || 'Update', 
+                tagColor: tagColor || '#10b981', 
+                image: postImage, 
+                date: formattedDate 
+            });
         }
     } else {
         const newId = Date.now();
@@ -321,12 +433,25 @@ app.post('/api/blogs', (req, res) => {
             author: author || 'Hafiz Ramajan',
             summary,
             content,
-            badge: badge || 'Update',
+            badge: badge || category || 'Update',
             tagColor: tagColor || '#10b981',
-            date: new Date().toLocaleDateString()
+            image: postImage,
+            date: formattedDate
         });
     }
     writeJsonFile('blogs.json', blogs);
+    // Broadcast live notification to all connected websites and APK apps instantly
+    try {
+        const latestPost = blogs[0];
+        broadcastLiveNotification({
+            type: 'new_announcement',
+            post: latestPost,
+            timestamp: Date.now()
+        });
+        console.log("🚀 Broadcasted live announcement to", sseClients.size, "clients:", latestPost.title);
+    } catch (err) {
+        console.error("Broadcast notification error:", err);
+    }
     res.json({ success: true, blogs });
 });
 

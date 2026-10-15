@@ -23,34 +23,56 @@ async function loadAndRenderServices() {
 
     if (!globalServicesData || globalServicesData.length === 0) {
         globalServicesData = [
-            { name: "SSP Scholarship Online Application", category: "Scholarship", rate: "₹50", description: "Applicable for 1st-10th, PUC, Degree" },
-            { name: "Fresh Indian Passport Application", category: "Passport", rate: "₹500", description: "Online filing & PSK appointment" },
-            { name: "New Color PVC Voter ID Card", category: "Voter ID", rate: "₹100", description: "Old card to digital PVC card" },
-            { name: "New PAN Card (Instant/Regular)", category: "PAN Card", rate: "₹150", description: "NSDL/UTI filing with doorstep delivery" }
+            { id: 1, name: "SSP Scholarship Online Application (Karnataka)", category: "Scholarship", rate: "₹50 Only", turnAround: "Same Day", description: "Applicable for 1st-10th Class, PUC, Degree UG/PG with online tracking slip." },
+            { id: 2, name: "Fresh Indian Passport Application", category: "Passport", rate: "₹500 / Filing", turnAround: "1-2 Days", description: "Online filing, document pre-screening & PSK appointment slot scheduling." },
+            { id: 3, name: "Tatkaal Passport Urgent Application", category: "Passport", rate: "₹800 / Priority", turnAround: "Express / Same Day", description: "Emergency Tatkaal passport filing with priority PSK slot booking." },
+            { id: 4, name: "Passport Name Spelling & DOB Correction", category: "Passport", rate: "₹400 / File", turnAround: "1-2 Days", description: "Official correction filing for spelling mismatch & Annexure-D affidavit formatting." },
+            { id: 5, name: "Annexure-D / Annexure-E Legal Affidavit", category: "Legal Affidavit", rate: "₹250 / Notarized", turnAround: "Same Day (1 Hr)", description: "Notarized One & Same Person affidavit formatting for PSK submission." },
+            { id: 6, name: "New PAN Card (Instant / Regular)", category: "PAN Card", rate: "₹150 / Doorstep", turnAround: "2-3 Days", description: "Fresh PAN card filing via NSDL/UTI with doorstep PVC card delivery." },
+            { id: 7, name: "New Color PVC Digital Voter ID Card", category: "Voter ID", rate: "₹100 / High-Res", turnAround: "Same Day", description: "Convert old voter ID to high-quality digital color PVC card with QR code." },
+            { id: 8, name: "Police Clearance Certificate (PCC) & Verification", category: "Police PCC", rate: "₹300 / Filing", turnAround: "1-2 Days", description: "Police verification form submission for Indian Passport & Overseas visa." }
         ];
     }
 
+    const isRoman = (currentLang === 'roman');
+
     grid.innerHTML = globalServicesData.map(s => {
-        let icon = '📌';
+        let icon = '💼';
         const cat = (s.category || '').toLowerCase();
-        if (cat.includes('passport')) icon = '🛂';
-        else if (cat.includes('scholarship')) icon = '🎓';
-        else if (cat.includes('voter')) icon = '🗳️';
-        else if (cat.includes('pan')) icon = '💳';
-        else if (cat.includes('police')) icon = '👮';
-        else if (cat.includes('affidavit')) icon = '📑';
-        else if (cat.includes('visa')) icon = '✈️';
+        let catColor = '#2563eb';
+
+        if (cat.includes('passport')) { icon = '🛂'; catColor = '#2563eb'; }
+        else if (cat.includes('scholarship')) { icon = '🎓'; catColor = '#10b981'; }
+        else if (cat.includes('voter')) { icon = '💳'; catColor = '#6366f1'; }
+        else if (cat.includes('pan')) { icon = '📄'; catColor = '#06b6d4'; }
+        else if (cat.includes('police')) { icon = '👮'; catColor = '#8b5cf6'; }
+        else if (cat.includes('affidavit') || cat.includes('legal')) { icon = '📑'; catColor = '#f59e0b'; }
+        else if (cat.includes('visa')) { icon = '✈️'; catColor = '#ec4899'; }
+
+        const cleanRate = s.rate && s.rate.toLowerCase().includes('call') ? (isRoman ? 'Call Karein' : 'Contact Us') : (s.rate || (isRoman ? 'Poochein' : 'Enquire'));
+        const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Main aapke portal par service dekh raha hu: \"" + s.name + "\". Mujhe is service ke baare me guidance aur booking karwani hai.");
+        const bookText = isRoman ? "💬 WhatsApp Book" : "💬 Book on WhatsApp";
 
         return `
-            <div class="service-highlight-pill" title="${s.description || ''}">
-                <span>${icon}</span>
-                <span style="flex-grow: 1;"><strong>${s.name}</strong></span>
-                <span class="service-rate-badge">${s.rate || 'Enquire'}</span>
-            </div>
+            <article class="modern-service-card animate-fade-in">
+                <div class="service-card-top">
+                    <span class="service-cat-badge" style="background: ${catColor}18; color: ${catColor}; border: 1px solid ${catColor}35;">
+                        ${icon} ${s.category || 'Service'}
+                    </span>
+                    <span class="service-turnaround-badge">⏱️ ${s.turnAround || 'Same Day'}</span>
+                </div>
+                <h4 class="service-card-title">${s.name}</h4>
+                <p class="service-card-desc">${s.description || ''}</p>
+                <div class="service-card-bottom">
+                    <span class="service-rate-pill">${cleanRate}</span>
+                    <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn-service-book">
+                        <span>${bookText}</span>
+                    </a>
+                </div>
+            </article>
         `;
     }).join('');
 }
-
 
 // ==========================================================================
 // EXCELLENCE SERVICES - NEWS, SCHEMES & BLOG MANAGER
@@ -58,7 +80,7 @@ async function loadAndRenderServices() {
 let allNewsData = [];
 
 async function loadAndRenderBlogs() {
-    const grid = document.getElementById('public-blogs-grid');
+    const grid = document.getElementById('portal-news-grid');
     if (!grid) return;
 
     try {
@@ -70,219 +92,186 @@ async function loadAndRenderBlogs() {
         console.warn("Could not fetch /api/blogs, using fallback", e);
     }
 
-    if (!allNewsData || allNewsData.length === 0) {
-        allNewsData = [
-            {
-                id: 'ssp-1',
-                title: "SSP Scholarship 2026-27 Applications Open - Fees Only ₹50!",
-                category: "Scholarship",
-                date: "Today",
-                summary: "Karnataka SSP scholarship forms 1st to 10th & Degree UG/PG ke liye online process ho rahe hain.",
-                badge: "SSP Scholarship",
-                tagColor: "#10b981",
-                author: "Hafiz Ramajan"
-            },
-            {
-                id: 'voter-2',
-                title: "New Color PVC Digital Voter ID Card Service Started",
-                category: "Voter ID",
-                date: "Updated",
-                summary: "Purana black & white voter card naye high quality PVC color card me convert karwayen.",
-                badge: "Voter ID",
-                tagColor: "#3b82f6",
-                author: "Hafiz Ramajan"
-            },
-            {
-                id: 'passport-3',
-                title: "Passport Seva Kendra: Name Spelling Discrepancy Policy",
-                category: "Passport",
-                date: "Important Alert",
-                summary: "Aadhaar Card aur 10th Marksheet me 1 letter ka farak hone par Annexure-D affidavit zaroori hai.",
-                badge: "Passport Alert",
-                tagColor: "#f59e0b",
-                author: "Hafiz Ramajan"
-            },
-            {
-                id: 'pan-4',
-                title: "Instant e-PAN Card & Aadhaar-PAN Linking Service",
-                category: "PAN Card",
-                date: "Active",
-                summary: "Income tax portal par instant PAN allotment aur biometric correction available hai.",
-                badge: "PAN Card",
-                tagColor: "#6366f1",
-                author: "Hafiz Ramajan"
-            },
-            {
-                id: 'police-5',
-                title: "Police Verification Certificate (PCC) Online Application",
-                category: "Police PCC",
-                date: "New",
-                summary: "Gulf visa aur international jobs ke liye Police Clearance Certificate (PCC) tayyar karwayen.",
-                badge: "PCC Clearance",
-                tagColor: "#8b5cf6",
-                author: "Hafiz Ramajan"
-            },
-            {
-                id: 'ration-6',
-                title: "Karnataka Ration Card BPL/APL Name Addition & Split",
-                category: "Govt Scheme",
-                date: "Recent",
-                summary: "Ahara portal par naye parivar sadasya ka naam jodne ke forms submit ho rahe hain.",
-                badge: "Ration Card",
-                tagColor: "#ec4899",
-                author: "Hafiz Ramajan"
-            }
-        ];
-    }
-
-    renderNewsSidebarFeed('');
-    setupNewsSearchAndModal();
+    renderPortalNewsGrid();
+    setupPortalNewsInteractions();
 }
 
-function renderNewsSidebarFeed(filterQuery = '') {
-    const grid = document.getElementById('public-blogs-grid');
-    const viewAllBtn = document.getElementById('btn-view-all-news');
-    const totalCountEl = document.getElementById('total-news-count');
+let activeNewsCategory = 'all';
+let currentNewsSearchQuery = '';
+
+function renderPortalNewsGrid() {
+    const grid = document.getElementById('portal-news-grid');
     if (!grid) return;
 
-    const q = filterQuery.toLowerCase().trim();
-    let displayList = allNewsData;
+    const q = (currentNewsSearchQuery || '').toLowerCase().trim();
+    const cat = (activeNewsCategory || 'all').toLowerCase();
 
+    let list = allNewsData;
+
+    // Filter by category
+    if (cat !== 'all') {
+        list = list.filter(b => {
+            const bCat = (b.category || '').toLowerCase();
+            const bBadge = (b.badge || '').toLowerCase();
+            return bCat.includes(cat) || cat.includes(bCat) || bBadge.includes(cat);
+        });
+    }
+
+    // Filter by search query
     if (q) {
-        displayList = allNewsData.filter(b => 
+        list = list.filter(b => 
             (b.title || '').toLowerCase().includes(q) ||
             (b.summary || '').toLowerCase().includes(q) ||
-            (b.category || '').toLowerCase().includes(q) ||
-            (b.badge || '').toLowerCase().includes(q)
+            (b.content || '').toLowerCase().includes(q) ||
+            (b.category || '').toLowerCase().includes(q)
         );
-    } else {
-        // Show ONLY Last 5 posts in the sidebar!
-        displayList = allNewsData.slice(0, 5);
     }
 
-    if (totalCountEl) totalCountEl.textContent = allNewsData.length;
-    if (viewAllBtn) {
-        viewAllBtn.style.display = (allNewsData.length > 5 && !q) ? 'flex' : 'none';
-    }
-
-    if (displayList.length === 0) {
-        grid.innerHTML = '<div style="text-align:center; color: var(--text-muted); padding: 16px; font-size: 0.85rem;">Koi news ya scheme nahi mili.</div>';
+    if (list.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: rgba(255,255,255,0.02); border: 1px dashed var(--glass-border); border-radius: 14px;">
+                <span style="font-size: 2.4rem; display: block; margin-bottom: 8px;">📭</span>
+                <strong style="color: var(--text-main); font-size: 1.1rem; display: block;">Koi news ya update nahi mila.</strong>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">Search query badal kar dekhein ya 'All Updates' category select karein.</p>
+            </div>
+        `;
         return;
     }
 
-    grid.innerHTML = displayList.map(b => {
-        const msg = encodeURIComponent(`Namaste Hafiz Ramajan Sir! Maine aapke website par blog dekha: "${b.title}". Mujhe is service ke baare me baat karni hai.`);
-        const imgHtml = b.image ? `<div class="blog-thumb-wrap"><img src="${b.image}" alt="${b.title}" class="blog-thumb-img" onerror="this.parentElement.style.display='none'"></div>` : '';
+    grid.innerHTML = list.map(b => {
+        const img = b.image || '/assets/passport-services-poster.jpg';
+        const isRoman = (currentLang === 'roman');
+        const readBtnText = isRoman ? "Puri Khabar Padhein" : "Read Full Article";
+        const shareBtnText = isRoman ? "WhatsApp Share" : "Share on WhatsApp";
+        const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Maine aapke website par news/scheme dekhi: \"" + b.title + "\". Mujhe iske baare me jankari chahiye.");
+
+        let catColor = '#2563eb';
+        let catIcon = '📰';
+        const cLower = (b.category || '').toLowerCase();
+        if (cLower.includes('pass')) { catColor = '#2563eb'; catIcon = '🛂'; }
+        else if (cLower.includes('schol')) { catColor = '#10b981'; catIcon = '🎓'; }
+        else if (cLower.includes('vot')) { catColor = '#6366f1'; catIcon = '💳'; }
+        else if (cLower.includes('pan')) { catColor = '#06b6d4'; catIcon = '📄'; }
+        else if (cLower.includes('polic')) { catColor = '#8b5cf6'; catIcon = '👮'; }
+        else if (cLower.includes('legal') || cLower.includes('aff')) { catColor = '#f59e0b'; catIcon = '📑'; }
+
         return `
-            <article class="blog-post-card animate-fade-in">
-                ${imgHtml}
-                <div>
-                    <div class="blog-post-header">
-                        <span class="blog-badge" style="background: ${b.tagColor ? b.tagColor + '20' : 'rgba(16,185,129,0.15)'}; color: ${b.tagColor || '#10b981'};	">${b.badge || b.category || 'Update'}</span>
-                        <span class="blog-date">${b.date || 'Recent'}</span>
-                    </div>
-                    <h5 class="blog-post-title">${b.title}</h5>
-                    <p class="blog-post-summary">${b.summary || ''}</p>
+            <article class="portal-news-card animate-fade-in">
+                <div class="portal-card-media" style="position: relative; height: 180px; overflow: hidden; background: #0f172a;">
+                    <img src="${img}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/passport-services-poster.jpg'">
+                    <span class="portal-media-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); color: ${catColor}; border: 1px solid ${catColor}50; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700;">
+                        ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
+                    </span>
+                    <span class="portal-date-tag" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #e2e8f0; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;">🗓️ ${b.date || 'Active'}</span>
                 </div>
-                <div class="blog-cta-row">
-                    <span style="font-size: 0.74rem; color: var(--text-muted);">👤 ${b.author || 'Hafiz Ramajan'}</span>
-                    <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn-blog-action">
-                        <span>💬 Apply via WhatsApp</span>
-                    </a>
+                <div class="portal-card-body" style="padding: 16px 18px; flex: 1; display: flex; flex-direction: column;">
+                    <h3 class="portal-card-title" style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">${b.title}</h3>
+                    <p class="portal-card-summary" style="margin: 0 0 14px 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; flex: 1;">${b.summary || ''}</p>
+                    <div class="portal-card-meta-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-bottom: 12px;">
+                        <span class="portal-author-tag" style="color: #94a3b8;">✍️ ${b.author || 'Hafiz Ramajan'}</span>
+                        <span class="portal-status-verified" style="color: #34d399; font-weight: 700;">✓ Official</span>
+                    </div>
+                    <div class="portal-card-actions" style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="openArticleReader('${b.id}')" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px;">
+                            <span>📖 ${readBtnText}</span>
+                        </button>
+                        <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn btn-success btn-sm" title="Inquire on WhatsApp" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px; text-decoration: none; text-align: center;">
+                            <span>💬 ${shareBtnText}</span>
+                        </a>
+                    </div>
                 </div>
             </article>
         `;
     }).join('');
 }
 
-function setupNewsSearchAndModal() {
-    const searchInput = document.getElementById('news-search-input');
+function setupPortalNewsInteractions() {
+    // Search input
+    const searchInput = document.getElementById('portal-news-search-input');
     if (searchInput) {
         searchInput.oninput = (e) => {
-            renderNewsSidebarFeed(e.target.value);
+            currentNewsSearchQuery = e.target.value;
+            renderPortalNewsGrid();
         };
     }
 
-    const viewAllBtn = document.getElementById('btn-view-all-news');
-    const modal = document.getElementById('all-news-modal');
-    const closeModalBtn = document.getElementById('close-all-news-modal');
-    const modalGrid = document.getElementById('all-news-grid');
-    const modalSearchInput = document.getElementById('modal-news-search-input');
-
-    const renderModalItems = (q = '') => {
-        if (!modalGrid) return;
-        const query = q.toLowerCase().trim();
-        const filtered = query ? allNewsData.filter(b => 
-            (b.title || '').toLowerCase().includes(query) ||
-            (b.summary || '').toLowerCase().includes(query) ||
-            (b.category || '').toLowerCase().includes(query) ||
-            (b.badge || '').toLowerCase().includes(query)
-        ) : allNewsData;
-
-        if (filtered.length === 0) {
-            modalGrid.innerHTML = '<div style="text-align:center; color: var(--text-muted); padding: 30px; font-size: 0.95rem;">🔍 Koi scheme ya news nahi mili. Doosra keyword search karein.</div>';
-            return;
-        }
-
-        modalGrid.innerHTML = filtered.map(b => {
-            const msg = encodeURIComponent(`Namaste Hafiz Ramajan Sir! Maine aapke portal par dekha: "${b.title}". Is baare me jankari chahiye.`);
-            const imgHtml = b.image ? `
-                <div class="all-news-img-wrap">
-                    <img src="${b.image}" alt="${b.title}" class="all-news-img" onerror="this.parentElement.style.display='none'">
-                </div>
-            ` : '';
-            return `
-                <article class="blog-post-card all-news-card animate-fade-in">
-                    ${imgHtml}
-                    <div class="all-news-content">
-                        <div>
-                            <div class="blog-post-header">
-                                <span class="blog-badge" style="background: ${b.tagColor ? b.tagColor + '20' : 'rgba(16,185,129,0.15)'}; color: ${b.tagColor || '#10b981'}; font-weight: 800;">${b.badge || b.category || 'Update'}</span>
-                                <span class="blog-date" style="font-weight: 600;">📅 ${b.date || 'Recent'}</span>
-                            </div>
-                            <h4 class="blog-post-title" style="margin: 4px 0 6px 0; font-size: 1.05rem; font-family: var(--font-heading);">${b.title}</h4>
-                            <p class="blog-post-summary" style="font-size: 0.88rem; line-height: 1.5; margin: 0 0 10px 0;">${b.summary || ''}</p>
-                        </div>
-                        <div class="blog-cta-row">
-                            <span style="font-size: 0.76rem;">👤 ${b.author || 'Hafiz Ramajan'}</span>
-                            <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn-blog-action" style="font-weight: 700;">
-                                <span>💬 Apply / Contact on WhatsApp</span>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-            `;
-        }).join('');
-    };
-
-    if (viewAllBtn && modal) {
-        viewAllBtn.onclick = () => {
-            modal.classList.remove('hidden');
-            if (modalSearchInput) modalSearchInput.value = '';
-            renderModalItems('');
+    // Category pills
+    const pills = document.querySelectorAll('#news-category-pills .cat-pill');
+    pills.forEach(pill => {
+        pill.onclick = () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            activeNewsCategory = pill.dataset.category || 'all';
+            renderPortalNewsGrid();
         };
-    }
+    });
 
-    if (closeModalBtn && modal) {
-        closeModalBtn.onclick = () => {
-            modal.classList.add('hidden');
-        };
+    // Close article modal
+    const closeBtn = document.getElementById('close-article-reader-modal');
+    if (closeBtn) {
+        closeBtn.onclick = closeArticleReader;
     }
-
+    const modal = document.getElementById('article-reader-modal');
     if (modal) {
         modal.onclick = (e) => {
-            if (e.target.id === 'all-news-modal') {
-                modal.classList.add('hidden');
-            }
-        };
-    }
-
-    if (modalSearchInput) {
-        modalSearchInput.oninput = (e) => {
-            renderModalItems(e.target.value);
+            if (e.target.id === 'article-reader-modal') closeArticleReader();
         };
     }
 }
+
+function openArticleReader(blogId) {
+    const post = allNewsData.find(b => String(b.id) === String(blogId));
+    if (!post) return;
+
+    const modal = document.getElementById('article-reader-modal');
+    if (!modal) return;
+
+    const titleEl = document.getElementById('reader-title');
+    const badgeEl = document.getElementById('reader-badge');
+    const catCrumb = document.getElementById('reader-cat-crumb');
+    const dateEl = document.getElementById('reader-date');
+    const authorEl = document.getElementById('reader-author');
+    const imgEl = document.getElementById('reader-featured-img');
+    const sumEl = document.getElementById('reader-summary-text');
+    const contentEl = document.getElementById('reader-content-text');
+    const waCta = document.getElementById('reader-wa-cta');
+
+    if (titleEl) titleEl.textContent = post.title;
+    if (badgeEl) badgeEl.textContent = post.category || 'Notice';
+    if (catCrumb) catCrumb.textContent = post.category || 'Government Scheme';
+    if (dateEl) dateEl.textContent = post.date || 'Active';
+    if (authorEl) authorEl.textContent = post.author || 'Hafiz Ramajan';
+    if (imgEl) imgEl.src = post.image || '/assets/passport-services-poster.jpg';
+    if (sumEl) sumEl.textContent = post.summary || '';
+
+    if (contentEl) {
+        const rawContent = post.content || post.summary || '';
+        const paras = rawContent.split('\n').filter(p => p.trim() !== '');
+        contentEl.innerHTML = paras.map(p => `<p style="margin-bottom: 12px; line-height: 1.6; font-size: 0.94rem;">${p}</p>`).join('');
+    }
+
+    if (waCta) {
+        const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Maine aapke portal par news/scheme dekhi: \"" + post.title + "\". Mujhe iske documents filing aur service ke baare me jankari chahiye.");
+        waCta.href = "https://wa.me/917849008882?text=" + msg;
+    }
+
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'all';
+}
+window.openArticleReader = openArticleReader;
+
+function closeArticleReader() {
+    const modal = document.getElementById('article-reader-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+}
+window.closeArticleReader = closeArticleReader;
+
 
 // ==========================================================================
 // EXCELLENCE SERVICES - ADMIN PORTAL (HAFIZ RAMAJAN DASHBOARD)
@@ -796,33 +785,55 @@ if (pdfjsLib) {
 const translations = {
     roman: {
         title: "Passport Document Verification System",
-        subtitle: "Aadhaar, PAN, 10th Marksheet aur Custom documents ko upload karke passport ke liye cross-verify karein.",
+        subtitle: "Aadhaar, PAN Card aur 10th Marksheet upload karke spelling mismatch, Date of Birth errors aur PSK appointment clearance check karein.",
+        systemBadge: "AI KYC & PSK Verification Engine",
+        
+        // Navigation
+        navVerify: "📋 Documents Verify",
+        navNews: "Latest News & Schemes",
+        navServices: "Services & Rates",
+        navEligibility: "Eligibility Checker",
+        navFaq: "FAQs",
+        
+        // Live Ticker
+        tickerBadge: "LATEST UPDATES",
+        tickerExplore: "View All 8 Updates",
+
+        // Hero Trust & Stats
+        heroTitle: "Instant AI Document Cross-Verification & Pre-Screening",
+        heroSubtitle: "Aadhaar, PAN Card aur 10th Marksheet upload karke spelling mismatch, DOB galtiyan aur PSK rejection se bachein.",
+        trust1Title: "100% PSK Compliance",
+        trust1Desc: "MEA & RPO standards ke mutabiq certified pre-screening.",
+        trust2Title: "Character-by-Character AI Match",
+        trust2Desc: "Ek ek harf aur spelling discrepancy ki live checking.",
+        trust3Title: "Zero Appointment Rejection",
+        trust3Desc: "Pehle hi galti pakad kar Annexure-D affidavit guidance.",
+        stat1Label: "100% Client Privacy",
+        stat2Label: "Real-Time AI OCR",
+        stat3Label: "0 Rejections at PSK",
+        stat4Label: "Direct Expert Assistance",
+
+        // Roadmap
+        roadmapHeading: "Passport Clearance Roadmap: 4 Simple Steps to Guaranteed Approval",
+        step1Title: "Step 1: Upload Documents",
+        step1Desc: "Aadhaar Card, PAN Card aur 10th Marksheet ki clean photo ya PDF attach karein.",
+        step2Title: "Step 2: AI Cross-Verification",
+        step2Desc: "AI OCR Name, Gender, DOB aur Document ID ko extract karke cross-verify karega.",
+        step3Title: "Step 3: Discrepancy Audit",
+        step3Desc: "Spelling mismatch aur DOB difference ko red aur yellow badges me highlight kiya jayega.",
+        step4Title: "Step 4: Audit Certificate",
+        step4Desc: "Official audit report download karein aur zaroori ho to correction karwayen.",
+
+        // Actions Bar
         addDoc: "Custom Document Add Karein",
         verify: "Verify Documents",
         reset: "Reset All",
-        statusInitial: "Aadhaar aur PAN mandatory hain. 10th Marksheet aur Custom docs bhi upload kar sakte hain.",
-        statusNeedMandatory: "Sab mandatory documents upload karna lazmi hai.",
-        statusReady: "Verify button par click karke AI verification shuru karein.",
-        verdictSuccess: "Sab documents kamyabi se match ho gaye hain! Ready for Passport.",
-        verdictError: "Mismatch mila! Highlighted fields aur spelling ko check karein.",
-        field: "Field",
-        statusCol: "Status",
-        fieldName: "Name (Pura Naam)",
-        fieldGender: "Gender (Jins / Sex)",
-        fieldDob: "Date of Birth (DOB)",
-        fieldFather: "Father's Name (Walid Ka Naam)",
-        fieldDocNumber: "Document ID Number",
-        btnShowRaw: "Show Raw Extracted Text",
-        btnHideRaw: "Hide Raw Extracted Text",
-        btnDownloadPdf: "Download PDF Report",
-        btnPrintReport: "Print Report",
-        topParJayein: "Top Par Jayein",
-        viewFullReport: "View Full Report",
-        modalTitle: "Custom Document Add Karein",
-        modalDocLabel: "Document Name (jaise Voter ID, Driving License, Passport)",
-        modalMandatoryLabel: "Kya yeh document mandatory hai?",
-        modalCancel: "Cancel",
-        modalSubmit: "Add Document",
+        newsDrawerBtn: "Latest News & Updates",
+
+        // Document Cards
+        aadhaarTitle: "Aadhaar Card",
+        panTitle: "PAN Card",
+        marksheetTitle: "10th Marksheet",
         badgeMandatory: "Mandatory",
         badgeOptional: "Optional",
         uploadText: "File yaha drag karein ya click karke upload karein",
@@ -832,284 +843,240 @@ const translations = {
         statusTextProcessing: "AI OCR processing...",
         statusTextDone: "Verification Complete",
         statusTextError: "Verification Failed",
-        inputPlaceholderName: "Naam likhein...",
-        inputPlaceholderDob: "DD/MM/YYYY",
-        inputPlaceholderFather: "Walid/Pita ka naam likhein...",
-        inputPlaceholderDocNumber: "Document number likhein...",
-        matchBadge: "Match",
-        mismatchBadge: "Mismatch",
-        ignoredBadge: "Ignored (Need 2+ docs)",
-        infoOnly: "Document ID",
-        rawLogsTitle: "Raw Extracted Text Logs",
-        aadhaarTitle: "Aadhaar Card",
-        panTitle: "PAN Card",
-        marksheetTitle: "10th Marksheet",
-        closeReport: "Close Report",
-        spellingTitle: "Name Spelling Analysis (Spelling Ki Jaanch)",
-        genderMatch: "Gender Match",
-        genderMismatch: "Gender Mismatch",
-        male: "Male",
-        female: "Female",
-        other: "Other",
-        notSpecified: "Not Specified / N/A",
-        reportCertificateTitle: "OFFICIAL DOCUMENT VERIFICATION AUDIT CERTIFICATE",
-        newsDrawerBtn: "Latest News & Schemes",
-        newsSidebarTitle: "Latest News & Schemes",
-        newsSidebarSubtitle: "Govt Schemes & Daily Alerts",
-        newsSearchPlaceholder: "News ya schemes search karein...",
-        phoneCaptureTitle: "Applicant WhatsApp / Mobile Number (Zaroori):",
-        phoneCaptureDesc: "Apna 10-digit WhatsApp number darj karein taake verification report aur customer assistance direct mil sake.",
-        phoneCaptureSave: "Save Number",
-        pskAdvisoryTitle: "ℹ️ Passport Seva Kendra (PSK) Verification Guidelines:",
-        pskRuleName: "Name Spelling: Name 100% match hona chahiye Aadhaar, PAN aur Marksheet me.",
-        pskRuleGender: "Gender (Male/Female): Sabhi documents me Gender ek jaisa hona chahiye.",
-        pskRuleDob: "Date of Birth (DOB): 10th Marksheet / Birth Certificate official passport ke liye valid hota hai.",
-        phoneModalTitle: "Apna Mobile / WhatsApp Number Dein",
-        phoneModalOptional: "(Optional • Fikar na karein, ye bilkul zaroori nahi)",
-        phoneModalDesc: "Agar documents me koi spelling ya DOB galti nikalti hai, to Excellence Services ki team aapse direct rabta (contact) karke aapka affidavit aur passport documents theek karwa sakti hai.",
-        phoneModalSkip: "✖ Skip (Bina Number Verify)",
-        phoneModalSubmit: "⚡ Save & Verify Karein",
-        viewAllNews: "View All News & Schemes",
-        allNewsModalTitle: "All Latest News, Government Schemes & Service Blog"
+
+        // Status Messages
+        statusInitial: "Aadhaar aur PAN mandatory hain. 10th Marksheet aur Custom docs bhi upload kar sakte hain.",
+        statusNeedMandatory: "Sabhi zaroori (mandatory) documents upload karna lazmi hai.",
+        statusReady: "Verify button par click karke AI verification shuru karein.",
+        verdictSuccess: "Sab documents kamyabi se match ho gaye hain! Ready for Passport.",
+        verdictError: "Mismatch mila! Highlighted fields aur spelling difference ko check karein.",
+
+        // Audit Report
+        reportCertificateTitle: "OFFICIAL PASSPORT VERIFICATION AUDIT CERTIFICATE",
+        reportMetaSubtitle: "Official Verification Certificate for Indian Passport Application & PSK Compliance",
+        btnDownloadPdf: "Download PDF Report",
+        btnPrintReport: "Print Report",
+        topParJayein: "Top Par Jayein",
+        viewFullReport: "View Full Report",
+        field: "Field",
+        statusCol: "Status",
+        fieldName: "Name (Pura Naam)",
+        fieldGender: "Gender (Jins / Sex)",
+        fieldDob: "Date of Birth (DOB)",
+        fieldFather: "Father's Name (Walid Ka Naam)",
+        fieldDocNumber: "Document ID Number",
+
+        // PSK Advisory
+        pskAdvisoryTitle: "Passport Seva Kendra (PSK) Mandatory Verification Guidelines:",
+        pskRuleName: "Name Spelling Rule: Aadhaar, PAN aur Marksheet me ek ek harf (letters) bilkul barabar hone chahiye. Thoda sa bhi farq hone par Annexure-D One & Same Person legal affidavit lazmi hoga.",
+        pskRuleGender: "Gender Rule: Sabhi documents par Gender (Male / Female / Transgender) ek jaisa hona chahiye.",
+        pskRuleDob: "Date of Birth Rule: Aadhaar me poori tareekh (DD/MM/YYYY) honi chahiye. Sirf saal (Year of Birth) hone par PSK application hold ho sakti hai.",
+
+        // News & Portal
+        portalBadge: "OFFICIAL ANNOUNCEMENTS & SCHEMES",
+        portalTitle: "Latest Government Schemes & Passport Circulars",
+        portalSubtitle: "Government schemes, scholarship deadlines, e-Passport rollout guidelines aur circulars ki authentic updates.",
+        portalSearchPlaceholder: "Schemes, scholarship ya passport rules search karein...",
+        filterAll: "Sabhi Updates (All)",
+        filterPassport: "Passport Rules",
+        filterScholarship: "SSP Scholarships",
+        filterVoter: "Voter ID Cards",
+        filterPan: "PAN Card Updates",
+        filterPolice: "Police Verification",
+        readMoreBtn: "Puri Khabar Padhein",
+        shareBtn: "WhatsApp Share",
+
+        // Services & Shop Section
+        servicesTitle: "Hamari Sabhi Online Sevaen & Fees (Services & Price List):",
+        promoTitle: "📋 Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!",
+        promoSubtitle: "Passport, PAN Card, Voter ID, ya Marksheet me Name Spelling, DOB, ya Father's Name mismatch ho gaya hai? Ya naya Passport, Voter ID, Police Verification, ya SSP Scholarship karwana ho? Fikar mat karein! Aapka sabhi online kaam 100% legal, fast aur approved karwayen.",
+        bookOnWhatsApp: "💬 WhatsApp Book",
+
+        // Diagnostic Section
+        diagTitle: "Quick Passport Eligibility & Category Diagnostic",
+        diagSubtitle: "3 aasaan sawalon ke jawab dein aur janein ki aap Non-ECR ke eligible hain ya Annexure-D affidavit zaroori hai.",
+        q1Title: "1. Kya aapne 10th Class (Matriculation / SSLC) pass kiya hai?",
+        q1Sub: "10th Marksheet hone par aapko Non-ECR (Emigration Check Not Required) category milti hai.",
+        q2Title: "2. Kya aapke documents me Name Spelling me koi mismatch hai?",
+        q2Sub: "Agar haan, to PSK appointment se pehle Annexure-D legal affidavit banana hoga.",
+        q3Title: "3. Kya aapke Aadhaar Card par Poori Date of Birth (DD/MM/YYYY) darj hai?",
+        q3Sub: "Sirf Year of Birth hone par pehle Aadhaar update karwana zaroori hai.",
+
+        // FAQ Section
+        faqTitle: "Frequently Asked Questions (Aam Sawalat)",
+        faqSubtitle: "Passport, Name spelling mismatch aur online documents ke bare me zaroori maloomat.",
+        faqQ1: "Aadhaar aur PAN me Name Spelling me farq ho to Passport ban sakta hai?",
+        faqA1: "Haan, ban sakta hai lekin PSK par rejection se bachne ke liye First-class Magistrate ya Notary se certified Annexure-D (One and the Same Person) Affidavit jama karna padega.",
+        faqQ2: "Non-ECR Passport ke liye kaun se documents chahiye?",
+        faqA2: "10th standard (SSLC/Matriculation) marksheet ya higher qualification certificate lagane par bina kisi immigration check ke Non-ECR passport issue hota hai.",
+        faqQ3: "Tatkaal Passport kitne din me milta hai?",
+        faqA3: "Tatkaal category me PSK verification ke baad aamtaur par 1 se 3 working days me passport print ho kar dispatch ho jata hai.",
+        faqQ4: "Aadhaar Card me sirf saal (Year of Birth) likha hai to kya karein?",
+        faqA4: "PSK rules ke mutabiq Aadhaar me Date, Month aur Year teeno darj hona zaroori hai. Aap hamare centre se pehle Aadhaar DOB update karwa sakte hain.",
+        faqQ5: "SSP Scholarship ke liye kya eligibility hai?",
+        faqA5: "Karnataka Post-Matric & Pre-Matric SSP Scholarship ke liye valid Caste & Income certificate, Aadhaar-linked bank account aur college admission receipt zaroori hai.",
+
+        // Footer
+        footerDesc: "AI KYC & PSK Compliance Engine dwara sanchalit. Indian Passport applicants aur digital service kendras ke liye banaya gaya hai.",
+        footerPartner: "Excellence Services Raibag — Authorized Digital Government Assistance Partner.",
+        floatingWhatsApp: "Need Help? WhatsApp Us",
+
+        // Modals
+        modalTitle: "Custom Document Add Karein",
+        modalDocLabel: "Document Name (jaise Voter ID, Driving License, Passport)",
+        modalMandatoryLabel: "Kya yeh document mandatory hai?",
+        modalCancel: "Cancel",
+        modalSubmit: "Add Document"
     },
     en: {
         title: "Passport Document Verification System",
-        subtitle: "Upload and cross-verify documents locally using secure client-side PDF rendering & AI OCR.",
+        subtitle: "Upload Aadhaar, PAN Card & 10th Marksheet to detect spelling mismatches, Date of Birth errors, and ensure 100% PSK appointment clearance without delays.",
+        systemBadge: "AI KYC & PSK Compliance Engine",
+        
+        // Navigation
+        navVerify: "📋 Verify Docs",
+        navNews: "Latest News & Schemes",
+        navServices: "Services & Rates",
+        navEligibility: "Eligibility Checker",
+        navFaq: "FAQs",
+
+        // Live Ticker
+        tickerBadge: "LATEST UPDATES",
+        tickerExplore: "View All 8 Updates",
+
+        // Hero Trust & Stats
+        heroTitle: "Instant AI Document Cross-Verification & Pre-Screening",
+        heroSubtitle: "Upload Aadhaar, PAN Card & 10th Marksheet to detect spelling mismatches, Date of Birth errors, and ensure 100% PSK appointment clearance without delays.",
+        trust1Title: "100% PSK Compliance",
+        trust1Desc: "Pre-screened against official MEA & RPO standards.",
+        trust2Title: "Character-by-Character AI Match",
+        trust2Desc: "Detects exact character mismatches and spelling differences.",
+        trust3Title: "Zero Appointment Rejection",
+        trust3Desc: "Pre-identify errors with Annexure-D affidavit guidance.",
+        stat1Label: "100% Client Privacy",
+        stat2Label: "Real-Time AI OCR",
+        stat3Label: "0 Rejections at PSK",
+        stat4Label: "Direct Expert Assistance",
+
+        // Roadmap
+        roadmapHeading: "Passport Clearance Roadmap: 4 Simple Steps to Guaranteed Approval",
+        step1Title: "Step 1: Upload Documents",
+        step1Desc: "Attach clear scans or photos of Aadhaar Card, PAN Card, and 10th Marksheet.",
+        step2Title: "Step 2: AI Cross-Verification",
+        step2Desc: "AI OCR extracts and cross-verifies Full Name, Gender, Date of Birth, and ID Number.",
+        step3Title: "Step 3: Instant Discrepancy Audit",
+        step3Desc: "Spelling discrepancies and DOB mismatches are highlighted with alert badges.",
+        step4Title: "Step 4: Audit Certificate",
+        step4Desc: "Download official compliance certificate and resolve errors before your PSK slot.",
+
+        // Actions Bar
         addDoc: "Add Custom Document",
         verify: "Verify Documents",
         reset: "Reset All",
-        statusInitial: "Aadhaar and PAN are mandatory. 10th Marksheet and custom documents can also be uploaded.",
-        statusNeedMandatory: "Please upload all mandatory documents first.",
-        statusReady: "Click 'Verify Documents' button to start AI cross-verification.",
-        verdictSuccess: "All documents successfully matched! Ready for Passport submission.",
-        verdictError: "Discrepancy detected! Please review highlighted fields & spelling differences.",
-        field: "Field",
-        statusCol: "Status",
-        fieldName: "Full Name",
-        fieldGender: "Gender (Sex)",
-        fieldDob: "Date of Birth (DOB)",
-        fieldFather: "Father's Name",
-        fieldDocNumber: "Document ID Number",
-        btnShowRaw: "Show Raw Extracted Text",
-        btnHideRaw: "Hide Raw Extracted Text",
-        btnDownloadPdf: "Download PDF Report",
-        btnPrintReport: "Print Report",
-        topParJayein: "Go to Top",
-        viewFullReport: "View Full Report",
-        modalTitle: "Add Custom Document",
-        modalDocLabel: "Document Name (e.g., Voter ID, Driving License)",
-        modalMandatoryLabel: "Is this document mandatory?",
-        modalCancel: "Cancel",
-        modalSubmit: "Add Document",
+        newsDrawerBtn: "Latest News & Updates",
+
+        // Document Cards
+        aadhaarTitle: "Aadhaar Card",
+        panTitle: "PAN Card",
+        marksheetTitle: "10th Marksheet",
         badgeMandatory: "Mandatory",
         badgeOptional: "Optional",
-        uploadText: "Drag & drop your file here, or click to browse",
-        uploadSubtext: "Supports PNG, JPG, JPEG, PDF up to 15MB",
+        uploadText: "Drag & drop file here or click to browse",
+        uploadSubtext: "PNG, JPG, JPEG, PDF up to 15MB",
         statusTextPending: "Pending",
         statusTextUploaded: "File Uploaded / Ready",
         statusTextProcessing: "AI OCR processing...",
         statusTextDone: "Verification Complete",
         statusTextError: "Verification Failed",
-        inputPlaceholderName: "Type name...",
-        inputPlaceholderDob: "DD/MM/YYYY",
-        inputPlaceholderFather: "Type father's name...",
-        inputPlaceholderDocNumber: "Type document number...",
-        matchBadge: "Match",
-        mismatchBadge: "Mismatch",
-        ignoredBadge: "Ignored (Need 2+ docs)",
-        infoOnly: "Document ID",
-        rawLogsTitle: "Raw Extracted Text Logs",
-        aadhaarTitle: "Aadhaar Card",
-        panTitle: "PAN Card",
-        marksheetTitle: "10th Marksheet",
-        closeReport: "Close Report",
-        spellingTitle: "Smart Name & Spelling Verification Analysis",
-        genderMatch: "Gender Match",
-        genderMismatch: "Gender Mismatch",
-        male: "Male",
-        female: "Female",
-        other: "Other",
-        notSpecified: "Not Specified / N/A",
+
+        // Status Messages
+        statusInitial: "Aadhaar and PAN Card are mandatory. 10th Marksheet and custom documents can also be verified.",
+        statusNeedMandatory: "Please upload all mandatory documents before proceeding.",
+        statusReady: "Click 'Verify Documents' button to start AI cross-verification.",
+        verdictSuccess: "All documents successfully matched! Ready for Passport submission.",
+        verdictError: "Discrepancy detected! Please review highlighted fields & spelling differences.",
+
+        // Audit Report
         reportCertificateTitle: "OFFICIAL PASSPORT VERIFICATION AUDIT CERTIFICATE",
-        newsDrawerBtn: "Latest News & Govt Schemes",
-        newsSidebarTitle: "Latest News & Govt Schemes",
-        newsSidebarSubtitle: "Govt Schemes & Daily Alerts",
-        newsSearchPlaceholder: "Search news & schemes...",
-        phoneCaptureTitle: "Applicant WhatsApp / Mobile Number (Optional):",
-        phoneCaptureDesc: "Enter your 10-digit WhatsApp number to receive official verification report & quick consultation.",
-        phoneCaptureSave: "Save Number",
-        pskAdvisoryTitle: "ℹ️ Passport Seva Kendra (PSK) Verification Guidelines:",
-        pskRuleName: "Name Spelling: Name must match 100% across Aadhaar, PAN, and 10th Marksheet.",
-        pskRuleGender: "Gender (Male/Female): Gender must be strictly consistent across identity records.",
-        pskRuleDob: "Date of Birth (DOB): 10th Marksheet / Birth Certificate takes precedence for official passport issuance.",
-        phoneModalTitle: "Provide Mobile / WhatsApp Number",
-        phoneModalOptional: "(Optional • Don't worry, completely optional)",
-        phoneModalDesc: "If any spelling discrepancy or DOB mismatch is found, Excellence Services team can directly assist you with Annexure affidavit & correction.",
-        phoneModalSkip: "✖ Skip (Verify without Number)",
-        phoneModalSubmit: "⚡ Save & Verify Now",
-        viewAllNews: "View All News & Schemes",
-        allNewsModalTitle: "All Latest News, Government Schemes & Service Blog"
-    },
-    hi: {
-        title: "पासपोर्ट दस्तावेज़ सत्यापन प्रणाली",
-        subtitle: "पासपोर्ट आवेदन के लिए आधार, पैन, 10वीं मार्कशीट और अन्य दस्तावेज़ों का एआई आधारित सत्यापन करें।",
-        addDoc: "कस्टम दस्तावेज़ जोड़ें",
-        verify: "दस्तावेज़ सत्यापित करें",
-        reset: "रीसेट करें",
-        statusInitial: "आधार और पैन अनिवार्य हैं। 10वीं मार्कशीट व अन्य दस्तावेज़ भी जोड़ सकते हैं।",
-        statusNeedMandatory: "सभी अनिवार्य दस्तावेज़ अपलोड करना आवश्यक है।",
-        statusReady: "सत्यापन प्रक्रिया शुरू करने के लिए 'दस्तावेज़ सत्यापित करें' पर क्लिक करें।",
-        verdictSuccess: "सभी दस्तावेज़ सफलतापूर्वक मेल खाते हैं! पासपोर्ट के लिए तैयार।",
-        verdictError: "अंतर मिला! कृपया नाम की स्पेलिंग और अन्य विवरण की जाँच करें।",
-        field: "विवरण",
-        statusCol: "स्थिति",
-        fieldName: "पूरा नाम",
-        fieldGender: "लिंग (Gender)",
-        fieldDob: "जन्म तिथि (DOB)",
-        fieldFather: "पिता का नाम",
-        fieldDocNumber: "दस्तावेज़ संख्या (ID)",
-        btnShowRaw: "मूल टेक्स्ट देखें",
-        btnHideRaw: "मूल टेक्स्ट छिपाएं",
-        btnDownloadPdf: "पीडीएफ रिपोर्ट डाउनलोड करें",
-        btnPrintReport: "प्रिंट रिपोर्ट",
-        topParJayein: "ऊपर जाएं",
-        viewFullReport: "पूरी रिपोर्ट देखें",
-        modalTitle: "कस्टम दस्तावेज़ जोड़ें",
-        modalDocLabel: "दस्तावेज़ का नाम (जैसे वोटर आईडी, ड्राइविंग लाइसेंस)",
-        modalMandatoryLabel: "क्या यह दस्तावेज़ अनिवार्य है?",
-        modalCancel: "रद्द करें",
-        modalSubmit: "जोड़ें",
-        badgeMandatory: "अनिवार्य",
-        badgeOptional: "वैकल्पिक",
-        uploadText: "फ़ाइल यहाँ खींचें या अपलोड करने के लिए क्लिक करें",
-        uploadSubtext: "PNG, JPG, JPEG, PDF (अधिकतम 15MB)",
-        statusTextPending: "प्रतीक्षारत",
-        statusTextUploaded: "फ़ाइल अपलोड / तैयार",
-        statusTextProcessing: "एआई ओसीआर चल रहा है...",
-        statusTextDone: "सत्यापन संपन्न",
-        statusTextError: "सत्यापन विफल",
-        inputPlaceholderName: "नाम लिखें...",
-        inputPlaceholderDob: "दिन/माह/वर्ष",
-        inputPlaceholderFather: "पिता का नाम लिखें...",
-        inputPlaceholderDocNumber: "दस्तावेज़ नंबर लिखें...",
-        matchBadge: "समान (Match)",
-        mismatchBadge: "असमान (Mismatch)",
-        ignoredBadge: "अमान्य (2+ दस्तावेज़ चाहिए)",
-        infoOnly: "दस्तावेज़ ID",
-        rawLogsTitle: "मूल एक्सट्रैक्टेड टेक्स्ट लॉग्स",
-        aadhaarTitle: "आधार कार्ड",
-        panTitle: "पैन कार्ड",
-        marksheetTitle: "10वीं की मार्कशीट",
-        closeReport: "रिपोर्ट बंद करें",
-        spellingTitle: "स्मार्ट नाम व स्पेलिंग अंतर विश्लेषण",
-        genderMatch: "लिंग मिलान सफल",
-        genderMismatch: "लिंग में अंतर",
-        male: "पुरुष (Male)",
-        female: "महिला (Female)",
-        other: "अन्य (Other)",
-        notSpecified: "उल्लेखित नहीं / N/A",
-        reportCertificateTitle: "पासपोर्ट दस्तावेज़ सत्यापन ऑडिट प्रमाण-पत्र",
-        newsDrawerBtn: "नवीनतम समाचार और योजनाएं",
-        newsSidebarTitle: "ताज़ा ख़बरें और सरकारी योजनाएं",
-        newsSidebarSubtitle: "सरकारी योजनाएं और दैनिक अलर्ट",
-        newsSearchPlaceholder: "योजना या समाचार खोजें...",
-        phoneCaptureTitle: "आवेदक का व्हाट्सएप / मोबाइल नंबर (आवश्यक):",
-        phoneCaptureDesc: "अपना 10-अंकों का नंबर दर्ज करें ताकि सत्यापन रिपोर्ट और ग्राहक सहायता सीधे मिल सके।",
-        phoneCaptureSave: "नंबर सेव करें",
-        pskAdvisoryTitle: "ℹ️ पासपोर्ट सेवा केंद्र (PSK) सत्यापन दिशानिर्देश:",
-        pskRuleName: "नाम स्पेलिंग: आधार, पैन और मार्कशीट में 100% नाम मिलना चाहिए।",
-        pskRuleGender: "लिंग (Gender): सभी पहचान पत्रों में लिंग समान होना चाहिए।",
-        pskRuleDob: "जन्म तिथि (DOB): 10वीं मार्कशीट/जन्म प्रमाण पत्र पासपोर्ट के लिए मान्य होता है।",
-        phoneModalTitle: "अपना मोबाइल / व्हाट्सएप नंबर दर्ज करें",
-        phoneModalOptional: "(वैकल्पिक • चिंता न करें, यह अनिवार्य नहीं है)",
-        phoneModalDesc: "यदि दस्तावेज़ों में कोई स्पेलिंग या जन्मतिथि त्रुटि पाई जाती है, तो हमारी टीम सीधे संपर्क करके शपथ पत्र (Affidavit) बनवाने में सहायता करेगी।",
-        phoneModalSkip: "✖ छोड़ें (बिना नंबर सत्यापित करें)",
-        phoneModalSubmit: "⚡ सेव करें और सत्यापित करें",
-        viewAllNews: "सभी समाचार और योजनाएं देखें",
-        allNewsModalTitle: "सभी नवीनतम समाचार, सरकारी योजनाएं और सेवा ब्लॉग"
-    },
-    ur: {
-        title: "پاسپورٹ دستاویز تصدیقی نظام",
-        subtitle: "محفوظ کلائنٹ سائیڈ پی ڈی ایف رینڈرنگ اور اے آئی او سی آر سے دستاویزات کی تصدیق کریں۔",
-        addDoc: "اپنی مرضی کی دستاویز شامل کریں",
-        verify: "دستاویزات کی تصدیق کریں",
-        reset: "سب ری سیٹ کریں",
-        statusInitial: "آدھار اور پین کارڈ لازمی ہیں۔ دسویں کی مارک شیٹ بھی اپ لوڈ کر سکتے ہیں۔",
-        statusNeedMandatory: "تمام لازمی دستاویزات اپ لوڈ کرنا ضروری ہیں۔",
-        statusReady: "تصدیق کا عمل شروع کرنے کے لیے بٹن پر کلک کریں۔",
-        verdictSuccess: "تمام دستاویزات کامیابی کے ساتھ مطابقت رکھتی ہیں!",
-        verdictError: "تضاد پایا گیا! برائے کرم نمایاں کردہ خانے اور ہجے درست کریں۔",
-        field: "فیلڈ",
-        statusCol: "حیثیت",
-        fieldName: "پورا نام",
-        fieldGender: "جنس (Gender)",
-        fieldDob: "تاریخ پیدائش (DOB)",
-        fieldFather: "والد کا نام",
-        fieldDocNumber: "دستاویز نمبر",
-        btnShowRaw: "نکالا گیا متن دیکھیں",
-        btnHideRaw: "نکالا گیا متن چھپائیں",
-        btnDownloadPdf: "پی ڈی ایف رپورٹ ڈاؤن لوڈ کریں",
-        btnPrintReport: "پرنٹ رپورٹ",
-        topParJayein: "اوپر جائیں",
-        viewFullReport: "مکمل رپورٹ دیکھیں",
-        modalTitle: "اپنی مرضی کی دستاویز شامل کریں",
-        modalDocLabel: "دستاویز کا نام (جیسے ووٹر کارڈ، لائسنس)",
-        modalMandatoryLabel: "کیا یہ دستاویز لازمی ہے؟",
-        modalCancel: "منسوخ کریں",
-        modalSubmit: "شامل کریں",
-        badgeMandatory: "لازمی",
-        badgeOptional: "اختیاری",
-        uploadText: "فائل یہاں ڈراپ کریں یا کلک کر کے منتخب کریں",
-        uploadSubtext: "PNG، JPG، JPEG، PDF (زیادہ سے زیادہ 15MB)",
-        statusTextPending: "زیر التواء",
-        statusTextUploaded: "فائل اپ لوڈ / تیار",
-        statusTextProcessing: "اے آئی تصدیق جاری ہے...",
-        statusTextDone: "تصدیق مکمل",
-        statusTextError: "تصدیق ناکام",
-        inputPlaceholderName: "نام درج کریں...",
-        inputPlaceholderDob: "دن/ماہ/سال",
-        inputPlaceholderFather: "والد کا نام درج کریں...",
-        inputPlaceholderDocNumber: "دستاویز نمبر درج کریں...",
-        matchBadge: "مطابقت",
-        mismatchBadge: "تضاد",
-        ignoredBadge: "نظر انداز (2+ دستاویزات درکار)",
-        infoOnly: "دستاویز ID",
-        rawLogsTitle: "نکالے گئے متن کا لاگ",
-        aadhaarTitle: "آدھار کارڈ",
-        panTitle: "پین کارڈ",
-        marksheetTitle: "دسویں کی مارک شیٹ",
-        closeReport: "رپورٹ بند کریں",
-        spellingTitle: "نام کے ہجے کا تجزیہ",
-        genderMatch: "جنس کی مطابقت",
-        genderMismatch: "جنس میں تضاد",
-        male: "مرد (Male)",
-        female: "عورت (Female)",
-        other: "دیگر (Other)",
-        notSpecified: "درج نہیں / N/A",
-        reportCertificateTitle: "پاسپورٹ دستاویزات کی تصدیق کا آڈٹ سرٹیفکیٹ",
-        newsDrawerBtn: "تازہ ترین خبریں اور اسکیمیں",
-        newsSidebarTitle: "تازہ ترین خبریں اور سرکاری اسکیمیں",
-        newsSidebarSubtitle: "سرکاری اسکیمیں اور روزانہ کے الرٹس",
-        newsSearchPlaceholder: "خبریں یا اسکیمیں تلاش کریں...",
-        phoneCaptureTitle: "درخواست گزار کا واٹس ایپ / موبائل نمبر (ضروری):",
-        phoneCaptureDesc: "اپنا 10 ہندسوں کا نمبر درج کریں تاکہ رپورٹ اور کسٹمر سپورٹ مل سکے۔",
-        phoneCaptureSave: "نمبر محفوظ کریں",
-        pskAdvisoryTitle: "ℹ️ پاسپورٹ سیوا کیندر (PSK) تصدیقی ہدایات:",
-        pskRuleName: "نام کے ہجے: آدھار، پین اور مارک شیٹ میں نام 100% مطابقت رکھنا چاہیے۔",
-        pskRuleGender: "جنس: تمام شناختی کارڈز میں جنس ایک جیسی ہونی چاہیے۔",
-        pskRuleDob: "تاریخ پیدائش: دسویں کی مارک شیٹ یا پیدائش کا سرٹیفکیٹ ترجیحی مانا جاتا ہے۔",
-        phoneModalTitle: "اپنا موبائل / واٹس ایپ نمبر درج کریں",
-        phoneModalOptional: "(اختیاری • فکر نہ کریں، یہ لازمی نہیں)",
-        phoneModalDesc: "اگر دستاویز میں کوئی غلطی ہو تو ہماری ٹیم آپ سے رابطہ کر کے درست کروا سکتی ہے۔",
-        phoneModalSkip: "✖ چھوڑیں (بغیر نمبر تصدیق کریں)",
-        phoneModalSubmit: "⚡ محفوظ کریں اور تصدیق کریں",
-        viewAllNews: "تمام خبریں اور اسکیمیں دیکھیں",
-        allNewsModalTitle: "تمام تازہ ترین خبریں، سرکاری اسکیمیں اور بلاگ"
+        reportMetaSubtitle: "Official Verification Certificate for Indian Passport Application & PSK Compliance",
+        btnDownloadPdf: "Download PDF Report",
+        btnPrintReport: "Print Report",
+        topParJayein: "Go to Top",
+        viewFullReport: "View Full Report",
+        field: "Field",
+        statusCol: "Status",
+        fieldName: "Full Legal Name",
+        fieldGender: "Gender (Sex)",
+        fieldDob: "Date of Birth (DOB)",
+        fieldFather: "Father's Full Name",
+        fieldDocNumber: "Document ID Number",
+
+        // PSK Advisory
+        pskAdvisoryTitle: "Passport Seva Kendra (PSK) Mandatory Verification Guidelines:",
+        pskRuleName: "Name Spelling Rule: Character-by-character spelling across Aadhaar, PAN, and Marksheet must match precisely. Any discrepancy requires an Annexure-D 'One and the Same Person' notarized affidavit.",
+        pskRuleGender: "Gender Rule: Gender (Male / Female / Transgender) must match consistently across all submitted government proofs.",
+        pskRuleDob: "Date of Birth Rule: Aadhaar must reflect full Date of Birth (DD/MM/YYYY). Year-only records lead to mandatory application hold at the PSK counter.",
+
+        // News & Portal
+        portalBadge: "OFFICIAL ANNOUNCEMENTS & SCHEMES",
+        portalTitle: "Latest Government Schemes & Passport Circulars",
+        portalSubtitle: "Stay updated with official deadlines, fee updates, e-Passport rollout guidelines, and student scholarship alerts.",
+        portalSearchPlaceholder: "Search schemes, scholarships, passport rules...",
+        filterAll: "All Announcements",
+        filterPassport: "Passport Rules",
+        filterScholarship: "SSP Scholarships",
+        filterVoter: "Voter ID & ECI",
+        filterPan: "PAN & Tax",
+        filterPolice: "Police Verification",
+        readMoreBtn: "Read Full Article",
+        shareBtn: "WhatsApp Share",
+
+        // Services & Shop Section
+        servicesTitle: "Our Complete Online Government Services & Official Price List:",
+        promoTitle: "📋 Document Errors or Need Fresh Documents? We Deliver 100% Accurate Online Services!",
+        promoSubtitle: "Spelling, Date of Birth, or Father's Name mismatch in Passport, PAN, Voter ID, or Marksheet? Or need a fresh Passport, Voter ID, Police Verification, or SSP Scholarship? Don't worry! Get all legal government applications filed with guaranteed approval.",
+        bookOnWhatsApp: "💬 Book on WhatsApp",
+
+        // Diagnostic Section
+        diagTitle: "Quick Passport Eligibility & Category Diagnostic",
+        diagSubtitle: "Answer 3 quick questions to check if you qualify for Non-ECR or need Annexure-D affidavit.",
+        q1Title: "1. Have you passed 10th Standard (Matriculation / SSLC)?",
+        q1Sub: "Qualifies you for Non-ECR (Emigration Check Not Required) category.",
+        q2Title: "2. Is there any Name Spelling Mismatch across your documents?",
+        q2Sub: "Requires Annexure-D / Legal Notarized Affidavit before PSK appointment.",
+        q3Title: "3. Does your Aadhaar have Full Date of Birth (DD/MM/YYYY)?",
+        q3Sub: "Year-only Aadhaar requires mandatory DOB update before passport filing.",
+
+        // FAQ Section
+        faqTitle: "Frequently Asked Questions",
+        faqSubtitle: "Important answers regarding Indian Passport applications, spelling mismatches, and online citizen services.",
+        faqQ1: "Can I get a passport if my name spelling differs between Aadhaar and PAN?",
+        faqA1: "Yes, you can apply. However, to prevent rejection at PSK, you must submit a notarized Annexure-D 'One and the Same Person' Affidavit certified by a First-Class Magistrate or Notary Public.",
+        faqQ2: "What documents are required for Non-ECR (Emigration Check Not Required)?",
+        faqA2: "Submitting a 10th Standard (SSLC/Matriculation) pass certificate or higher educational degree guarantees Non-ECR status without emigration clearances.",
+        faqQ3: "How fast is Tatkaal Passport issued?",
+        faqA3: "Under Tatkaal processing, once PSK biometric verification is cleared, the passport is typically printed and dispatched within 1 to 3 working days.",
+        faqQ4: "My Aadhaar card shows only Year of Birth. Can I still apply for Passport?",
+        faqA4: "No. PSK guidelines strictly require full Date of Birth (DD/MM/YYYY) on Aadhaar. You must update your Aadhaar DOB first, which we can expedite at our center.",
+        faqQ5: "What is required for the Karnataka SSP Scholarship application?",
+        faqA5: "You need a valid Caste & Income Certificate (RD Number), Aadhaar-linked NPCI active bank account, and the current academic year college admission fee receipt.",
+
+        // Footer
+        footerDesc: "Powered by AI KYC & PSK Compliance Engine. Designed for Indian Passport Applicants & Digital Service Kendras.",
+        footerPartner: "Excellence Services Raibag — Authorized Digital Government Assistance Partner.",
+        floatingWhatsApp: "Need Help? WhatsApp Us",
+
+        // Modals
+        modalTitle: "Add Custom Document",
+        modalDocLabel: "Document Name (e.g., Voter ID, Driving License, Passport)",
+        modalMandatoryLabel: "Is this document mandatory for verification?",
+        modalCancel: "Cancel",
+        modalSubmit: "Add Document"
     }
 };
 
 // Global App States
-let currentLang = localStorage.getItem('appLanguage') || 'roman';
+let currentLang = localStorage.getItem('appLanguage') || 'en';
 let activeTheme = localStorage.getItem('appTheme') || 'light';
 let verificationPerformed = false;
 
@@ -1163,6 +1130,80 @@ let documents = [
 ];
 
 // Initialize UI Elements & Translation System
+
+// ==========================================================================
+// MULTI-PAGE VIEW TAB SWITCHER (VERIFY, NEWS, SERVICES, ELIGIBILITY, FAQS)
+// ==========================================================================
+function switchPageTab(pageId) {
+    if (pageId === 'page-eligibility') {
+        switchPageTab('page-verification');
+        return;
+    }
+    const pages = document.querySelectorAll('.app-page-view');
+    const navLinks = document.querySelectorAll('#main-nav-tabs .nav-link');
+    const bottomNavItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+
+    pages.forEach(p => {
+        if (p.id === pageId) {
+            p.style.display = 'block';
+            p.classList.add('active');
+        } else {
+            p.style.display = 'none';
+            p.classList.remove('active');
+        }
+    });
+
+    navLinks.forEach(link => {
+        if (link.dataset.page === pageId) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    bottomNavItems.forEach(item => {
+        if (item.dataset.page === pageId) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    const hashName = pageId.replace('page-', '');
+    if (window.history && window.history.pushState) {
+        window.history.pushState(null, null, '#' + hashName);
+    }
+
+    // Clear unread indicator dots whenever user opens news
+    if (pageId === 'page-news') {
+        const bellDot = document.getElementById('bell-unread-dot');
+        if (bellDot) bellDot.classList.add('hidden');
+        const bottomNewsDot = document.getElementById('bottom-news-dot');
+        if (bottomNewsDot) bottomNewsDot.classList.add('hidden');
+        if (typeof loadAndRenderBlogs === 'function') loadAndRenderBlogs();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.switchPageTab = switchPageTab;
+
+function handleHashRoute() {
+    const raw = (window.location.hash || '').replace('#', '').toLowerCase();
+    if (raw.includes('news') || raw.includes('portal')) {
+        switchPageTab('page-news');
+    } else if (raw.includes('serv') || raw.includes('promo')) {
+        switchPageTab('page-services');
+    } else if (raw.includes('elig') || raw.includes('check')) {
+        switchPageTab('page-verification');
+    } else if (raw.includes('faq')) {
+        switchPageTab('page-faqs');
+    } else if (raw.includes('verif') || raw === '') {
+        switchPageTab('page-verification');
+    }
+}
+window.addEventListener('hashchange', handleHashRoute);
+
+
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initLanguageSelector();
@@ -1172,6 +1213,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAndRenderServices();
     loadAndRenderBlogs();
     loadShopInfo();
+    initLiveNotificationStream();
+    handleHashRoute();
     setupPhoneCapture();
     setupPhonePromptModal();
 
@@ -1283,24 +1326,109 @@ function initLanguageSelector() {
             currentLang = e.target.value;
             localStorage.setItem('appLanguage', currentLang);
             applyTranslations();
+            if (typeof renderDocumentGrid === 'function') renderDocumentGrid();
+            if (typeof loadAndRenderServices === 'function') loadAndRenderServices();
+            if (typeof loadAndRenderBlogs === 'function') loadAndRenderBlogs();
+            if (verificationPerformed && typeof compileVerificationResults === 'function') {
+                compileVerificationResults();
+            }
         });
     }
 }
 
 // Apply Translations to DOM Elements
 function applyTranslations() {
+    const isRoman = (currentLang === 'roman');
     const dict = translations[currentLang] || translations.roman;
     
-    document.documentElement.dir = (currentLang === 'ur') ? 'rtl' : 'ltr';
+    document.documentElement.dir = 'ltr';
     
     // Page Title & Header
     const pageTitle = document.getElementById('i18n-page-title');
     if (pageTitle) pageTitle.textContent = dict.title;
     const titleEl = document.getElementById('i18n-title');
     if (titleEl) titleEl.textContent = dict.title;
-    const subtitleEl = document.getElementById('i18n-subtitle');
-    if (subtitleEl) subtitleEl.textContent = dict.subtitle;
+    const systemBadge = document.getElementById('i18n-system-badge');
+    if (systemBadge) systemBadge.textContent = dict.systemBadge;
     
+    // Navbar Links
+    const navVerifyText = document.getElementById('nav-verify-text');
+    if (navVerifyText) {
+        navVerifyText.textContent = isRoman ? "Documents Verify" : "Verify Docs";
+    } else {
+        const navVerify = document.getElementById('nav-verify-link');
+        if (navVerify) navVerify.textContent = dict.navVerify;
+    }
+
+    const backText = isRoman ? "Verification System Par Wapas Jayein" : "Back to Verification System";
+    ['back-to-verify-news', 'back-to-verify-services', 'back-to-verify-elig', 'back-to-verify-faq'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = backText;
+    });
+    const navNews = document.getElementById('nav-news-text');
+    if (navNews) navNews.textContent = dict.navNews;
+    const navServices = document.getElementById('nav-services-text');
+    if (navServices) navServices.textContent = dict.navServices;
+    const navChecker = document.getElementById('nav-checker-text');
+    if (navChecker) navChecker.textContent = dict.navEligibility;
+    const navFaq = document.getElementById('nav-faq-text');
+    if (navFaq) navFaq.textContent = dict.navFaq;
+
+    // Live Ticker
+    const tickerBadge = document.getElementById('ticker-badge-text');
+    if (tickerBadge) tickerBadge.textContent = dict.tickerBadge;
+    const tickerExplore = document.getElementById('ticker-explore-text');
+    if (tickerExplore) tickerExplore.textContent = dict.tickerExplore;
+
+    // Hero Section & Trust Badges
+    const heroTitle = document.getElementById('hero-title-text');
+    if (heroTitle) heroTitle.textContent = dict.heroTitle;
+    const heroSub = document.getElementById('i18n-subtitle');
+    if (heroSub) heroSub.textContent = dict.heroSubtitle;
+
+    const t1Title = document.getElementById('trust-1-title');
+    if (t1Title) t1Title.textContent = dict.trust1Title;
+    const t1Desc = document.getElementById('trust-1-desc');
+    if (t1Desc) t1Desc.textContent = dict.trust1Desc;
+    const t2Title = document.getElementById('trust-2-title');
+    if (t2Title) t2Title.textContent = dict.trust2Title;
+    const t2Desc = document.getElementById('trust-2-desc');
+    if (t2Desc) t2Desc.textContent = dict.trust2Desc;
+    const t3Title = document.getElementById('trust-3-title');
+    if (t3Title) t3Title.textContent = dict.trust3Title;
+    const t3Desc = document.getElementById('trust-3-desc');
+    if (t3Desc) t3Desc.textContent = dict.trust3Desc;
+
+    // Hero Stats
+    const s1 = document.getElementById('stat-1-label');
+    if (s1) s1.textContent = dict.stat1Label;
+    const s2 = document.getElementById('stat-2-label');
+    if (s2) s2.textContent = dict.stat2Label;
+    const s3 = document.getElementById('stat-3-label');
+    if (s3) s3.textContent = dict.stat3Label;
+    const s4 = document.getElementById('stat-4-label');
+    if (s4) s4.textContent = dict.stat4Label;
+
+    // Compliance Roadmap Strip
+    const roadHead = document.getElementById('roadmap-heading');
+    if (roadHead) roadHead.textContent = dict.roadmapHeading;
+    const st1Title = document.getElementById('step-1-title');
+    if (st1Title) st1Title.textContent = dict.step1Title;
+    const st1Desc = document.getElementById('step-1-desc');
+    if (st1Desc) st1Desc.textContent = dict.step1Desc;
+    const st2Title = document.getElementById('step-2-title');
+    if (st2Title) st2Title.textContent = dict.step2Title;
+    const st2Desc = document.getElementById('step-2-desc');
+    if (st2Desc) st2Desc.textContent = dict.step2Desc;
+    const st3Title = document.getElementById('step-3-title');
+    if (st3Title) st3Title.textContent = dict.step3Title;
+    const st3Desc = document.getElementById('step-3-desc');
+    if (st3Desc) st3Desc.textContent = dict.step3Desc;
+    const st4Title = document.getElementById('step-4-title');
+    if (st4Title) st4Title.textContent = dict.step4Title;
+    const st4Desc = document.getElementById('step-4-desc');
+    if (st4Desc) st4Desc.textContent = dict.step4Desc;
+
     // Actions Bar Buttons
     const addDocBtn = document.getElementById('i18n-add-doc');
     if (addDocBtn) addDocBtn.textContent = dict.addDoc;
@@ -1315,6 +1443,7 @@ function applyTranslations() {
         if (lastSpan) lastSpan.textContent = dict.newsDrawerBtn;
     }
 
+    // Report Actions & Headings
     const dlPdfBtn = document.getElementById('i18n-download-pdf');
     if (dlPdfBtn) dlPdfBtn.textContent = dict.btnDownloadPdf;
     const topDlBtn = document.getElementById('i18n-top-dl-pdf');
@@ -1328,21 +1457,13 @@ function applyTranslations() {
         const sSpan = topScrollBtn.querySelector('span:last-child');
         if (sSpan) sSpan.textContent = dict.topParJayein;
     }
-
-    // Phone Capture Bar
-    const phoneCapTitle = document.getElementById('phone-capture-title');
-    if (phoneCapTitle) phoneCapTitle.textContent = dict.phoneCaptureTitle;
-    const phoneCapDesc = document.getElementById('phone-capture-desc');
-    if (phoneCapDesc) phoneCapDesc.textContent = dict.phoneCaptureDesc;
-    const savePhoneBtn = document.getElementById('i18n-save-phone');
-    if (savePhoneBtn) savePhoneBtn.textContent = '💾 ' + dict.phoneCaptureSave;
-
-    // Report Header Title
     const inlineTitle = document.getElementById('i18n-inline-report-title');
     if (inlineTitle) inlineTitle.textContent = dict.reportCertificateTitle;
+    const reportSub = document.getElementById('report-timestamp-meta');
+    if (reportSub) reportSub.textContent = dict.reportMetaSubtitle;
 
-    // PSK Guidelines Title & Items
-    const pskTitle = document.getElementById('i18n-psk-title');
+    // PSK Guidelines
+    const pskTitle = document.getElementById('i18n-psk-title') || document.querySelector('.psk-advisory-box h4');
     if (pskTitle) pskTitle.textContent = dict.pskAdvisoryTitle;
     const pskList = document.getElementById('advisory-list-items');
     if (pskList) {
@@ -1353,39 +1474,120 @@ function applyTranslations() {
         `;
     }
 
-    // Sidebar News & Search
-    const newsTitle = document.getElementById('sidebar-news-title');
-    if (newsTitle) newsTitle.textContent = dict.newsSidebarTitle;
-    const newsSub = document.getElementById('sidebar-news-sub');
-    if (newsSub) newsSub.textContent = dict.newsSidebarSubtitle;
-    const newsInput = document.getElementById('news-search-input');
-    if (newsInput) newsInput.placeholder = dict.newsSearchPlaceholder;
-    const viewAllNewsText = document.getElementById('i18n-view-all-news');
-    if (viewAllNewsText) viewAllNewsText.textContent = dict.viewAllNews;
-    const allNewsModalTitle = document.getElementById('all-news-modal-title');
-    if (allNewsModalTitle) allNewsModalTitle.textContent = dict.allNewsModalTitle;
+    // News Portal Section
+    const portalBadge = document.getElementById('portal-badge-text');
+    if (portalBadge) portalBadge.textContent = dict.portalBadge;
+    const portalTitle = document.getElementById('portal-title-text');
+    if (portalTitle) portalTitle.textContent = dict.portalTitle;
+    const portalSub = document.getElementById('portal-sub-text');
+    if (portalSub) portalSub.textContent = dict.portalSubtitle;
+    const portalInput = document.getElementById('portal-news-search-input');
+    if (portalInput) portalInput.placeholder = dict.portalSearchPlaceholder;
 
-    // Phone Prompt Modal
-    const pModalTitle = document.querySelector('#phone-prompt-modal .phone-modal-title');
-    if (pModalTitle) pModalTitle.textContent = dict.phoneModalTitle;
-    const pModalOpt = document.querySelector('#phone-prompt-modal .phone-modal-optional');
-    if (pModalOpt) pModalOpt.textContent = dict.phoneModalOptional;
-    const pModalDesc = document.querySelector('#phone-prompt-modal .phone-modal-desc');
-    if (pModalDesc) pModalDesc.textContent = dict.phoneModalDesc;
-    const pModalSkip = document.querySelector('#btn-skip-phone-modal span');
-    if (pModalSkip) pModalSkip.textContent = dict.phoneModalSkip;
-    const pModalSubmit = document.querySelector('#btn-submit-phone-modal span');
-    if (pModalSubmit) pModalSubmit.textContent = dict.phoneModalSubmit;
+    // Category Filter Buttons
+    const catAll = document.getElementById('cat-all-btn');
+    if (catAll) catAll.textContent = dict.filterAll;
+    const catPass = document.getElementById('cat-passport-btn');
+    if (catPass) catPass.textContent = dict.filterPassport;
+    const catSch = document.getElementById('cat-scholarship-btn');
+    if (catSch) catSch.textContent = dict.filterScholarship;
+    const catVot = document.getElementById('cat-voter-btn');
+    if (catVot) catVot.textContent = dict.filterVoter;
+    const catPan = document.getElementById('cat-pan-btn');
+    if (catPan) catPan.textContent = dict.filterPan;
+    const catLeg = document.getElementById('cat-legal-btn');
+    if (catLeg) catLeg.textContent = dict.filterPolice;
 
-    // Update In-Memory Document Titles
+    // Services Promo Banner
+    const promoTitle = document.getElementById('promo-banner-title');
+    if (promoTitle) {
+        promoTitle.textContent = isRoman ?
+            "📋 Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!" :
+            "📋 Discrepancy in Your Documents or Need Fresh Applications? We Guarantee 100% Approval!";
+    }
+    const promoSub = document.getElementById('promo-banner-subtitle');
+    if (promoSub) {
+        promoSub.textContent = isRoman ?
+            "Passport, PAN Card, Voter ID, ya Marksheet me Name Spelling, DOB, ya Father's Name mismatch ho gaya hai? Ya naya Passport, Voter ID, Police Verification, ya SSP Scholarship karwana ho? Fikar mat karein! Aapka sabhi online kaam 100% legal, fast aur approved karwayen." :
+            "Have spelling mismatches in Name, DOB, or Father's Name across Aadhaar, PAN Card, Voter ID, or Marksheet? Or need new Passport, Voter ID, Police Verification, or SSP Scholarship? Don't worry! We handle all online government applications with 100% legal clearance.";
+    }
+
+    // Services Section Heading
+    const servCatTitle = document.getElementById('services-category-title-text');
+    if (servCatTitle) {
+        servCatTitle.innerHTML = `💼 <strong>${dict.servicesTitle}</strong>`;
+    }
+
+    // Eligibility Diagnostic Section
+    const diagTitle = document.getElementById('diag-header-title');
+    if (diagTitle) diagTitle.textContent = dict.diagTitle;
+    const diagSub = document.getElementById('diag-header-sub');
+    if (diagSub) diagSub.textContent = dict.diagSubtitle;
+    const q1T = document.getElementById('q1-title');
+    if (q1T) q1T.textContent = dict.q1Title;
+    const q1S = document.getElementById('q1-sub');
+    if (q1S) q1S.textContent = dict.q1Sub;
+    const q2T = document.getElementById('q2-title');
+    if (q2T) q2T.textContent = dict.q2Title;
+    const q2S = document.getElementById('q2-sub');
+    if (q2S) q2S.textContent = dict.q2Sub;
+    const q3T = document.getElementById('q3-title');
+    if (q3T) q3T.textContent = dict.q3Title;
+    const q3S = document.getElementById('q3-sub');
+    if (q3S) q3S.textContent = dict.q3Sub;
+
+    // FAQ Section
+    const faqMainTitle = document.getElementById('faq-main-title');
+    if (faqMainTitle) faqMainTitle.textContent = dict.faqTitle;
+    const faqMainSub = document.getElementById('faq-main-sub');
+    if (faqMainSub) faqMainSub.textContent = dict.faqSubtitle;
+    const fq1 = document.getElementById('faq-q1');
+    if (fq1) fq1.textContent = dict.faqQ1;
+    const fa1 = document.getElementById('faq-a1');
+    if (fa1) fa1.textContent = dict.faqA1;
+    const fq2 = document.getElementById('faq-q2');
+    if (fq2) fq2.textContent = dict.faqQ2;
+    const fa2 = document.getElementById('faq-a2');
+    if (fa2) fa2.textContent = dict.faqA2;
+    const fq3 = document.getElementById('faq-q3');
+    if (fq3) fq3.textContent = dict.faqQ3;
+    const fa3 = document.getElementById('faq-a3');
+    if (fa3) fa3.textContent = dict.faqA3;
+    const fq4 = document.getElementById('faq-q4');
+    if (fq4) fq4.textContent = dict.faqQ4;
+    const fa4 = document.getElementById('faq-a4');
+    if (fa4) fa4.textContent = dict.faqA4;
+    const fq5 = document.getElementById('faq-q5');
+    if (fq5) fq5.textContent = dict.faqQ5;
+    const fa5 = document.getElementById('faq-a5');
+    if (fa5) fa5.textContent = dict.faqA5;
+
+    // Footer
+    const footDesc = document.getElementById('footer-desc-text');
+    if (footDesc) footDesc.textContent = dict.footerDesc;
+    const footPart = document.getElementById('footer-partner-text');
+    if (footPart) footPart.textContent = dict.footerPartner;
+
+    // Floating WhatsApp
+    const floatWa = document.getElementById('floating-wa-text');
+    if (floatWa) floatWa.textContent = dict.floatingWhatsApp;
+
+    // Update in-memory document card titles
     if (documents[0]) documents[0].title = dict.aadhaarTitle;
     if (documents[1]) documents[1].title = dict.panTitle;
     if (documents[2]) documents[2].title = dict.marksheetTitle;
 
-    // Re-render UI
+    // Re-render UI components
     updateGlobalStatus();
     renderDocumentGrid();
-    
+    loadAndRenderServices();
+    loadShopInfo();
+
+    // Re-run diagnostic if exists
+    if (typeof runEligibilityDiagnostic === 'function') {
+        runEligibilityDiagnostic();
+    }
+
     // Only re-compile report if verification has already been performed
     if (verificationPerformed) {
         const reportSec = document.getElementById('verification-report-section');
@@ -1397,7 +1599,24 @@ function applyTranslations() {
 
 // Setup Main Event Listeners
 function setupGlobalEventListeners() {
-    document.getElementById('add-doc-btn').addEventListener('click', openModal);
+    // Navigation Tab Switching
+    document.querySelectorAll('#main-nav-tabs .nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetPage = link.dataset.page;
+            if (targetPage) switchPageTab(targetPage);
+        });
+    });
+
+    const tickerBtn = document.getElementById('ticker-view-all-btn');
+    if (tickerBtn) {
+        tickerBtn.addEventListener('click', () => switchPageTab('page-news'));
+    }
+    const newsDrawerBtn = document.getElementById('btn-toggle-news-drawer');
+    if (newsDrawerBtn) {
+        newsDrawerBtn.addEventListener('click', () => switchPageTab('page-news'));
+    }
+    const addDocBtn = document.getElementById('add-doc-btn'); if (addDocBtn) addDocBtn.addEventListener('click', openModal);
     document.getElementById('reset-all-btn').addEventListener('click', resetAll);
     document.getElementById('verify-all-btn').addEventListener('click', handleVerifyClick);
 
@@ -1744,6 +1963,37 @@ function renderDocumentGrid() {
 
         grid.appendChild(card);
     });
+
+    // 4th Card: Add Custom Document Box (Right Next to 10th Marksheet)
+    const addCard = document.createElement('article');
+    addCard.className = 'doc-card add-custom-doc-card animate-fade-in';
+    addCard.id = 'card-add-custom-doc';
+    addCard.setAttribute('role', 'button');
+    addCard.setAttribute('tabindex', '0');
+    addCard.title = dict.modalTitle || 'Custom Document Add Karein';
+
+    addCard.innerHTML = `
+        <div class="doc-header">
+            <span class="doc-title">➕ ${dict.addDoc || 'Custom Document'}</span>
+            <span class="badge badge-optional">${dict.badgeOptional || 'Optional'}</span>
+        </div>
+        <div class="add-custom-box-inner">
+            <div class="add-custom-icon">📑</div>
+            <strong class="add-custom-title">${dict.addDoc || 'Custom Document Add Karein'}</strong>
+            <p class="add-custom-desc">Voter ID, Driving License, Passport etc.</p>
+            <span class="btn btn-secondary btn-sm add-custom-btn">
+                <span>➕ Add Document</span>
+            </span>
+        </div>
+    `;
+    addCard.addEventListener('click', openModal);
+    addCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal();
+        }
+    });
+    grid.appendChild(addCard);
 }
 
 // Compress and resize image files to lightweight JPEGs
@@ -1966,6 +2216,73 @@ function removeDocument(docId) {
 
 // Global Status message updates & Button state toggles
 function updateGlobalStatus() {
+    const statusText = document.getElementById('global-status-text');
+    const verifyBtn = document.getElementById('verify-all-btn');
+    const dict = translations[currentLang] || translations.roman;
+
+    const mandatoryDocs = documents.filter(d => d.mandatory);
+    const mandatoryUploaded = mandatoryDocs.every(d => d.file !== null);
+    const anyUploaded = documents.some(d => d.file !== null);
+
+    if (!anyUploaded) {
+        if (statusText) statusText.textContent = dict.statusInitial;
+        if (verifyBtn) {
+            verifyBtn.disabled = true;
+            verifyBtn.classList.remove('pulse-ready');
+        }
+    } else if (!mandatoryUploaded) {
+        if (statusText) statusText.textContent = dict.statusNeedMandatory;
+        if (verifyBtn) {
+            verifyBtn.disabled = true;
+            verifyBtn.classList.remove('pulse-ready');
+        }
+    } else {
+        if (statusText) statusText.textContent = dict.statusReady;
+        if (verifyBtn) {
+            verifyBtn.disabled = false;
+            verifyBtn.classList.add('pulse-ready');
+        }
+    }
+}
+
+function clearFile(docId) {
+    const docIndex = documents.findIndex(d => d.id === docId);
+    if (docIndex > -1) {
+        documents[docIndex].file = null;
+        documents[docIndex].processedBlob = null;
+        documents[docIndex].status = 'pending';
+        documents[docIndex].progress = 0;
+        documents[docIndex].rawText = '';
+        documents[docIndex].name = 'N/A';
+        documents[docIndex].gender = 'N/A';
+        documents[docIndex].dob = 'N/A';
+        documents[docIndex].fatherName = 'N/A';
+        documents[docIndex].documentNumber = 'N/A';
+        
+        renderDocumentGrid();
+        updateGlobalStatus();
+        
+        document.getElementById('raw-text-section').classList.add('hidden');
+        
+        const reportModal = document.getElementById('verification-report-section');
+        if (reportModal) reportModal.classList.add('hidden');
+    }
+}
+
+// Remove custom document fully
+function removeDocument(docId) {
+    documents = documents.filter(d => d.id !== docId);
+    renderDocumentGrid();
+    updateGlobalStatus();
+    
+    document.getElementById('raw-text-section').classList.add('hidden');
+    
+    const reportModal = document.getElementById('verification-report-section');
+    if (reportModal) reportModal.classList.add('hidden');
+}
+
+// Global Status message updates & Button state toggles
+function updateGlobalStatus() {
     const aadhaarUploaded = documents.find(d => d.id === 'aadhaar')?.file !== null;
     const panUploaded = documents.find(d => d.id === 'pan')?.file !== null;
     const verifyBtn = document.getElementById('verify-all-btn');
@@ -2032,15 +2349,35 @@ function showGlobalMessage(msg, type) {
 
 // Modal handling logic
 function openModal() {
-    document.getElementById('custom-doc-modal').classList.remove('hidden');
-    document.getElementById('custom-doc-title').value = '';
-    document.getElementById('custom-doc-mandatory').checked = false;
-    document.getElementById('custom-doc-title').focus();
+    const modal = document.getElementById('custom-doc-modal');
+    if (!modal) {
+        console.error("custom-doc-modal element not found in DOM");
+        return;
+    }
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'all';
+    
+    const input = document.getElementById('custom-doc-title');
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 60);
+    }
+    const chk = document.getElementById('custom-doc-mandatory');
+    if (chk) chk.checked = false;
 }
+window.openModal = openModal;
 
 function closeModal() {
-    document.getElementById('custom-doc-modal').classList.add('hidden');
+    const modal = document.getElementById('custom-doc-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
 }
+window.closeModal = closeModal;
 
 function handleAddCustomDoc() {
     const titleVal = document.getElementById('custom-doc-title').value.trim();
@@ -2929,13 +3266,21 @@ function preparePrintablePdfTemplate() {
     `;
 }
 
+let isGeneratingPdf = false;
 async function generatePdfReport() {
+    if (isGeneratingPdf) {
+        console.log("PDF generation already in progress, ignoring duplicate click");
+        return;
+    }
+    isGeneratingPdf = true;
+
     preparePrintablePdfTemplate();
     const pdfContentEl = document.getElementById('pdf-report-content');
     const wrapper = document.getElementById('printable-pdf-container');
     
     if (!pdfContentEl || !wrapper) {
         alert("Report container not found!");
+        isGeneratingPdf = false;
         return;
     }
 
@@ -2950,7 +3295,7 @@ async function generatePdfReport() {
     wrapper.style.display = 'block';
 
     const opt = {
-        margin: [10, 10, 10, 10],
+        margin: [8, 8, 8, 8],
         filename: fileName,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
@@ -2969,9 +3314,47 @@ async function generatePdfReport() {
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
+    const dlBtn = document.getElementById('download-pdf-btn');
+    const topDlBtn = document.getElementById('top-download-pdf-btn');
+    if (dlBtn) dlBtn.innerHTML = '<span>⏳</span> Preparing PDF...';
+    if (topDlBtn) topDlBtn.innerHTML = '<span>⏳</span> Preparing PDF...';
+
     try {
         if (window.html2pdf) {
-            await html2pdf().set(opt).from(pdfContentEl).save();
+            const worker = html2pdf().set(opt).from(pdfContentEl);
+            const pdfBase64 = await worker.outputPdf('datauristring');
+
+            let downloaded = false;
+
+            // 1. Android APK Native Bridge (Direct save to phone Downloads)
+            if (window.AndroidBridge && typeof window.AndroidBridge.downloadPdf === 'function') {
+                try {
+                    window.AndroidBridge.downloadPdf(pdfBase64, fileName);
+                    downloaded = true;
+                } catch (bridgeErr) {
+                    console.warn("AndroidBridge downloadPdf error:", bridgeErr);
+                }
+            } else if (window.AndroidBridge && typeof window.AndroidBridge.saveAndSharePdf === 'function') {
+                try {
+                    window.AndroidBridge.saveAndSharePdf(pdfBase64, fileName);
+                    downloaded = true;
+                } catch (bridgeErr) {
+                    console.warn("AndroidBridge saveAndSharePdf error:", bridgeErr);
+                }
+            }
+
+            // 2. Background server archival (Saves copy on server without duplicate client download)
+            fetch('/api/save-pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pdfBase64, filename: fileName })
+            }).catch(e => console.warn("Background server save:", e));
+
+            // 3. Client Download (EXACTLY ONCE)
+            if (!downloaded) {
+                await worker.save();
+                downloaded = true;
+            }
         } else {
             window.print();
         }
@@ -2980,6 +3363,11 @@ async function generatePdfReport() {
         window.print();
     } finally {
         wrapper.style.display = 'none';
+        if (dlBtn) dlBtn.innerHTML = '<span>📥</span> <span id="i18n-download-pdf">Download PDF Report</span>';
+        if (topDlBtn) topDlBtn.innerHTML = '<span>📥</span> <span id="i18n-top-dl-pdf">Download PDF Report</span>';
+        setTimeout(() => {
+            isGeneratingPdf = false;
+        }, 1500);
     }
 }
 
@@ -3018,7 +3406,6 @@ async function loadShopInfo() {
             return;
         }
 
-        // Update in-memory contact object for dynamic consultation message generator
         if (info.phone1) {
             EXCELLENCE_CONTACT.primaryPhone = info.phone1;
             EXCELLENCE_CONTACT.primaryDigits = info.phone1.replace(/[^0-9]/g, '');
@@ -3031,15 +3418,24 @@ async function loadShopInfo() {
         if (info.ownerName) EXCELLENCE_CONTACT.ownerName = info.ownerName;
         if (info.address) EXCELLENCE_CONTACT.location = info.address;
         if (info.email) EXCELLENCE_CONTACT.email = info.email;
-        if (info.whatsapp) EXCELLENCE_CONTACT.qrLink = info.whatsapp;
 
-        // Dynamic Headings & Subtitles
-        if (bannerTitle && info.bannerTitle) bannerTitle.innerHTML = `📄 ${info.bannerTitle}`;
-        if (bannerSub && info.bannerSubtitle) bannerSub.innerHTML = info.bannerSubtitle;
+        const isRoman = (currentLang === 'roman');
+
+        // Dynamic Headings & Subtitles with clean Roman / English
+        if (bannerTitle) {
+            bannerTitle.innerHTML = isRoman ?
+                "📋 Documents Me Galti Hai Ya Naye Documents Banwane Hain? Hum 100% Sahi Karke Denge!" :
+                "📋 Document Errors or Need Fresh Documents? We Deliver 100% Accurate Online Services!";
+        }
+        if (bannerSub) {
+            bannerSub.innerHTML = isRoman ?
+                "Passport, PAN Card, Voter ID, ya Marksheet me Name Spelling, DOB, ya Father's Name mismatch ho gaya hai? Ya naya Passport, Voter ID, Police Verification, ya SSP Scholarship karwana ho? Fikar mat karein! Aapka sabhi online kaam 100% legal, fast aur approved karwayen." :
+                "Spelling, Date of Birth, or Father's Name mismatch in Passport, PAN, Voter ID, or Marksheet? Or need a fresh Passport, Voter ID, Police Verification, or SSP Scholarship? Don't worry! Get all legal government applications filed with guaranteed approval.";
+        }
 
         if (shopBadge && info.shopName) {
             shopBadge.textContent = info.shopName;
-            if (shopLocation) shopLocation.textContent = info.ownerName ? ` — (By ${info.ownerName})` : '';
+            if (shopLocation) shopLocation.textContent = info.ownerName ? "By " + info.ownerName : '';
             if (badgeWrapper) badgeWrapper.style.display = 'inline-flex';
         }
 
@@ -3050,101 +3446,69 @@ async function loadShopInfo() {
 
         if (!dynamicContainer) return;
 
-        // Build Shop Details Box
-        let itemsHtml = '';
-        if (info.shopName) {
-            itemsHtml += `
-                <div class="shop-item">
-                    <span class="shop-icon">🏬</span>
-                    <div><strong>Shop Name:</strong> ${info.shopName} ${info.ownerName ? `(By ${info.ownerName})` : ''}</div>
-                </div>`;
-        }
-        if (info.address) {
-            itemsHtml += `
-                <div class="shop-item">
-                    <span class="shop-icon">📍</span>
-                    <div><strong>Address:</strong> ${info.address}</div>
-                </div>`;
-        }
-        if (info.timing) {
-            itemsHtml += `
-                <div class="shop-item">
-                    <span class="shop-icon">⏰</span>
-                    <div><strong>Timing:</strong> ${info.timing}</div>
-                </div>`;
-        }
-        if (info.instagram) {
-            itemsHtml += `
-                <div class="shop-item">
-                    <span class="shop-icon">📸</span>
-                    <div><strong>Instagram:</strong> <a href="${info.instagram}" target="_blank" style="color: #60a5fa; text-decoration: underline;">${info.instagramHandle || info.instagram}</a></div>
-                </div>`;
-        }
-        if (info.email) {
-            itemsHtml += `
-                <div class="shop-item">
-                    <span class="shop-icon">✉️</span>
-                    <div><strong>Email:</strong> <a href="mailto:${info.email}" style="color: #60a5fa; text-decoration: underline;">${info.email}</a></div>
-                </div>`;
-        }
-
-        let qrHtml = '';
-        if (info.qrImage) {
-            const waLink = info.whatsapp ? (info.whatsapp.startsWith('http') ? info.whatsapp : `https://wa.me/${info.whatsapp.replace(/[^0-9]/g, '')}`) : '#';
-            qrHtml = `
-                <div class="shop-qr-box">
-                    <a href="${waLink}" target="_blank" title="Click karke WhatsApp par direct chat karein">
-                        <img src="${info.qrImage}" alt="${info.ownerName || info.shopName} WhatsApp QR Code" class="whatsapp-qr-img" onerror="this.parentElement.style.display='none'">
-                    </a>
-                    <div class="qr-caption">
-                        <strong>${info.ownerName || info.shopName}</strong><br>
-                        <span>📱 Scan QR using WhatsApp camera</span>
-                    </div>
-                </div>`;
-        }
-
-        let ctaButtonsHtml = '';
-        if (info.whatsapp) {
-            const waLink = info.whatsapp.startsWith('http') ? info.whatsapp : `https://wa.me/${info.whatsapp.replace(/[^0-9]/g, '')}`;
-            ctaButtonsHtml += `
-                <a id="whatsapp-consult-btn" href="${waLink}" target="_blank" class="btn-whatsapp">
-                    <span style="font-size: 1.3rem;">💬</span> <span>WhatsApp Direct Chat Karein</span>
-                </a>`;
-        }
-        if (info.phone1) {
-            ctaButtonsHtml += `
-                <a id="call-primary-btn" href="tel:${info.phone1}" class="btn-call">
-                    <span style="font-size: 1.15rem;">📞</span> <span>Call: ${info.phone1}</span>
-                </a>`;
-        }
-        if (info.phone2) {
-            ctaButtonsHtml += `
-                <a id="call-secondary-btn" href="tel:${info.phone2}" class="btn-call btn-call-alt">
-                    <span style="font-size: 1.15rem;">📞</span> <span>Call: ${info.phone2}</span>
-                </a>`;
-        }
-        if (info.email) {
-            ctaButtonsHtml += `
-                <a id="email-btn" href="mailto:${info.email}" class="btn-email">
-                    <span style="font-size: 1.15rem;">✉️</span> <span>${info.email}</span>
-                </a>`;
-        }
+        const waUrl = info.whatsapp && info.whatsapp.startsWith('http') ?
+            info.whatsapp :
+            "https://wa.me/917849008882?text=Namaste%20Ramajan%20Sir!%20Mujhe%20Excellence%20Services%20ke%20baare%20me%20baat%20karni%20hai.";
 
         dynamicContainer.innerHTML = `
-            <div class="shop-info-banner">
-                <div class="shop-details-left">
-                    ${itemsHtml}
+            <div class="shop-executive-card glass-card animate-fade-in" style="margin-top: 28px; padding: 24px 28px; border-radius: 18px;">
+                <div class="shop-profile-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px;">
+                    <div class="shop-brand-col">
+                        <div class="shop-official-badge" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(37,99,235,0.18); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+                            <span>🏛️ OFFICIAL SEVA PARTNER</span>
+                        </div>
+                        <h3 class="shop-title-large" style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em;">${info.shopName || 'EXCELLENCE SERVICES'}</h3>
+                        <span class="shop-owner-subtitle" style="color: #94a3b8; font-size: 0.95rem; font-weight: 600;">Proprietor: ${info.ownerName || 'Hafiz Ramajan'}</span>
+                    </div>
+                    <div class="shop-timing-badge" style="background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); padding: 8px 16px; border-radius: 12px; font-size: 0.92rem; font-weight: 700;">
+                        <span>🕒 ${info.timing || '9:00 AM - 9:00 PM (Monday to Sunday)'}</span>
+                    </div>
                 </div>
-                ${qrHtml}
-            </div>
-            ${ctaButtonsHtml ? `<div class="promo-cta-group">${ctaButtonsHtml}</div>` : ''}
-        `;
 
+                <div class="shop-grid-meta" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 22px;">
+                    <div class="shop-meta-item" style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="font-size: 1.3rem;">📍</span>
+                        <div>
+                            <strong style="color: #e2e8f0; font-size: 0.88rem; display: block; margin-bottom: 2px;">Office Address:</strong>
+                            <p style="margin: 0; color: #94a3b8; font-size: 0.92rem; line-height: 1.45;">${info.address || 'Near Iqra School, Raibag, Dist. Belagavi, Karnataka'}</p>
+                        </div>
+                    </div>
+                    <div class="shop-meta-item" style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="font-size: 1.3rem;">✉️</span>
+                        <div>
+                            <strong style="color: #e2e8f0; font-size: 0.88rem; display: block; margin-bottom: 2px;">Official Email:</strong>
+                            <p style="margin: 0;"><a href="mailto:${info.email || 'ramajanraibag@gmail.com'}" style="color: #60a5fa; text-decoration: underline; font-weight: 600; font-size: 0.92rem;">${info.email || 'ramajanraibag@gmail.com'}</a></p>
+                        </div>
+                    </div>
+                    <div class="shop-meta-item" style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="font-size: 1.3rem;">📞</span>
+                        <div>
+                            <strong style="color: #e2e8f0; font-size: 0.88rem; display: block; margin-bottom: 2px;">Direct Helpline Numbers:</strong>
+                            <p style="margin: 0;">
+                                <a href="tel:${info.phone1 || '7849008882'}" style="color: #34d399; font-weight: 700; font-size: 0.94rem;">+91 ${info.phone1 || '7849008882'}</a> &bull; 
+                                <a href="tel:${info.phone2 || '9620746029'}" style="color: #34d399; font-weight: 700; font-size: 0.94rem;">+91 ${info.phone2 || '9620746029'}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shop-action-buttons-strip" style="display: flex; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+                    <a href="${waUrl}" target="_blank" class="btn btn-success" style="font-weight: 800; padding: 11px 22px; font-size: 0.95rem; border-radius: 10px;">
+                        <span>💬 Chat on WhatsApp (+91 7849008882)</span>
+                    </a>
+                    <a href="tel:${info.phone1 || '7849008882'}" class="btn btn-secondary" style="font-weight: 700; padding: 11px 18px; font-size: 0.92rem; border-radius: 10px;">
+                        <span>📞 Call: ${info.phone1 || '7849008882'}</span>
+                    </a>
+                    <a href="tel:${info.phone2 || '9620746029'}" class="btn btn-secondary" style="font-weight: 700; padding: 11px 18px; font-size: 0.92rem; border-radius: 10px;">
+                        <span>📞 Call: ${info.phone2 || '9620746029'}</span>
+                    </a>
+                </div>
+            </div>
+        `;
     } catch (e) {
         console.warn("Could not load shop info:", e);
     }
 }
-
 
 // ==========================================================================
 // APPLICANT PHONE NUMBER CAPTURE & NEWS SIDEBAR TOGGLE
@@ -3291,4 +3655,222 @@ function setupPhonePromptModal() {
             closeModalAndVerify();
         }
     };
+}
+
+
+// ==========================================================================
+// REAL-TIME BLOG & SCHEME NOTIFICATION ENGINE (ADMIN POST BROADCAST)
+// ==========================================================================
+let knownBlogIds = new Set();
+let isFirstBlogLoad = true;
+let currentToastPostId = null;
+
+function showLiveBlogToast(post) {
+    const container = document.getElementById('live-blog-toast-container');
+    const titleEl = document.getElementById('toast-post-title');
+    const descEl = document.getElementById('toast-post-desc');
+    const readBtn = document.getElementById('toast-read-btn');
+    if (!container || !titleEl) return;
+
+    currentToastPostId = post.id;
+    titleEl.textContent = post.title || 'New Announcement';
+    if (descEl) descEl.textContent = post.summary || 'Click karein pura update padhne ke liye.';
+
+    if (readBtn) {
+        readBtn.onclick = () => {
+            dismissLiveToast();
+            openArticleReader(post.id);
+        };
+    }
+
+    container.classList.remove('hidden');
+
+    // Trigger Native Browser Web Notification if permitted
+    if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+            try {
+                new Notification('📢 Nayi Update: ' + (post.title || 'Official Announcement'), {
+                    body: post.summary || 'Excellence Services dwara naya update post kiya gaya hai.',
+                    icon: post.image || '/assets/passport-services-poster.jpg'
+                });
+            } catch (err) {
+                console.log("Notification trigger notice:", err);
+            }
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission();
+        }
+    }
+
+    // Auto dismiss after 12 seconds
+    setTimeout(() => {
+        if (currentToastPostId === post.id) dismissLiveToast();
+    }, 12000);
+}
+
+function dismissLiveToast() {
+    const container = document.getElementById('live-blog-toast-container');
+    if (container) container.classList.add('hidden');
+}
+window.dismissLiveToast = dismissLiveToast;
+
+// Polling interval to check for new posts every 4 seconds
+setInterval(async () => {
+    try {
+        const res = await fetch('/api/blogs');
+        if (!res.ok) return;
+        const freshList = await res.json();
+        if (!Array.isArray(freshList)) return;
+
+        let hasNew = false;
+        let latestNewPost = null;
+
+        freshList.forEach(b => {
+            const strId = String(b.id);
+            if (!knownBlogIds.has(strId)) {
+                if (!isFirstBlogLoad && !hasNew) {
+                    hasNew = true;
+                    latestNewPost = b;
+                }
+                knownBlogIds.add(strId);
+            }
+        });
+
+        if (isFirstBlogLoad) {
+            isFirstBlogLoad = false;
+        } else if (hasNew && latestNewPost) {
+            allNewsData = freshList;
+            renderPortalNewsGrid();
+            showLiveBlogToast(latestNewPost);
+            const dot = document.getElementById('bell-unread-dot');
+            if (dot) dot.classList.remove('hidden');
+            if ('vibrate' in navigator) { try { navigator.vibrate([150, 75, 150]); } catch(e){} }
+        }
+    } catch (e) {
+        // Silent fail on network blip
+    }
+}, 4000);
+
+
+// ==========================================================================
+// REAL-TIME NOTIFICATION SYSTEM (SSE LISTENER FOR ADMIN POSTS)
+// ==========================================================================
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function initLiveNotificationStream() {
+    if (!window.EventSource) return;
+
+    try {
+        const evtSource = new EventSource('/api/live-stream');
+
+        evtSource.onmessage = function (event) {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'new_announcement' && data.post) {
+                    showLiveAnnouncementToast(data.post);
+                    playChimeSound();
+                    if (navigator.vibrate) {
+                        try { navigator.vibrate([100, 60, 120]); } catch (e) {}
+                    }
+                    // Update badges
+                    const bellDot = document.getElementById('bell-unread-dot');
+                    if (bellDot) bellDot.classList.remove('hidden');
+                    const bottomNewsDot = document.getElementById('bottom-news-dot');
+                    if (bottomNewsDot) bottomNewsDot.classList.remove('hidden');
+
+                    // Refresh blog content in background
+                    if (typeof loadAndRenderBlogs === 'function') {
+                        loadAndRenderBlogs();
+                    }
+                }
+            } catch (err) {
+                console.warn("Error parsing live stream message:", err);
+            }
+        };
+
+        evtSource.onerror = function () {
+            // EventSource will auto-reconnect
+        };
+    } catch (e) {
+        console.warn("SSE connection error:", e);
+    }
+}
+
+function playChimeSound() {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+            ctx.resume();
+        }
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            const startTime = ctx.currentTime + (idx * 0.1);
+            gain.gain.setValueAtTime(0.12, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(startTime);
+            osc.stop(startTime + 0.38);
+        });
+    } catch (e) {}
+}
+
+function showLiveAnnouncementToast(post) {
+    const container = document.getElementById('live-blog-toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'live-announcement-toast';
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <span class="live-toast-icon">📢</span>
+        <div class="live-toast-content">
+            <div class="live-toast-header">
+                <span class="live-toast-badge">${post.badge || 'New Scheme'}</span>
+                <span class="live-toast-time">Just Now</span>
+            </div>
+            <h4 class="live-toast-title">${escapeHtml(post.title || 'New Announcement')}</h4>
+            <p class="live-toast-summary">${escapeHtml(post.summary || '')}</p>
+            <span class="live-toast-action">👉 Tap to View Details & Official Notification</span>
+        </div>
+        <button type="button" class="live-toast-close" title="Dismiss">&times;</button>
+    `;
+
+    // Clicking anywhere on toast switches to News tab and reads article
+    toast.addEventListener('click', (e) => {
+        if (e.target.classList.contains('live-toast-close')) {
+            e.stopPropagation();
+            toast.remove();
+            return;
+        }
+        switchPageTab('page-news');
+        if (typeof openArticleReader === 'function') {
+            openArticleReader(post.id);
+        }
+        toast.remove();
+    });
+
+    container.appendChild(toast);
+
+    // Auto dismiss after 8 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 8000);
 }

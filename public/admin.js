@@ -459,16 +459,29 @@ async function loadBlogs() {
         console.warn("Blogs fetch error:", e);
     }
 
+    const countEl = document.getElementById('kpi-blogs');
+    if (countEl) countEl.textContent = blogsData.length;
+
     const tbody = document.getElementById('page-blogs-tbody');
     if (!tbody) return;
 
+    if (blogsData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);">Abhi tak koi blog ya news post nahi hai. "Post New Update" par click karke naya post add karein!</td></tr>';
+        return;
+    }
+
     tbody.innerHTML = blogsData.map(b => {
+        const imgHtml = b.image ? 
+            `<img src="${b.image}" alt="${b.title}" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15);">` :
+            `<div style="width: 52px; height: 38px; background: rgba(255,255,255,0.06); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">📰</div>`;
+
         return `
             <tr>
-                <td><strong>${b.title}</strong></td>
-                <td><span class="status-badge ignored">${b.category || 'General'}</span></td>
-                <td style="font-size:0.8rem; color:#94a3b8;">${b.date || 'Today'}</td>
-                <td style="font-size:0.82rem; color:#94a3b8; max-width:280px;">${b.summary || '--'}</td>
+                <td>${imgHtml}</td>
+                <td><strong style="color: #e2e8f0;">${b.title}</strong></td>
+                <td><span class="status-badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);">${b.category || 'General'}</span></td>
+                <td style="font-size:0.8rem; color:#94a3b8;">${b.date || 'Recent'}</td>
+                <td style="font-size:0.82rem; color:#94a3b8; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${b.summary || ''}</td>
                 <td>
                     <div style="display:flex; gap:6px;">
                         <button onclick="handleEditBlog('${b.id}')" class="btn btn-sm btn-secondary" style="padding:4px 8px; font-size:0.78rem;">✏️ Edit</button>
@@ -484,11 +497,31 @@ window.handleEditBlog = function(id) {
     const b = blogsData.find(x => String(x.id) === String(id));
     if (!b) return;
     document.getElementById('input-blog-id').value = b.id;
-    document.getElementById('input-blog-title').value = b.title;
+    document.getElementById('input-blog-title').value = b.title || '';
     document.getElementById('input-blog-cat').value = b.category || '';
     document.getElementById('input-blog-summary').value = b.summary || '';
     document.getElementById('input-blog-content').value = b.content || '';
-    document.getElementById('heading-blog-form').textContent = "✏️ Edit Update: " + b.title;
+    
+    // Set photo
+    const imgHidden = document.getElementById('input-blog-image');
+    const previewCont = document.getElementById('blog-image-preview-container');
+    const idleCont = document.getElementById('dropzone-idle-content');
+    const previewEl = document.getElementById('blog-image-preview-el');
+    const fnText = document.getElementById('preview-filename-text');
+
+    if (b.image) {
+        if (imgHidden) imgHidden.value = b.image;
+        if (previewEl) previewEl.src = b.image;
+        if (previewCont) previewCont.style.display = 'flex';
+        if (idleCont) idleCont.style.display = 'none';
+        if (fnText) fnText.textContent = b.image;
+    } else {
+        if (imgHidden) imgHidden.value = '';
+        if (previewCont) previewCont.style.display = 'none';
+        if (idleCont) idleCont.style.display = 'block';
+    }
+
+    document.getElementById('heading-blog-form').textContent = "✏️ Edit Post: " + b.title;
     const card = document.getElementById('card-blog-form');
     card.classList.remove('hidden');
     card.scrollIntoView({ behavior: 'smooth' });
@@ -511,6 +544,97 @@ function setupBlogsManager() {
     const cancelBtn = document.getElementById('btn-cancel-blog');
     const form = document.getElementById('form-blog');
 
+    // Photo Upload Uploader Wiring
+    const dropzone = document.getElementById('admin-photo-dropzone');
+    const fileInput = document.getElementById('input-blog-image-file');
+    const idleCont = document.getElementById('dropzone-idle-content');
+    const previewCont = document.getElementById('blog-image-preview-container');
+    const previewEl = document.getElementById('blog-image-preview-el');
+    const hiddenImg = document.getElementById('input-blog-image');
+    const fnText = document.getElementById('preview-filename-text');
+    const removeBtn = document.getElementById('btn-remove-photo');
+    const changeBtn = document.getElementById('btn-change-photo');
+
+    const resetPhotoUpload = () => {
+        if (hiddenImg) hiddenImg.value = '';
+        if (fileInput) fileInput.value = '';
+        if (previewCont) previewCont.style.display = 'none';
+        if (idleCont) idleCont.style.display = 'block';
+    };
+
+    const setPhotoPreview = (src, label = 'Custom Upload') => {
+        if (hiddenImg) hiddenImg.value = src;
+        if (previewEl) previewEl.src = src;
+        if (fnText) fnText.textContent = label;
+        if (idleCont) idleCont.style.display = 'none';
+        if (previewCont) previewCont.style.display = 'flex';
+    };
+
+    if (dropzone && fileInput) {
+        dropzone.addEventListener('click', (e) => {
+            if (e.target.id === 'btn-remove-photo' || e.target.id === 'btn-change-photo') return;
+            if (idleCont && idleCont.style.display !== 'none') {
+                fileInput.click();
+            }
+        });
+
+        if (changeBtn) {
+            changeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+        }
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetPhotoUpload();
+            });
+        }
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            // Upload directly to server endpoint /api/upload-asset
+            const formData = new FormData();
+            formData.append('image', file);
+
+            if (fnText) fnText.textContent = "Uploading " + file.name + "...";
+
+            try {
+                const res = await fetch('/api/upload-asset', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok && data.url) {
+                    setPhotoPreview(data.url, file.name);
+                } else {
+                    // Fallback to client FileReader base64
+                    const reader = new FileReader();
+                    reader.onload = (re) => setPhotoPreview(re.target.result, file.name);
+                    reader.readAsDataURL(file);
+                }
+            } catch (err) {
+                console.warn("Upload error, fallback to data url:", err);
+                const reader = new FileReader();
+                reader.onload = (re) => setPhotoPreview(re.target.result, file.name);
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Ready Poster Presets
+    document.querySelectorAll('.btn-img-preset').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const src = btn.getAttribute('data-src');
+            const label = btn.textContent.trim();
+            setPhotoPreview(src, label);
+        });
+    });
+
     if (addBtn) {
         addBtn.addEventListener('click', () => {
             document.getElementById('input-blog-id').value = '';
@@ -518,9 +642,11 @@ function setupBlogsManager() {
             document.getElementById('input-blog-cat').value = '';
             document.getElementById('input-blog-summary').value = '';
             document.getElementById('input-blog-content').value = '';
+            resetPhotoUpload();
             document.getElementById('heading-blog-form').textContent = "➕ Post New Announcement to Website";
             formCard.classList.remove('hidden');
             document.getElementById('input-blog-title').focus();
+            formCard.scrollIntoView({ behavior: 'smooth' });
         });
     }
 
@@ -533,32 +659,47 @@ function setupBlogsManager() {
             e.preventDefault();
             const id = document.getElementById('input-blog-id').value;
             const title = document.getElementById('input-blog-title').value.trim();
-            const category = document.getElementById('input-blog-cat').value.trim();
+            const category = document.getElementById('input-blog-cat').value.trim() || 'General';
             const summary = document.getElementById('input-blog-summary').value.trim();
             const content = document.getElementById('input-blog-content').value.trim();
+            const image = document.getElementById('input-blog-image').value || '/assets/passport-services-poster.jpg';
+
             if (!title || !summary) return alert("Title aur Summary likhna zaroori hai!");
 
             try {
                 const res = await fetch('/api/blogs', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, title, category, summary, content, author: 'Hafiz Ramajan' })
+                    body: JSON.stringify({
+                        id,
+                        title,
+                        category,
+                        badge: category,
+                        summary,
+                        content,
+                        image,
+                        author: 'Hafiz Ramajan',
+                        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                    })
                 });
+
                 if (res.ok) {
                     formCard.classList.add('hidden');
                     loadBlogs();
                     loadStats();
-                    alert("Update post website par publish ho gayi!");
+                    alert("🚀 Nayi Scheme/Update kamyabi se publish ho gayi! Website users ke pass live notification broadcast ho gayi hai.");
+                } else {
+                    alert("Error saving blog!");
                 }
             } catch (err) {
                 console.error("Save blog error:", err);
+                alert("Server error saving blog: " + err.message);
             }
         });
     }
 }
 
 
-// ==========================================================================
 // TAB 4: SHOP & CONTACT PROFILE SETTINGS
 // ==========================================================================
 function setupShopManager() {
