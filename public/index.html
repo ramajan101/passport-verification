@@ -113,7 +113,18 @@
             <p class="hero-subtitle" id="i18n-subtitle" style="color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.5;">
                 Upload Aadhaar, PAN Card &amp; 10th Marksheet to detect spelling mismatches, Date of Birth errors, and ensure 100% PSK appointment clearance without delays.
             </p>
+        
+        <!-- LIVE REAL-TIME ANNOUNCEMENT TICKER BANNER -->
+        <div id="live-announcement-ticker" class="live-announcement-ticker glass-card animate-fade-in" style="display: none; margin: 10px auto 22px auto; max-width: 960px; padding: 12px 20px; align-items: center; justify-content: space-between; border-left: 4px solid #38bdf8; background: rgba(56, 189, 248, 0.08); border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.25);">
+            <div style="display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1;">
+                <span class="ticker-badge" style="background: #ef4444; color: #fff; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; white-space: nowrap; animation: pulse 1.8s infinite;">🔴 LIVE UPDATE</span>
+                <span id="ticker-post-title" style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Loading latest updates...</span>
+            </div>
+            <button type="button" id="ticker-view-btn" class="btn btn-primary btn-sm" style="margin-left: 14px; white-space: nowrap; font-size: 0.8rem; padding: 6px 14px; border-radius: 8px;">
+                Pura Padhein →
+            </button>
         </div>
+</div>
             <!-- 4-STEP VISUAL HOW IT WORKS ROADMAP -->
         <section class="how-it-works-section animate-fade-in">
             <h3 class="section-title-sm" id="roadmap-heading">Simple 4-Step Verification Workflow</h3>
@@ -261,6 +272,53 @@
                         </div>
                     </div>
                 </section>
+            </div>
+        </section>
+        
+        <!-- ============================================================== -->
+        <!-- PUBLIC LATEST UPDATES & SCHEMES SECTION (DIRECTLY ON WEBSITE)   -->
+        <!-- ============================================================== -->
+        <section id="home-updates-section" class="home-updates-section glass-card animate-fade-in" style="margin-top: 40px; padding: 28px 24px; border-radius: 16px;">
+            <div class="news-portal-header" style="margin-bottom: 22px;">
+                <div class="portal-header-left">
+                    <div class="portal-badge-pill" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 12px; border-radius: 20px;">
+                        <span class="pulsing-circle" style="width: 8px; height: 8px; background: #38bdf8; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-weight: 700; font-size: 0.78rem; letter-spacing: 0.5px; color: #38bdf8;">📢 OFFICIAL ANNOUNCEMENTS &amp; SCHEMES</span>
+                    </div>
+                    <h2 class="portal-title" style="font-size: 1.55rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px 0;">
+                        Latest Government Schemes, Passport Rules &amp; Alerts
+                    </h2>
+                    <p class="portal-subtitle" style="font-size: 0.92rem; color: var(--text-muted); margin: 0; line-height: 1.5;">
+                        Excellence Services official updates — scholarship deadlines, Tatkaal rules, PVC Voter ID, and document guidelines. Click any update to view full guidelines.
+                    </p>
+                </div>
+                <div class="portal-header-right" style="margin-top: 14px;">
+                    <div class="portal-search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="home-news-search-input" placeholder="Search schemes, tatkaal, scholarship..." autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="category-pills-bar" id="home-category-pills" style="margin-bottom: 24px;">
+                <button type="button" class="cat-pill active" data-category="all">🌐 All Updates</button>
+                <button type="button" class="cat-pill" data-category="Passport">🛂 Passport &amp; PSK</button>
+                <button type="button" class="cat-pill" data-category="Scholarship">🎓 Scholarship</button>
+                <button type="button" class="cat-pill" data-category="Voter ID">🗳️ Voter ID</button>
+                <button type="button" class="cat-pill" data-category="PAN Card">💳 PAN Card</button>
+                <button type="button" class="cat-pill" data-category="Legal">📑 Legal Guidance</button>
+            </div>
+
+            <!-- Dynamic News Cards Grid (Website Front Page) -->
+            <div class="news-cards-grid" id="home-news-grid">
+                <!-- Dynamically loaded via app.js -->
+            </div>
+
+            <div style="text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                <button type="button" class="btn btn-secondary" onclick="switchPageTab('page-news'); window.scrollTo({top:0, behavior:'smooth'});" style="font-weight: 700; padding: 12px 28px; border-radius: 10px;">
+                    <span>📢 Open Full Schemes &amp; Updates Portal →</span>
+                </button>
             </div>
         </section>
         </div>
@@ -490,9 +548,7 @@
                         <a href="#faqs" onclick="switchPageTab('page-faqs'); return false;" style="color: var(--text-muted); text-decoration: none; font-size: 0.88rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
                             <span>❓</span> <span>Frequently Asked Questions</span>
                         </a>
-                        <a href="/PassportVerification.apk" download class="footer-apk-dl-btn" style="color: #34d399; text-decoration: none; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <span>📲</span> <span>Download Android App (APK)</span>
-                        </a>
+                        
                     </div>
                 </div>
 
@@ -701,7 +757,7 @@
         </button>
         <button type="button" class="bottom-nav-item" data-page="page-news" onclick="switchPageTab('page-news');">
             <span class="bottom-nav-icon">📰</span>
-            <span class="bottom-nav-label">News</span>
+            <span class="bottom-nav-label">Updates</span>
             <span class="bottom-nav-dot hidden" id="bottom-news-dot"></span>
         </button>
         <button type="button" class="bottom-nav-item" data-page="page-services" onclick="switchPageTab('page-services');">

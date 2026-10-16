@@ -1,3 +1,4 @@
+let currentLang = localStorage.getItem('appLanguage') || 'en';
 
 // ==========================================================================
 // EXCELLENCE SERVICES - DYNAMIC SERVICES & BLOG RENDERING
@@ -75,14 +76,64 @@ async function loadAndRenderServices() {
 }
 
 // ==========================================================================
-// EXCELLENCE SERVICES - NEWS, SCHEMES & BLOG MANAGER
+// EXCELLENCE SERVICES - NEWS, SCHEMES & BLOG MANAGER (REAL-TIME SYNC)
 // ==========================================================================
 let allNewsData = [];
+let activeHomeCategory = 'all';
+let currentHomeSearchQuery = '';
+let activeNewsCategory = 'all';
+let currentNewsSearchQuery = '';
 
+// Helper to generate consistent, beautiful card HTML for both Home & Portal grids
+function createBlogCardHtml(b, isRoman) {
+    const img = b.image || '/assets/passport-services-poster.jpg';
+    const readBtnText = isRoman ? "Puri Khabar Padhein" : "Read Full Article";
+    const shareBtnText = isRoman ? "WhatsApp Share" : "Share on WhatsApp";
+    const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Maine aapke website par news/scheme dekhi: \"" + b.title + "\". Mujhe iske baare me jankari chahiye.");
+
+    let catColor = '#2563eb';
+    let catIcon = '📰';
+    const cLower = ((b.category || '') + ' ' + (b.badge || '')).toLowerCase();
+    if (cLower.includes('pass')) { catColor = '#2563eb'; catIcon = '🛂'; }
+    else if (cLower.includes('schol')) { catColor = '#10b981'; catIcon = '🎓'; }
+    else if (cLower.includes('vot')) { catColor = '#6366f1'; catIcon = '🗳️'; }
+    else if (cLower.includes('pan')) { catColor = '#06b6d4'; catIcon = '💳'; }
+    else if (cLower.includes('polic')) { catColor = '#8b5cf6'; catIcon = '👮'; }
+    else if (cLower.includes('legal') || cLower.includes('aff')) { catColor = '#f59e0b'; catIcon = '📑'; }
+
+    return `
+        <article class="portal-news-card animate-fade-in" onclick="if(event.target.closest('a') || event.target.closest('button')) return; openArticleReader('${b.id}');">
+            <div class="portal-card-media" style="position: relative; height: 185px; overflow: hidden; background: #0f172a;">
+                <img src="${img}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onerror="this.src='/assets/passport-services-poster.jpg'">
+                <span class="portal-media-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); color: ${catColor}; border: 1px solid ${catColor}50; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                    ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
+                </span>
+                <span class="portal-date-tag" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: #e2e8f0; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;">
+                    🗓️ ${b.date || 'Active'}
+                </span>
+            </div>
+            <div class="portal-card-body" style="padding: 16px 18px; flex: 1; display: flex; flex-direction: column;">
+                <h3 class="portal-card-title" style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">${b.title}</h3>
+                <p class="portal-card-summary" style="margin: 0 0 14px 0; font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${b.summary || ''}</p>
+                <div class="portal-card-meta-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-bottom: 12px;">
+                    <span class="portal-author-tag" style="color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">✍️ ${b.author || 'Hafiz Ramajan'}</span>
+                    <span class="portal-status-verified" style="color: #34d399; font-weight: 700;">✓ Official</span>
+                </div>
+                <div class="portal-card-actions" style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="openArticleReader('${b.id}')" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px;">
+                        <span>📖 ${readBtnText}</span>
+                    </button>
+                    <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn btn-success btn-sm" title="Inquire on WhatsApp" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px; text-decoration: none; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+                        <span>💬 ${shareBtnText}</span>
+                    </a>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+// Master loader for Blogs & Schemes (Renders everywhere on website)
 async function loadAndRenderBlogs() {
-    const grid = document.getElementById('portal-news-grid');
-    if (!grid) return;
-
     try {
         const res = await fetch('/api/blogs');
         if (res.ok) {
@@ -92,23 +143,44 @@ async function loadAndRenderBlogs() {
         console.warn("Could not fetch /api/blogs, using fallback", e);
     }
 
+    updateLiveAnnouncementTicker();
+    renderHomeNewsGrid();
     renderPortalNewsGrid();
+    setupHomeNewsInteractions();
     setupPortalNewsInteractions();
 }
 
-let activeNewsCategory = 'all';
-let currentNewsSearchQuery = '';
+// Update Top Live Announcement Ticker Banner
+function updateLiveAnnouncementTicker() {
+    const ticker = document.getElementById('live-announcement-ticker');
+    const tickerTitle = document.getElementById('ticker-post-title');
+    const tickerViewBtn = document.getElementById('ticker-view-btn');
+    if (!ticker || !tickerTitle) return;
 
-function renderPortalNewsGrid() {
-    const grid = document.getElementById('portal-news-grid');
+    if (allNewsData && allNewsData.length > 0) {
+        const latest = allNewsData[0];
+        const cat = latest.category || latest.badge || 'Official Notice';
+        tickerTitle.textContent = `[${cat}] ${latest.title}`;
+        ticker.style.display = 'flex';
+        if (tickerViewBtn) {
+            tickerViewBtn.onclick = () => openArticleReader(latest.id);
+        }
+    } else {
+        ticker.style.display = 'none';
+    }
+}
+
+// Render Featured Updates on Website Front Page (#home-news-grid)
+function renderHomeNewsGrid() {
+    const grid = document.getElementById('home-news-grid');
     if (!grid) return;
 
-    const q = (currentNewsSearchQuery || '').toLowerCase().trim();
-    const cat = (activeNewsCategory || 'all').toLowerCase();
+    const q = (currentHomeSearchQuery || '').toLowerCase().trim();
+    const cat = (activeHomeCategory || 'all').toLowerCase();
 
-    let list = allNewsData;
+    let list = allNewsData || [];
 
-    // Filter by category
+    // Filter by Category
     if (cat !== 'all') {
         list = list.filter(b => {
             const bCat = (b.category || '').toLowerCase();
@@ -117,7 +189,49 @@ function renderPortalNewsGrid() {
         });
     }
 
-    // Filter by search query
+    // Filter by Search Query
+    if (q) {
+        list = list.filter(b => 
+            (b.title || '').toLowerCase().includes(q) ||
+            (b.summary || '').toLowerCase().includes(q) ||
+            (b.content || '').toLowerCase().includes(q) ||
+            (b.category || '').toLowerCase().includes(q)
+        );
+    }
+
+    if (list.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border: 1px dashed var(--glass-border); border-radius: 14px;">
+                <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">📭</span>
+                <strong style="color: var(--text-main); font-size: 1.05rem; display: block;">Koi news ya update nahi mila.</strong>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">Search query badal kar dekhein ya 'All Updates' category select karein.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const isRoman = (currentLang === 'roman');
+    grid.innerHTML = list.map(b => createBlogCardHtml(b, isRoman)).join('');
+}
+
+// Render Updates in Dedicated News Portal Tab (#portal-news-grid)
+function renderPortalNewsGrid() {
+    const grid = document.getElementById('portal-news-grid');
+    if (!grid) return;
+
+    const q = (currentNewsSearchQuery || '').toLowerCase().trim();
+    const cat = (activeNewsCategory || 'all').toLowerCase();
+
+    let list = allNewsData || [];
+
+    if (cat !== 'all') {
+        list = list.filter(b => {
+            const bCat = (b.category || '').toLowerCase();
+            const bBadge = (b.badge || '').toLowerCase();
+            return bCat.includes(cat) || cat.includes(bCat) || bBadge.includes(cat);
+        });
+    }
+
     if (q) {
         list = list.filter(b => 
             (b.title || '').toLowerCase().includes(q) ||
@@ -138,55 +252,33 @@ function renderPortalNewsGrid() {
         return;
     }
 
-    grid.innerHTML = list.map(b => {
-        const img = b.image || '/assets/passport-services-poster.jpg';
-        const isRoman = (currentLang === 'roman');
-        const readBtnText = isRoman ? "Puri Khabar Padhein" : "Read Full Article";
-        const shareBtnText = isRoman ? "WhatsApp Share" : "Share on WhatsApp";
-        const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Maine aapke website par news/scheme dekhi: \"" + b.title + "\". Mujhe iske baare me jankari chahiye.");
-
-        let catColor = '#2563eb';
-        let catIcon = '📰';
-        const cLower = (b.category || '').toLowerCase();
-        if (cLower.includes('pass')) { catColor = '#2563eb'; catIcon = '🛂'; }
-        else if (cLower.includes('schol')) { catColor = '#10b981'; catIcon = '🎓'; }
-        else if (cLower.includes('vot')) { catColor = '#6366f1'; catIcon = '💳'; }
-        else if (cLower.includes('pan')) { catColor = '#06b6d4'; catIcon = '📄'; }
-        else if (cLower.includes('polic')) { catColor = '#8b5cf6'; catIcon = '👮'; }
-        else if (cLower.includes('legal') || cLower.includes('aff')) { catColor = '#f59e0b'; catIcon = '📑'; }
-
-        return `
-            <article class="portal-news-card animate-fade-in">
-                <div class="portal-card-media" style="position: relative; height: 180px; overflow: hidden; background: #0f172a;">
-                    <img src="${img}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/passport-services-poster.jpg'">
-                    <span class="portal-media-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); color: ${catColor}; border: 1px solid ${catColor}50; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700;">
-                        ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
-                    </span>
-                    <span class="portal-date-tag" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #e2e8f0; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;">🗓️ ${b.date || 'Active'}</span>
-                </div>
-                <div class="portal-card-body" style="padding: 16px 18px; flex: 1; display: flex; flex-direction: column;">
-                    <h3 class="portal-card-title" style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">${b.title}</h3>
-                    <p class="portal-card-summary" style="margin: 0 0 14px 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; flex: 1;">${b.summary || ''}</p>
-                    <div class="portal-card-meta-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-bottom: 12px;">
-                        <span class="portal-author-tag" style="color: #94a3b8;">✍️ ${b.author || 'Hafiz Ramajan'}</span>
-                        <span class="portal-status-verified" style="color: #34d399; font-weight: 700;">✓ Official</span>
-                    </div>
-                    <div class="portal-card-actions" style="display: flex; gap: 8px;">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="openArticleReader('${b.id}')" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px;">
-                            <span>📖 ${readBtnText}</span>
-                        </button>
-                        <a href="https://wa.me/917849008882?text=${msg}" target="_blank" class="btn btn-success btn-sm" title="Inquire on WhatsApp" style="flex: 1; font-weight: 700; font-size: 0.82rem; padding: 8px 10px; text-decoration: none; text-align: center;">
-                            <span>💬 ${shareBtnText}</span>
-                        </a>
-                    </div>
-                </div>
-            </article>
-        `;
-    }).join('');
+    const isRoman = (currentLang === 'roman');
+    grid.innerHTML = list.map(b => createBlogCardHtml(b, isRoman)).join('');
 }
 
+// Setup Event Listeners for Home Updates Section
+function setupHomeNewsInteractions() {
+    const searchInput = document.getElementById('home-news-search-input');
+    if (searchInput) {
+        searchInput.oninput = (e) => {
+            currentHomeSearchQuery = e.target.value;
+            renderHomeNewsGrid();
+        };
+    }
+
+    const pills = document.querySelectorAll('#home-category-pills .cat-pill');
+    pills.forEach(pill => {
+        pill.onclick = () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            activeHomeCategory = pill.dataset.category || 'all';
+            renderHomeNewsGrid();
+        };
+    });
+}
+
+// Setup Event Listeners for Dedicated News Portal
 function setupPortalNewsInteractions() {
-    // Search input
     const searchInput = document.getElementById('portal-news-search-input');
     if (searchInput) {
         searchInput.oninput = (e) => {
@@ -195,7 +287,6 @@ function setupPortalNewsInteractions() {
         };
     }
 
-    // Category pills
     const pills = document.querySelectorAll('#news-category-pills .cat-pill');
     pills.forEach(pill => {
         pill.onclick = () => {
@@ -206,7 +297,6 @@ function setupPortalNewsInteractions() {
         };
     });
 
-    // Close article modal
     const closeBtn = document.getElementById('close-article-reader-modal');
     if (closeBtn) {
         closeBtn.onclick = closeArticleReader;
@@ -1076,7 +1166,7 @@ const translations = {
 };
 
 // Global App States
-let currentLang = localStorage.getItem('appLanguage') || 'en';
+currentLang = localStorage.getItem('appLanguage') || 'en';
 let activeTheme = localStorage.getItem('appTheme') || 'light';
 let verificationPerformed = false;
 
@@ -3739,8 +3829,7 @@ setInterval(async () => {
             isFirstBlogLoad = false;
         } else if (hasNew && latestNewPost) {
             allNewsData = freshList;
-            renderPortalNewsGrid();
-            showLiveBlogToast(latestNewPost);
+            renderHomeNewsGrid(); renderPortalNewsGrid(); updateLiveAnnouncementTicker(); showLiveBlogToast(latestNewPost);
             const dot = document.getElementById('bell-unread-dot');
             if (dot) dot.classList.remove('hidden');
             if ('vibrate' in navigator) { try { navigator.vibrate([150, 75, 150]); } catch(e){} }
