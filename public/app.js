@@ -86,7 +86,7 @@ let currentNewsSearchQuery = '';
 
 // Helper to generate consistent, beautiful card HTML for both Home & Portal grids
 function createBlogCardHtml(b, isRoman) {
-    const img = b.image || '/assets/passport-services-poster.jpg';
+    const hasImage = Boolean(b.image && typeof b.image === 'string' && b.image.trim() !== '' && !b.image.includes('passport-services-poster.jpg'));
     const readBtnText = isRoman ? "Puri Khabar Padhein" : "Read Full Article";
     const shareBtnText = isRoman ? "WhatsApp Share" : "Share on WhatsApp";
     const msg = encodeURIComponent("Namaste Hafiz Ramajan Sir! Maine aapke website par news/scheme dekhi: \"" + b.title + "\". Mujhe iske baare me jankari chahiye.");
@@ -101,17 +101,30 @@ function createBlogCardHtml(b, isRoman) {
     else if (cLower.includes('polic')) { catColor = '#8b5cf6'; catIcon = '👮'; }
     else if (cLower.includes('legal') || cLower.includes('aff')) { catColor = '#f59e0b'; catIcon = '📑'; }
 
+    const mediaHtml = hasImage ? `
+        <div class="portal-card-media" style="position: relative; height: 185px; overflow: hidden; background: #0f172a;">
+            <img src="${b.image}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onerror="this.parentElement.style.display='none'">
+            <span class="portal-media-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); color: ${catColor}; border: 1px solid ${catColor}50; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
+            </span>
+            <span class="portal-date-tag" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: #e2e8f0; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;">
+                🗓️ ${b.date || 'Active'}
+            </span>
+        </div>
+    ` : `
+        <div class="portal-card-no-media" style="padding: 16px 18px 4px 18px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="portal-media-badge" style="background: ${catColor}18; color: ${catColor}; border: 1px solid ${catColor}35; padding: 4px 12px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
+            </span>
+            <span class="portal-date-tag" style="color: var(--text-muted); font-size: 0.76rem; font-weight: 600;">
+                🗓️ ${b.date || 'Active'}
+            </span>
+        </div>
+    `;
+
     return `
         <article class="portal-news-card animate-fade-in" onclick="if(event.target.closest('a') || event.target.closest('button')) return; openArticleReader('${b.id}');">
-            <div class="portal-card-media" style="position: relative; height: 185px; overflow: hidden; background: #0f172a;">
-                <img src="${img}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onerror="this.src='/assets/passport-services-poster.jpg'">
-                <span class="portal-media-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); color: ${catColor}; border: 1px solid ${catColor}50; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                    ${catIcon} ${b.category || b.badge || 'Govt Scheme'}
-                </span>
-                <span class="portal-date-tag" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: #e2e8f0; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;">
-                    🗓️ ${b.date || 'Active'}
-                </span>
-            </div>
+            ${mediaHtml}
             <div class="portal-card-body" style="padding: 16px 18px; flex: 1; display: flex; flex-direction: column;">
                 <h3 class="portal-card-title" style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">${b.title}</h3>
                 <p class="portal-card-summary" style="margin: 0 0 14px 0; font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${b.summary || ''}</p>
@@ -331,7 +344,17 @@ function openArticleReader(blogId) {
     if (catCrumb) catCrumb.textContent = post.category || 'Government Scheme';
     if (dateEl) dateEl.textContent = post.date || 'Active';
     if (authorEl) authorEl.textContent = post.author || 'Hafiz Ramajan';
-    if (imgEl) imgEl.src = post.image || '/assets/passport-services-poster.jpg';
+    
+    const imgWrap = document.getElementById('reader-img-wrap');
+    const hasImage = Boolean(post.image && typeof post.image === 'string' && post.image.trim() !== '' && !post.image.includes('passport-services-poster.jpg'));
+    if (hasImage) {
+        if (imgEl) imgEl.src = post.image;
+        if (imgWrap) imgWrap.style.display = 'block';
+    } else {
+        if (imgWrap) imgWrap.style.display = 'none';
+        if (imgEl) imgEl.src = '';
+    }
+
     if (sumEl) sumEl.textContent = post.summary || '';
 
     if (contentEl) {
@@ -429,17 +452,7 @@ function initAdminPortal() {
                 }
             } catch (err) {
                 // Fallback client password check
-                if (pass === 'admin123' || pass === '7849008882' || pass === 'ramajan') {
-                    sessionStorage.setItem('adminToken', 'auth-admin-offline');
-                    errEl.classList.add('hidden');
-                    loginView.classList.add('hidden');
-                    dashView.classList.remove('hidden');
-                    loadAdminDashboard();
-                } else {
-                    errEl.textContent = "Galat Password! (Default: admin123)";
-                    errEl.classList.remove('hidden');
-                }
-            }
+                errEl.textContent = 'Galat Password! Access Denied.'; errEl.classList.remove('hidden'); }
         });
     }
 

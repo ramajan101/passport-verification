@@ -8,7 +8,7 @@
     "content": "Full guidelines for Tatkaal passport verification and fast clearance.",
     "badge": "Urgent Notice",
     "tagColor": "#10b981",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "date": "16 Oct 2026"
   },
   {
@@ -20,7 +20,7 @@
     "content": "Full details of the test announcement.",
     "badge": "Important Scheme",
     "tagColor": "#10b981",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "date": "14 Oct 2026"
   },
   {
@@ -39,7 +39,7 @@
       "Old Passport original booklet (Only applicable for renewals / re-issue)"
     ],
     "officialLink": "https://www.passportindia.gov.in",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "title": "New Indian e-Passport Rollout 2026: Biometric Chip & Fast Airport Clearance",
     "category": "Passport & PSK",
     "highlights": [
@@ -70,7 +70,7 @@
       "Annexure-E Self Declaration Affidavit regarding citizenship and criminal record"
     ],
     "officialLink": "https://www.passportindia.gov.in",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "title": "Tatkaal Passport Scheme 2026: Mandatory 3 Documents & Same-Day Dispatch",
     "category": "Passport & PSK",
     "highlights": [
@@ -101,7 +101,7 @@
       "₹20 / ₹50 Non-Judicial Notarized Stamp Paper prepared by advocate"
     ],
     "officialLink": "https://www.passportindia.gov.in",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "title": "Name Spelling Mismatch in Aadhaar vs Marksheet: New PSK Annexure-D Guideline",
     "category": "Legal Guidance",
     "highlights": [
@@ -253,7 +253,7 @@
       "Annexure-D affidavit signed by both parents consenting to passport issuance"
     ],
     "officialLink": "https://www.passportindia.gov.in",
-    "image": "/assets/passport-services-poster.jpg",
+    "image": "",
     "title": "Minor Child Passport Fresh & Renewal: Annexure-C & D Parental Consent Rules",
     "category": "Passport & PSK",
     "highlights": [

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
@@ -249,7 +250,7 @@ app.get('/api/services', (req, res) => {
     res.json(readJsonFile('services.json', []));
 });
 
-app.post('/api/services', (req, res) => {
+app.post('/api/services', requireAdminAuth, (req, res) => {
     const services = readJsonFile('services.json', []);
     const { id, name, category, rate, turnAround, description } = req.body;
     if (!name) return res.status(400).json({ error: "Service name required" });
@@ -269,7 +270,7 @@ app.post('/api/services', (req, res) => {
     res.json({ success: true, services });
 });
 
-app.delete('/api/services/:id', (req, res) => {
+app.delete('/api/services/:id', requireAdminAuth, (req, res) => {
     let services = readJsonFile('services.json', []);
     const targetId = req.params.id;
     services = services.filter(s => String(s.id) !== String(targetId));
@@ -280,7 +281,7 @@ app.delete('/api/services/:id', (req, res) => {
 // 2. Blog & Updates API
 
 // Image/Photo upload route for Admin Blog & Scheme Posters
-app.post('/api/upload-asset', upload.single('image'), (req, res) => {
+app.post('/api/upload-asset', requireAdminAuth, upload.single('image'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No image file uploaded' });
@@ -387,13 +388,13 @@ app.get('/api/blogs', (req, res) => {
     res.json(readJsonFile('blogs.json', []));
 });
 
-app.post('/api/blogs', (req, res) => {
+app.post('/api/blogs', requireAdminAuth, (req, res) => {
     const blogs = readJsonFile('blogs.json', []);
     const { id, title, category, author, summary, content, badge, tagColor, image, date } = req.body;
     if (!title) return res.status(400).json({ error: "Title required" });
 
     const formattedDate = date || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const postImage = image || '/assets/passport-services-poster.jpg';
+    const postImage = (image && typeof image === 'string' && image.trim() !== '' && !image.includes('passport-services-poster.jpg')) ? image.trim() : '';
 
     if (id) {
         const idx = blogs.findIndex(b => String(b.id) === String(id));
@@ -455,7 +456,7 @@ app.post('/api/blogs', (req, res) => {
     res.json({ success: true, blogs });
 });
 
-app.delete('/api/blogs/:id', (req, res) => {
+app.delete('/api/blogs/:id', requireAdminAuth, (req, res) => {
     let blogs = readJsonFile('blogs.json', []);
     const targetId = req.params.id;
     blogs = blogs.filter(b => String(b.id) !== String(targetId));
@@ -464,7 +465,7 @@ app.delete('/api/blogs/:id', (req, res) => {
 });
 
 // 3. User Verification Logs / CRM Lead Reports
-app.get('/api/logs', (req, res) => {
+app.get('/api/logs', requireAdminAuth, (req, res) => {
     res.json(readJsonFile('logs.json', []));
 });
 
@@ -487,7 +488,7 @@ app.post('/api/logs', (req, res) => {
     res.json({ success: true, log: newLog });
 });
 
-app.delete('/api/logs/:id', (req, res) => {
+app.delete('/api/logs/:id', requireAdminAuth, (req, res) => {
     let logs = readJsonFile('logs.json', []);
     if (req.params.id === 'all') {
         logs = [];
@@ -498,21 +499,64 @@ app.delete('/api/logs/:id', (req, res) => {
     res.json({ success: true, logs });
 });
 
+
+// ==========================================================================
+// EXCELLENCE SERVICES - SECURE ADMIN AUTHENTICATION (HMAC SIGNED TOKENS)
+// ==========================================================================
+function getAdminPassword() {
+    return String(process.env.ADMIN_PASSWORD || 'HafizPass@7849').trim();
+}
+
+function generateAdminToken() {
+    const payload = Date.now().toString();
+    const signature = crypto.createHmac('sha256', getAdminPassword()).update(payload).digest('hex');
+    return payload + '.' + signature;
+}
+
+function verifyAdminToken(token) {
+    if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+    const [payload, signature] = token.split('.');
+    const expected = crypto.createHmac('sha256', getAdminPassword()).update(payload).digest('hex');
+    if (signature !== expected) return false;
+    // Expire token after 7 days
+    const age = Date.now() - parseInt(payload, 10);
+    return age > 0 && age < 7 * 24 * 60 * 60 * 1000;
+}
+
+function requireAdminAuth(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : (req.query.token || req.headers['x-admin-token']);
+    if (token && verifyAdminToken(token)) {
+        return next();
+    }
+    return res.status(401).json({ error: "Access Denied: Sirf authorized admin hi access kar sakte hain." });
+}
+
 // 4. Admin Authentication
 app.post('/api/admin/login', (req, res) => {
     const { password } = req.body || {};
-    const cleanPass = String(password || '').trim().toLowerCase();
-    const adminPass = String(process.env.ADMIN_PASSWORD || 'admin123').toLowerCase();
-    const allowed = [adminPass, 'admin123', '7849008882', '9620746029', 'admin', 'ramajan', 'hafiz', '1234', '123456', 'admin@123'];
-    if (allowed.includes(cleanPass) || cleanPass.length >= 3) {
-        res.json({ success: true, token: 'auth-' + Date.now() });
+    const cleanPass = String(password || '').trim();
+    const adminPass = getAdminPassword();
+
+    if (!cleanPass) {
+        return res.status(400).json({ error: "Password likhna zaroori hai!" });
+    }
+
+    if (cleanPass === adminPass) {
+        const token = generateAdminToken();
+        res.json({ success: true, token });
     } else {
-        res.status(401).json({ error: "Galat Password! (Passcode: admin123 ya 7849008882)" });
+        res.status(401).json({ error: "Galat Password! Access Denied." });
     }
 });
 
+app.post('/api/admin/logout', (req, res) => {
+    res.json({ success: true });
+});
+
+
 // 5. Admin Dashboard Statistics
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', requireAdminAuth, (req, res) => {
     const logs = readJsonFile('logs.json', []);
     const services = readJsonFile('services.json', []);
     const blogs = readJsonFile('blogs.json', []);
@@ -553,7 +597,7 @@ app.get('/api/shop-info', (req, res) => {
     res.json(shopInfo);
 });
 
-app.post('/api/shop-info', (req, res) => {
+app.post('/api/shop-info', requireAdminAuth, (req, res) => {
     const info = req.body || {};
     writeJsonFile('shop_info.json', info);
     res.json({ success: true, shopInfo: info });

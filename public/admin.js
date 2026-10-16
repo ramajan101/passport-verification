@@ -91,15 +91,27 @@ document.addEventListener('DOMContentLoaded', () => {
     setupShopManager();
 });
 
-// Master Login Function
+
+function authFetch(url, options = {}) {
+    const token = sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken') || '';
+    const headers = options.headers ? { ...options.headers } : {};
+    headers['Authorization'] = 'Bearer ' + token;
+    return fetch(url, { ...options, headers });
+}
+
+// Master Login Function (Strict Password Verification - No Bypass)
 async function executeAdminLogin() {
     const passInput = document.getElementById('admin-auth-pass');
     const pass = (passInput ? passInput.value : '').trim();
     const errEl = document.getElementById('admin-auth-error');
 
-    // Valid master passwords
-    const validPins = ['admin123', '7849008882', '9620746029', 'admin', 'ramajan', 'hafiz', '1234', '123456', 'admin@123'];
-    const isLocalMatch = validPins.includes(pass.toLowerCase()) || pass.length >= 3;
+    if (!pass) {
+        if (errEl) {
+            errEl.textContent = "Kripya admin password darj karein.";
+            errEl.classList.remove('hidden');
+        }
+        return;
+    }
 
     try {
         const res = await fetch('/api/admin/login', {
@@ -108,28 +120,23 @@ async function executeAdminLogin() {
             body: JSON.stringify({ password: pass })
         });
         const d = await res.json();
-        if (res.ok && d.success) {
-            adminToken = d.token || 'auth-token-' + Date.now();
+        if (res.ok && d.success && d.token) {
+            adminToken = d.token;
             sessionStorage.setItem('adminToken', adminToken);
             localStorage.setItem('adminToken', adminToken);
             if (errEl) errEl.classList.add('hidden');
             showDashboard();
             return;
+        } else {
+            if (errEl) {
+                errEl.textContent = d.error || "Galat Password! Access Denied.";
+                errEl.classList.remove('hidden');
+            }
         }
     } catch (e) {
-        console.warn("Server login fetch error, using local fallback:", e);
-    }
-
-    // Fallback: if server is offline or returned error, allow login if pin matches
-    if (isLocalMatch) {
-        adminToken = 'auth-fallback-' + Date.now();
-        sessionStorage.setItem('adminToken', adminToken);
-        localStorage.setItem('adminToken', adminToken);
-        if (errEl) errEl.classList.add('hidden');
-        showDashboard();
-    } else {
+        console.error("Server login error:", e);
         if (errEl) {
-            errEl.textContent = "Galat Password! (Default: admin123 ya mobile number)";
+            errEl.textContent = "Server se connect nahi ho paya. Dobara koshish karein.";
             errEl.classList.remove('hidden');
         }
     }
@@ -172,7 +179,7 @@ async function loadAllData() {
 // Stats Overview
 async function loadStats() {
     try {
-        const res = await fetch('/api/stats');
+        const res = await authFetch('/api/stats');
         if (res.ok) {
             const s = await res.json();
             const vEl = document.getElementById('kpi-verifications');
@@ -193,7 +200,7 @@ async function loadStats() {
 // TAB 1: LEADS & CRM
 async function loadLeads() {
     try {
-        const res = await fetch('/api/logs');
+        const res = await authFetch('/api/logs');
         if (res.ok) {
             leadsData = await res.json();
         }
@@ -280,7 +287,7 @@ function renderLeads(list) {
 window.handleDeleteLead = async function(id) {
     if (!confirm("Is verification lead ko delete karein?")) return;
     try {
-        await fetch('/api/logs/' + id, { method: 'DELETE' });
+        await authFetch('/api/logs/' + id, { method: 'DELETE' });
         loadLeads();
         loadStats();
     } catch (e) {
@@ -386,7 +393,7 @@ window.handleEditService = function(id) {
 window.handleDeleteService = async function(id) {
     if (!confirm("Is service ko delete karein?")) return;
     try {
-        await fetch('/api/services/' + id, { method: 'DELETE' });
+        await authFetch('/api/services/' + id, { method: 'DELETE' });
         loadServices();
         loadStats();
     } catch (e) {
@@ -430,7 +437,7 @@ function setupServicesManager() {
             if (!name || !rate) return alert("Service Name aur Rate (Fees) likhna zaroori hai!");
 
             try {
-                const res = await fetch('/api/services', {
+                const res = await authFetch('/api/services', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, name, category, rate, turnAround, description })
@@ -530,7 +537,7 @@ window.handleEditBlog = function(id) {
 window.handleDeleteBlog = async function(id) {
     if (!confirm("Is update post ko delete karein?")) return;
     try {
-        await fetch('/api/blogs/' + id, { method: 'DELETE' });
+        await authFetch('/api/blogs/' + id, { method: 'DELETE' });
         loadBlogs();
         loadStats();
     } catch (e) {
@@ -603,7 +610,7 @@ function setupBlogsManager() {
             if (fnText) fnText.textContent = "Uploading " + file.name + "...";
 
             try {
-                const res = await fetch('/api/upload-asset', {
+                const res = await authFetch('/api/upload-asset', {
                     method: 'POST',
                     body: formData
                 });
@@ -662,12 +669,12 @@ function setupBlogsManager() {
             const category = document.getElementById('input-blog-cat').value.trim() || 'General';
             const summary = document.getElementById('input-blog-summary').value.trim();
             const content = document.getElementById('input-blog-content').value.trim();
-            const image = document.getElementById('input-blog-image').value || '/assets/passport-services-poster.jpg';
+            const image = (document.getElementById('input-blog-image').value || '').trim();
 
             if (!title || !summary) return alert("Title aur Summary likhna zaroori hai!");
 
             try {
-                const res = await fetch('/api/blogs', {
+                const res = await authFetch('/api/blogs', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -821,7 +828,7 @@ async function saveAdminShopInfo() {
     const statusEl = document.getElementById('shop-save-status');
 
     try {
-        const res = await fetch('/api/shop-info', {
+        const res = await authFetch('/api/shop-info', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
