@@ -1,4 +1,4 @@
-let currentLang = localStorage.getItem('appLanguage') || 'en';
+﻿let currentLang = localStorage.getItem('appLanguage') || 'en';
 
 // ==========================================================================
 // EXCELLENCE SERVICES - DYNAMIC SERVICES & BLOG RENDERING
@@ -3311,7 +3311,7 @@ function preparePrintablePdfTemplate() {
                     <div class="pdf-shop-branding">EXCELLENCE SERVICES &bull; PASSPORT VERIFICATION AUDIT DESK</div>
                     <h1>PASSPORT DOCUMENT CROSS-VERIFICATION AUDIT REPORT</h1>
                     <p>Official Verification Certificate for Indian Passport Application</p>
-                    <div class="pdf-shop-contact">📞 Helpline / Contact: <strong>7849008882</strong> &bull; <strong>9620746029</strong></div>
+                    <div class="pdf-shop-contact">📞 Helpline: <strong>7849008882</strong> &bull; <strong>9620746029</strong> &nbsp;|&nbsp; 🌐 Portal: <a href="https://aadhaarpan.onrender.com" target="_blank" style="color: #1d4ed8; text-decoration: underline; font-weight: 700;">https://aadhaarpan.onrender.com</a></div>
                 </div>
             </div>
             <div class="pdf-status-stamp">
@@ -3331,6 +3331,13 @@ function preparePrintablePdfTemplate() {
                 <td class="meta-value">${applicantName}</td>
                 <td class="meta-label">Gender / DOB:</td>
                 <td class="meta-value">${applicantGender} | ${applicantDob}</td>
+            </tr>
+            <tr>
+                <td class="meta-label">Official Portal:</td>
+                <td class="meta-value" colspan="3">
+                    <a href="https://aadhaarpan.onrender.com" target="_blank" style="color: #1d4ed8; text-decoration: underline; font-weight: 700;">https://aadhaarpan.onrender.com</a>
+                    <span style="font-size: 0.70rem; color: #64748b; font-weight: normal; margin-left: 8px;">(Click to verify or apply online)</span>
+                </td>
             </tr>
         </table>
 
@@ -3359,8 +3366,11 @@ function preparePrintablePdfTemplate() {
         </div>
 
         <div class="pdf-footer-band">
-            <div style="font-size: 0.72rem; color: #64748b; max-width: 440px; line-height: 1.35;">
+            <div style="font-size: 0.72rem; color: #64748b; max-width: 480px; line-height: 1.35;">
                 <em>This audit report is generated automatically by AI KYC OCR Engine for Passport Document pre-screening verification at Excellence Services.</em>
+                <div style="margin-top: 3px; font-weight: 700; color: #1e3a8a; font-size: 0.73rem;">
+                    🌐 Verification & Online Services: <a href="https://aadhaarpan.onrender.com" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: 700;">https://aadhaarpan.onrender.com</a>
+                </div>
             </div>
             <div class="pdf-sign-box">
                 <div class="pdf-sign-line">Authorized Verifier / Stamp</div>
@@ -3401,6 +3411,7 @@ async function generatePdfReport() {
         margin: [8, 8, 8, 8],
         filename: fileName,
         image: { type: 'jpeg', quality: 0.98 },
+        enableLinks: true,
         html2canvas: {
             scale: 2,
             useCORS: true,
