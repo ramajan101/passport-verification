@@ -69,7 +69,7 @@ app.post('/api/verify-document', upload.single('document'), async (req, res) => 
 
         if (!apiKey) {
             return res.status(401).json({
-                error: "Gemini API Key missing in backend .env file!"
+                error: "Gemini API Key missing in backend .env file or Render environment variables!"
             });
         }
 
@@ -103,9 +103,9 @@ Strict Guidelines:
 
         // Active Gemini models for vision extraction
         const modelsToTry = [
-            "gemini-3.5-flash-lite",
             "gemini-3.5-flash",
-            "gemini-3.8-flash"
+            "gemini-3.8-flash",
+            "gemini-3.5-flash-lite"
         ];
         let result = null;
         let lastError = null;
