@@ -20,7 +20,7 @@
                 for (let k of keys) { caches.delete(k); }
             });
         }
-        localStorage.removeItem('customGeminiApiKey');
+        // Persistent Gemini Key enabled
     </script>
 
     <!-- Google Fonts: Inter & Outfit -->
@@ -29,7 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Main Stylesheet with Cache Busting -->
-    <link rel="stylesheet" href="styles.css?v=update_20261014_v2">
+    <link rel="stylesheet" href="styles.css?v=update_20261027_v1">
     
     <!-- PDF.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
@@ -722,7 +722,7 @@
     </div>
 
     <!-- Main JavaScript App with Cache Busting -->
-    <script src="app.js?v=update_20261018_v3"></script>
+    <script src="app.js?v=update_20261027_v1"></script>
 
     <!-- Global Helper Scripts for Diagnostic and FAQ -->
     <script>

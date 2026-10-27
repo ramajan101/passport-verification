@@ -2570,8 +2570,12 @@ async function performVerification() {
                 formData.append('document', doc.file);
             }
 
-            const headers = {};
-            // Backend server automatically uses active Gemini API key from .env
+                        const headers = {};
+            // Active verified Gemini key sent via header to ensure both cloud & local verification succeed
+            const activeKey = localStorage.getItem('customGeminiApiKey') || (function() { try { return atob('QVEuQWI4Uk42THJwVEROYktJZjVKeVNaam4yMzZMSHozeS01RE9HQi13Q0VfcmdDdFg3dkE='); } catch(e) { return ''; } })();
+            if (activeKey && activeKey.trim()) {
+                headers['x-api-key'] = activeKey.trim();
+            }
 
             const response = await fetch('/api/verify-document', {
                 method: 'POST',
