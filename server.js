@@ -75,7 +75,7 @@ app.post('/api/verify-document', upload.single('document'), async (req, res) => 
         }
 
         // Initialize Gemini SDK with key
-        const ai = new GoogleGenerativeAI(apiKey);
+        let ai = new GoogleGenerativeAI(apiKey);
 
         // Convert file buffer to Gemini-compatible GenerativePart object
         const imagePart = {
@@ -123,7 +123,31 @@ Strict Guidelines:
                 }
             } catch (err) {
                 lastError = err;
-                console.warn(`[OCR] Model ${modelName} failed or limit hit: ${err.message}. Trying next model...`);
+                console.warn(`[OCR] Model ${modelName} failed or limit hit: ${err.message}`);
+
+                // If unauthorized or invalid key, immediately auto-recover with verified active key
+                const isAuthError = err.message && (
+                    err.message.includes('401') || 
+                    err.message.includes('API key not valid') || 
+                    err.message.includes('ACCESS_TOKEN_TYPE_UNSUPPORTED')
+                );
+
+                if (isAuthError && apiKey !== DEFAULT_GEMINI_KEY) {
+                    console.log('[OCR] Auth failed with host key, auto-switching to active default Gemini key...');
+                    apiKey = DEFAULT_GEMINI_KEY;
+                    ai = new GoogleGenerativeAI(apiKey);
+                    try {
+                        const fallbackModel = ai.getGenerativeModel({ model: modelName });
+                        result = await generateContentWithRetry(fallbackModel, prompt, imagePart, 2, 1200);
+                        if (result) {
+                            console.log(`[OCR] Success using auto-recovered key with model: ${modelName}`);
+                            break;
+                        }
+                    } catch (fbErr) {
+                        lastError = fbErr;
+                        console.warn(`[OCR] Fallback key also encountered: ${fbErr.message}`);
+                    }
+                }
             }
         }
 
